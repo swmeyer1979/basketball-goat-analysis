@@ -2,7 +2,7 @@
 
 **Samuel Meyer**
 
-*Submitted to Proceedings of the National Academy of Sciences (PNAS)*
+
 
 ---
 
