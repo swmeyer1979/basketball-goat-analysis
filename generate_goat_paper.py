@@ -558,7 +558,7 @@ doc.add_heading('Data and Code Availability', level=1)
 doc.add_paragraph(
     'All statistical data are publicly available from Basketball Reference (basketball-reference.com). '
     'Replication code for all five frameworks, including Monte Carlo simulations, Bayesian model fitting, and '
-    'sensitivity analyses, is available at [repository link]. The analysis uses Python (NumPy, SciPy, PyMC), '
+    'sensitivity analyses, is available at https://github.com/swmeyer1979/basketball-goat-analysis. The analysis uses Python (NumPy, SciPy, PyMC), '
     'R (brms, tidyverse), and Stan. Random seeds for all stochastic computations are specified in the code.'
 )
 
