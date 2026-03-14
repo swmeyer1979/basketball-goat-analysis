@@ -1,0 +1,82 @@
+{
+  "names": [
+    "Michael Jordan",
+    "LeBron James",
+    "Kareem Abdul-Jabbar",
+    "Bill Russell",
+    "Wilt Chamberlain",
+    "Magic Johnson",
+    "Tim Duncan",
+    "Larry Bird",
+    "Shaquille O'Neal",
+    "Hakeem Olajuwon"
+  ],
+  "eard_scores": [
+    9.72,
+    8.317913964518118,
+    7.2185078712325295,
+    5.910748748471835,
+    8.249440957052895,
+    7.345050647463847,
+    5.658536243676191,
+    6.034416006600919,
+    4.438818043529923,
+    6.6131835075904215
+  ],
+  "rankings": [
+    [
+      "Michael Jordan",
+      9.72
+    ],
+    [
+      "LeBron James",
+      8.317913964518118
+    ],
+    [
+      "Wilt Chamberlain",
+      8.249440957052895
+    ],
+    [
+      "Magic Johnson",
+      7.345050647463847
+    ],
+    [
+      "Kareem Abdul-Jabbar",
+      7.2185078712325295
+    ],
+    [
+      "Hakeem Olajuwon",
+      6.6131835075904215
+    ],
+    [
+      "Larry Bird",
+      6.034416006600919
+    ],
+    [
+      "Bill Russell",
+      5.910748748471835
+    ],
+    [
+      "Tim Duncan",
+      5.658536243676191
+    ],
+    [
+      "Shaquille O'Neal",
+      4.438818043529923
+    ]
+  ],
+  "bootstrap_jordan_pct": 0.8723175965665236,
+  "bootstrap_lebron_pct": 0.1276824034334764,
+  "goat_probability": {
+    "Michael Jordan": 0.8130000000000001,
+    "LeBron James": 0.11900000000000001,
+    "Kareem Abdul-Jabbar": 0.05,
+    "Bill Russell": 0.0025714285714285618,
+    "Wilt Chamberlain": 0.0025714285714285618,
+    "Magic Johnson": 0.0025714285714285618,
+    "Tim Duncan": 0.0025714285714285618,
+    "Larry Bird": 0.0025714285714285618,
+    "Shaquille O'Neal": 0.0025714285714285618,
+    "Hakeem Olajuwon": 0.0025714285714285618
+  }
+}
