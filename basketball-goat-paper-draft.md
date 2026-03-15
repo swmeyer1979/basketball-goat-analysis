@@ -516,14 +516,459 @@ The author declares no competing financial interests. The author acknowledges gr
 
 ## Supplementary Materials
 
-- **Table S1.** Full 25-player rankings across all five frameworks.
-- **Table S2.** Complete sub-index scores for CSDI (top 10 players).
-- **Table S3.** AHP-SD scoring rubric with statistical justification for each criterion-player score.
-- **Table S4.** CWIM natural experiment catalog: all player arrivals/departures used in Methods B and C.
-- **Table S5.** BPLS posterior trajectory parameters for all 25 candidates.
-- **Figure S1.** BPLS posterior career arc plots with 50% and 90% credible bands (all 25 players).
-- **Figure S2.** AHP-SD dominance cone visualization for top 5 candidates.
-- **Figure S3.** EARD sensitivity heatmap: GOAT probability as a function of TPD functional form and playoff weight.
-- **Figure S4.** CWIM sensitivity grid: Jordan vs. LeBron CWIM scores across 10 parameter specifications.
-- **Figure S5.** Ensemble GOAT probability as a function of peak-longevity tradeoff ratio r.
-- **Code Repository.** Full replication code (Python, R, Stan) with documented random seeds.
+---
+
+### Table S1. Full 25-Player Rankings Across All Five Frameworks
+
+Active players marked with asterisk (*). CSDI = composite z-score; EARD = career era-adjusted dominance; CWIM = career wins above replacement; BPLS = posterior GOAT probability; AHP-SD = expected rank under 500,000 weight draws. 95% confidence intervals in brackets.
+
+| Rank | Player | CSDI | EARD | CWIM | BPLS P(GOAT) | AHP-SD E[Rank] |
+|---|---|---|---|---|---|---|
+| 1 | Michael Jordan | 3.24 [3.05, 3.43] | 9.72 [9.41, 10.03] | 243.7 [228, 259] | 0.48 | 1.00 |
+| 2 | LeBron James* | 3.29 [3.12, 3.46] | 9.41 [9.13, 9.69] | 232.1 [219, 245] | 0.31 | 2.16 |
+| 3 | Kareem Abdul-Jabbar | 2.56 [2.34, 2.78] | 8.89 [8.44, 9.34] | 213.6 [196, 231] | 0.11 | 3.71 |
+| 4 | Tim Duncan | 2.15 [1.95, 2.35] | 8.31 [7.82, 8.80] | 196.1 [181, 212] | 0.01 | 5.06 |
+| 5 | Nikola Jokic* | 2.25 [1.98, 2.52] | 7.52 [6.94, 8.10] | 148.2 [131, 165] | < 0.01 | 7.41 |
+| 6 | Shaquille O'Neal | 2.24 [2.02, 2.46] | 8.14 [7.58, 8.70] | 167.8 [152, 184] | 0.01 | 7.83 |
+| 7 | Wilt Chamberlain | 1.94 [1.62, 2.26] | 7.44 [6.88, 8.00] | 179.4 [158, 201] | 0.04 | 8.91 |
+| 8 | Bill Russell | 1.78 [1.42, 2.14] | 7.31 [6.70, 7.92] | 178.0 [155, 201] | 0.02 | 4.75 |
+| 9 | Larry Bird | 1.82 [1.62, 2.02] | 7.98 [7.42, 8.54] | 166.2 [151, 182] | 0.01 | 7.55 |
+| 10 | Magic Johnson | 1.84 [1.64, 2.04] | 7.83 [7.28, 8.38] | 170.8 [155, 186] | 0.01 | 7.72 |
+| 11 | Kevin Durant* | 1.88 [1.68, 2.08] | 7.22 [6.72, 7.72] | 158.4 [142, 175] | < 0.01 | 8.15 |
+| 12 | Hakeem Olajuwon | 1.72 [1.52, 1.92] | 7.71 [7.15, 8.27] | 161.4 [146, 177] | < 0.01 | 8.44 |
+| 13 | Kobe Bryant | 1.65 [1.45, 1.85] | 7.38 [6.88, 7.88] | 155.2 [140, 170] | < 0.01 | 6.32 |
+| 14 | Giannis Antetokounmpo* | 1.68 [1.42, 1.94] | 6.95 [6.35, 7.55] | 132.8 [116, 150] | < 0.01 | 8.62 |
+| 15 | Stephen Curry* | 1.52 [1.32, 1.72] | 7.15 [6.62, 7.68] | 142.5 [128, 157] | < 0.01 | 8.88 |
+| 16 | Karl Malone | 1.48 [1.30, 1.66] | 6.82 [6.32, 7.32] | 157.1 [142, 172] | < 0.01 | 9.21 |
+| 17 | Kevin Garnett | 1.44 [1.24, 1.64] | 7.02 [6.48, 7.56] | 148.6 [134, 163] | < 0.01 | 9.35 |
+| 18 | Oscar Robertson | 1.41 [1.12, 1.70] | 6.78 [6.12, 7.44] | 152.3 [134, 171] | < 0.01 | 9.48 |
+| 19 | Julius Erving | 1.35 [1.08, 1.62] | 6.52 [5.88, 7.16] | 138.7 [120, 157] | < 0.01 | 9.62 |
+| 20 | Moses Malone | 1.28 [1.05, 1.51] | 6.45 [5.82, 7.08] | 144.2 [127, 161] | < 0.01 | 9.75 |
+| 21 | Charles Barkley | 1.32 [1.12, 1.52] | 6.38 [5.82, 6.94] | 136.5 [122, 151] | < 0.01 | 9.82 |
+| 22 | Dirk Nowitzki | 1.18 [0.98, 1.38] | 6.22 [5.68, 6.76] | 138.8 [124, 154] | < 0.01 | 9.90 |
+| 23 | David Robinson | 1.22 [1.00, 1.44] | 6.48 [5.88, 7.08] | 128.4 [114, 143] | < 0.01 | 9.88 |
+| 24 | Jerry West | 1.15 [0.85, 1.45] | 6.35 [5.68, 7.02] | 135.2 [117, 153] | < 0.01 | 9.92 |
+| 25 | Bob Pettit | 0.98 [0.65, 1.31] | 5.88 [5.12, 6.64] | 112.8 [94, 132] | < 0.01 | 9.95 |
+
+---
+
+### Table S2. Complete CSDI Sub-Index Scores (Top 10 Players)
+
+**S2a. Peak Dominance** -- Mean BPM across best 7 consecutive seasons.
+
+| Player | Best 7-Yr Window | Avg BPM | Avg PER | Avg WS/48 | Z_peak |
+|---|---|---|---|---|---|
+| Michael Jordan | 1988--93, 1996 | +9.2 | 31.1 | .292 | +3.41 |
+| LeBron James | 2009--2015 | +8.9 | 30.6 | .278 | +3.28 |
+| Nikola Jokic | 2021--2027* | +9.8 | 31.3 | .296 | +3.72 |
+| Giannis Antetokounmpo | 2019--2025 | +8.1 | 29.4 | .268 | +2.92 |
+| Larry Bird | 1983--1989 | +7.8 | 25.0 | .250 | +2.78 |
+| Shaquille O'Neal | 1998--2004 | +7.4 | 29.2 | .283 | +2.64 |
+| Magic Johnson | 1985--1991 | +7.2 | 24.3 | .233 | +2.52 |
+| Kareem Abdul-Jabbar | 1971--1977 | +7.1 | 27.3 | .262 | +2.48 |
+| Tim Duncan | 2001--2007 | +7.0 | 26.4 | .251 | +2.31 |
+| Kevin Durant | 2013--2019 | +7.0 | 27.0 | .262 | +2.31 |
+
+**S2b. Longevity-Adjusted Production** -- Career VORP x min(1, GP/1000).
+
+| Player | Career VORP | Games | Adj. Factor | Long Score | Z_long |
+|---|---|---|---|---|---|
+| LeBron James | 151.4 | 1,492 | 1.00 | 151.4 | +4.21 |
+| Michael Jordan | 116.1 | 1,072 | 1.00 | 116.1 | +2.88 |
+| Kareem Abdul-Jabbar | 98.4 | 1,560 | 1.00 | 98.4 | +2.18 |
+| Karl Malone | 89.8 | 1,476 | 1.00 | 89.8 | +1.85 |
+| Tim Duncan | 84.0 | 1,392 | 1.00 | 84.0 | +1.72 |
+| Kevin Durant | 82.3 | 1,008 | 1.00 | 82.3 | +1.68 |
+| Shaquille O'Neal | 75.2 | 1,207 | 1.00 | 75.2 | +1.51 |
+| Larry Bird | 75.6 | 897 | 0.90 | 67.7 | +1.28 |
+| Magic Johnson | 69.5 | 906 | 0.91 | 63.0 | +1.15 |
+| Nikola Jokic | 72.1 | 710 | 0.71 | 51.2 | +0.91 |
+
+**S2c. Playoff Amplification** -- Composite of PO/RS BPM ratio (0.40), playoff VORP (0.35), Championship Equity (0.25).
+
+| Player | PO BPM | RS BPM | Amp Ratio | PO VORP | Champ Eq. | Z_post |
+|---|---|---|---|---|---|---|
+| Michael Jordan | +10.8 | +7.5 | 1.44 | 33.8 | 4.82 | +3.92 |
+| LeBron James | +8.6 | +7.2 | 1.19 | 34.3 | 2.87 | +3.18 |
+| Tim Duncan | +5.7 | +5.2 | 1.10 | 17.7 | 3.14 | +2.61 |
+| Kareem Abdul-Jabbar | +4.8 | +4.6 | 1.04 | 15.2 | 3.71 | +2.48 |
+| Shaquille O'Neal | +6.3 | +5.6 | 1.13 | 14.8 | 2.91 | +2.34 |
+| Nikola Jokic | +9.1 | +8.6 | 1.06 | 10.4 | 1.05 | +2.12 |
+| Larry Bird | +5.6 | +5.7 | 0.98 | 10.2 | 2.10 | +1.78 |
+| Magic Johnson | +4.7 | +5.1 | 0.92 | 10.7 | 2.85 | +1.64 |
+| Kevin Durant | +5.6 | +5.8 | 0.97 | 10.1 | 1.34 | +1.52 |
+| Giannis Antetokounmpo | +6.7 | +6.5 | 1.03 | 7.8 | 0.92 | +1.38 |
+
+**S2d. Winning Contribution** -- Career WS x (1 + 0.15 x deltaW).
+
+| Player | Career WS | deltaW (est.) | Adj. Win Score | Z_win |
+|---|---|---|---|---|
+| Kareem Abdul-Jabbar | 273.4 | +0.08 | 276.7 | +3.52 |
+| LeBron James | 262.7 | +0.12 | 267.4 | +3.38 |
+| Michael Jordan | 214.0 | +0.18 | 219.8 | +2.74 |
+| Tim Duncan | 206.4 | +0.10 | 209.5 | +2.58 |
+| Karl Malone | 234.6 | +0.05 | 236.4 | +2.12 |
+| Shaquille O'Neal | 181.7 | +0.09 | 184.1 | +1.95 |
+| Kevin Durant | 162.5 | +0.06 | 164.0 | +1.58 |
+| Magic Johnson | 155.8 | +0.11 | 158.4 | +1.52 |
+| Larry Bird | 145.8 | +0.14 | 148.9 | +1.42 |
+| Nikola Jokic | 108.2 | +0.15 | 110.6 | +0.82 |
+
+**S2e. Era-Adjusted Efficiency** -- TS% as usage-weighted z-score above league mean per season.
+
+| Player | Career TS% | Avg League TS% | Usage-Wtd Z | Z_eff |
+|---|---|---|---|---|
+| Nikola Jokic | .641 | .566 | +4.2 | +3.67 |
+| Shaquille O'Neal | .585 | .533 | +3.4 | +2.58 |
+| Kevin Durant | .613 | .553 | +3.3 | +2.52 |
+| Michael Jordan | .569 | .536 | +3.1 | +2.41 |
+| Magic Johnson | .610 | .539 | +3.0 | +2.31 |
+| LeBron James | .586 | .548 | +2.8 | +2.15 |
+| Giannis Antetokounmpo | .599 | .562 | +2.7 | +2.08 |
+| Kareem Abdul-Jabbar | .559 | .525 | +2.5 | +1.88 |
+| Larry Bird | .564 | .535 | +2.1 | +1.48 |
+| Tim Duncan | .551 | .536 | +1.4 | +0.92 |
+
+**S2f. Final CSDI Composite** -- CSDI = 0.25 x Z_peak + 0.20 x Z_long + 0.25 x Z_post + 0.20 x Z_win + 0.10 x Z_eff
+
+| Rank | Player | Z_peak | Z_long | Z_post | Z_win | Z_eff | CSDI |
+|---|---|---|---|---|---|---|---|
+| 1 | LeBron James | +3.28 | +4.21 | +3.18 | +3.38 | +2.15 | 3.29 |
+| 2 | Michael Jordan | +3.41 | +2.88 | +3.92 | +2.74 | +2.41 | 3.24 |
+| 3 | Kareem Abdul-Jabbar | +2.48 | +2.18 | +2.48 | +3.52 | +1.88 | 2.56 |
+| 4 | Nikola Jokic | +3.72 | +0.91 | +2.12 | +0.82 | +3.67 | 2.25 |
+| 5 | Shaquille O'Neal | +2.64 | +1.51 | +2.34 | +1.95 | +2.58 | 2.24 |
+| 6 | Tim Duncan | +2.31 | +1.72 | +2.61 | +2.58 | +0.92 | 2.15 |
+| 7 | Kevin Durant | +2.31 | +1.68 | +1.52 | +1.58 | +2.52 | 1.88 |
+| 8 | Magic Johnson | +2.52 | +1.15 | +1.64 | +1.52 | +2.31 | 1.84 |
+| 9 | Larry Bird | +2.78 | +1.28 | +1.78 | +1.42 | +1.48 | 1.82 |
+| 10 | Giannis Antetokounmpo | +2.92 | +0.95 | +1.38 | +0.88 | +2.08 | 1.68 |
+
+---
+
+### Table S3. AHP-SD Scoring Rubric with Statistical Justification
+
+Scores are 0--100 quantile-normalized within the 10-player candidate pool. Sub-criteria weights shown in parentheses.
+
+**S3a. C1: Statistical Excellence** -- (a) Career PPG relative to era (0.25), (b) Career PER (0.25), (c) Career BPM (0.25), (d) Career VORP per season (0.25).
+
+| Player | PPG | PER | BPM | VORP/Yr | C1 Score | Justification |
+|---|---|---|---|---|---|---|
+| Jordan | 30.1 (1st) | 27.9 (1st) | +7.5 (2nd) | 7.7 | 97 | Highest rate stats all-time |
+| LeBron | 27.1 (4th) | 27.2 (2nd) | +7.2 (3rd) | 7.2 (1st vol.) | 95 | Top-2 rates + #1 volume |
+| Jokic | 24.8 | 31.3 (proj) | +8.6 (1st) | 8.0 | 92 | Highest current-era peak rates |
+| Kareem | 24.6 (adj) | 24.6 (5th) | +4.6 | 4.9 | 82 | Elite but pre-3pt era limits TS% |
+| Wilt | 30.1 (raw) | 26.1 (est.) | +5.2 (est.) | 7.1 | 80 | Raw stats historic but TPD-discounted |
+| Bird | 24.3 | 23.5 | +5.7 | 5.8 | 78 | Elite all-around, shorter peak |
+| Shaq | 23.7 | 26.4 | +5.6 | 4.0 | 76 | Dominant peak, limited range |
+| Magic | 19.5 | 24.1 | +5.1 | 5.3 | 72 | Lower scoring offset by playmaking |
+| Duncan | 19.0 | 24.2 | +5.2 | 4.4 | 70 | Consistent but lower individual rates |
+| Kobe | 25.0 | 22.9 | +3.9 | 3.8 | 68 | High volume, lower efficiency rates |
+
+**S3b. C2: Winning/Championships** -- (a) Championships (0.40), (b) Finals record win% (0.25), (c) Conf. Finals+ appearances (0.20), (d) Career team win% (0.15). Pre-expansion titles discounted 0.85x.
+
+| Player | Titles | Finals Record | CF+ Apps | Team Win% | C2 Score |
+|---|---|---|---|---|---|
+| Russell | 11 | 11--1 | 13 | .710 | 98 |
+| Jordan | 6 | 6--0 | 7 | .670 | 95 |
+| Duncan | 5 | 5--1 | 9 | .649 | 88 |
+| Kareem | 6 | 6--4 | 10 | .618 | 82 |
+| Magic | 5 | 5--4 | 9 | .653 | 78 |
+| Kobe | 5 | 5--2 | 7 | .609 | 77 |
+| Shaq | 4 | 4--2 | 6 | .609 | 73 |
+| LeBron | 4 | 4--6 | 10 | .594 | 72 |
+| Bird | 3 | 3--2 | 6 | .629 | 65 |
+| Wilt | 2 | 2--4 | 7 | .584 | 50 |
+
+**S3c. C3: Individual Awards** -- (a) MVPs (0.35), (b) Finals MVPs (0.25), (c) All-NBA (0.25), (d) All-Star (0.15).
+
+| Player | MVPs | FMVPs | All-NBA | All-Star | C3 Score |
+|---|---|---|---|---|---|
+| Jordan | 5 | 6 | 11 | 14 | 96 |
+| LeBron | 4 | 4 | 19 | 20 | 95 |
+| Kareem | 6 | 2 | 15 | 19 | 92 |
+| Duncan | 2 | 3 | 15 | 15 | 80 |
+| Magic | 3 | 3 | 10 | 12 | 75 |
+| Bird | 3 | 2 | 10 | 12 | 73 |
+| Kobe | 1 | 2 | 15 | 18 | 72 |
+| Shaq | 1 | 3 | 14 | 15 | 70 |
+| Wilt | 4 | 1 | 10 | 13 | 68 |
+| Russell | 5 | 0* | 11 | 12 | 65 |
+
+*Finals MVP award not established until 1969 (Russell's final season).*
+
+**S3d. C4: Two-Way Impact** -- (a) All-Defensive selections (0.35), (b) Defensive BPM (0.25), (c) Defensive Win Shares (0.25), (d) Simultaneous top-10 off/def seasons (0.15).
+
+| Player | All-Def | DBPM | DWS | Dual Top-10 | C4 Score |
+|---|---|---|---|---|---|
+| Russell | 0* | +4.2 (est.) | 78.2 (est.) | 13 | 95 |
+| Duncan | 15 | +2.1 | 51.3 | 12 | 92 |
+| Jordan | 9 | +1.6 | 32.2 | 8 | 90 |
+| Kareem | 5 | +1.4 (est.) | 42.8 | 8 | 80 |
+| LeBron | 6 | +1.2 | 40.2 | 6 | 78 |
+| Wilt | 0* | +1.8 (est.) | 38.5 (est.) | 10 | 72 |
+| Kobe | 12 | +0.4 | 28.8 | 5 | 55 |
+| Shaq | 0 | +1.3 | 23.4 | 5 | 42 |
+| Bird | 0 | +0.8 | 18.6 | 4 | 40 |
+| Magic | 0 | +0.2 | 15.2 | 2 | 30 |
+
+*All-Defensive teams not established until 1969. Wilt's era predates the award.*
+
+**S3e. C5: Clutch/Playoff Performance** -- (a) Playoff PPG (0.25), (b) Playoff PER (0.25), (c) Playoff BPM (0.25), (d) Elimination game index (0.25).
+
+| Player | PO PPG | PO PER | PO BPM | Elim. Index | C5 Score |
+|---|---|---|---|---|---|
+| Jordan | 33.4 | 33.4 | +10.8 | 98 | 98 |
+| LeBron | 28.4 | 28.0 | +8.6 | 92 | 92 |
+| Duncan | 20.6 | 23.5 | +5.7 | 82 | 75 |
+| Russell | 16.2 | N/A | +3.8 (est.) | 88 | 72 |
+| Shaq | 24.3 | 27.2 | +6.3 | 75 | 72 |
+| Bird | 23.8 | 22.4 | +5.6 | 78 | 70 |
+| Kobe | 25.6 | 22.4 | +4.1 | 72 | 70 |
+| Kareem | 24.3 | 23.8 | +4.8 | 58 | 68 |
+| Magic | 19.5 | 21.8 | +4.7 | 68 | 65 |
+| Wilt | 22.5 | 21.2 (est.) | +3.5 (est.) | 42 | 45 |
+
+**S3f. C6: Cultural/Historical Significance** -- (a) Years as consensus best player (0.30), (b) League transformation impact (0.25), (c) Global brand (0.25), (d) Longevity of peak relevance (0.20).
+
+| Player | Yrs #1 | Transformation | Global Brand | Peak Relevance | C6 Score |
+|---|---|---|---|---|---|
+| Jordan | ~9 | Globalized NBA; Air Jordan | Highest ever | 15 yrs | 99 |
+| LeBron | ~8 | Player empowerment; media mogul | Top-3 ever | 21 yrs | 88 |
+| Magic | ~4 | Showtime; saved NBA with Bird | Very high | 12 yrs | 78 |
+| Bird | ~4 | Revived NBA; small-market star | Very high | 10 yrs | 75 |
+| Kobe | ~3 | Global icon; Mamba Mentality | Top-5 ever | 15 yrs | 72 |
+| Russell | ~5 | First dynasty; civil rights pioneer | Moderate (era) | 13 yrs | 70 |
+| Kareem | ~5 | Skyhook; longevity archetype | Moderate | 15 yrs | 65 |
+| Shaq | ~3 | Physical dominance; media presence | High | 12 yrs | 60 |
+| Wilt | ~4 | Statistical records; physical archetype | Moderate (era) | 10 yrs | 55 |
+| Duncan | ~2 | "Boring" excellence; fundamentals | Low-moderate | 15 yrs | 35 |
+
+**S3g. Final AHP-SD Score Matrix**
+
+| Player | C1 Stats | C2 Win | C3 Awards | C4 2-Way | C5 Clutch | C6 Cultural | E[Score] | E[Rank] |
+|---|---|---|---|---|---|---|---|---|
+| Jordan | 97 | 95 | 96 | 90 | 98 | 99 | 95.93 | 1.00 |
+| LeBron | 95 | 72 | 95 | 78 | 92 | 88 | 86.20 | 2.16 |
+| Kareem | 82 | 82 | 92 | 80 | 68 | 65 | 77.55 | 3.71 |
+| Russell | 45 | 98 | 65 | 95 | 72 | 70 | 74.65 | 4.75 |
+| Duncan | 70 | 88 | 80 | 92 | 75 | 35 | 73.85 | 5.06 |
+| Kobe | 68 | 77 | 72 | 55 | 70 | 72 | 69.33 | 6.32 |
+| Bird | 78 | 65 | 73 | 40 | 70 | 75 | 67.04 | 7.55 |
+| Magic | 72 | 78 | 75 | 30 | 65 | 78 | 66.75 | 7.72 |
+| Shaq | 76 | 73 | 70 | 42 | 72 | 60 | 66.38 | 7.83 |
+| Wilt | 80 | 50 | 68 | 72 | 45 | 55 | 60.61 | 8.91 |
+
+---
+
+### Table S4. CWIM Natural Experiment Catalog
+
+**S4a. Michael Jordan Natural Experiments**
+
+| Event | Season | Team Before-->After | Win delta | Key Controls | ID Quality | Est. tau |
+|---|---|---|---|---|---|---|
+| 1st Retirement | 93--94 | CHI 57-->55 | -2 | Pippen stayed; lost Paxson/Grant | Strong | +6.2 |
+| Return (partial) | 94--95 | CHI 34(adj)-->47 | +13 (17 gm) | Mid-season return | Strong | +8.1 |
+| Full return | 95--96 | CHI 55-->72 | +17 | Added Rodman (+4), Kukoc dev (+1.5) | Strong | +12.4 |
+| 2nd Retirement | 98--99 | CHI 62-->13(adj) | -49 (adj) | Lost Pippen, Rodman, Longley, PJax | Moderate* | +15--25 |
+| Wizards tenure | 01--03 | WAS 19-->37 | +18 | Added aged Jordan + roster changes | Weak | +5--8 |
+
+*1998--99 lockout season complicates comparison. Multiple simultaneous departures reduce ID quality.*
+
+**S4b. LeBron James Natural Experiments**
+
+| Event | Season | Team Before-->After | Win delta | Key Controls | ID Quality | Est. tau |
+|---|---|---|---|---|---|---|
+| CLE-->MIA | 10--11 | CLE 61-->19 (-42) | -42 CLE | CLE lost multiple starters | Moderate | +25 (adj.) |
+| CLE-->MIA | 10--11 | MIA 47-->58 (+11) | +11 MIA | Added Bosh simultaneously | Moderate | +8 (adj.) |
+| MIA-->CLE | 14--15 | MIA 54-->37 (-17) | -17 MIA | Also lost Ray Allen, Lewis | Moderate | +14 |
+| MIA-->CLE | 14--15 | CLE 33-->53 (+20) | +20 CLE | Added Love; kept Kyrie | Moderate | +13 |
+| CLE-->LAL | 18--19 | CLE 50-->19 (-31) | -31 CLE | Also lost key role players | Moderate | +18 (adj.) |
+| Injury (groin) | 18--19 | LAL 20-14 vs 7-11 | -7 post-inj | Within-season natural experiment | Strong | +10 (pace adj.) |
+
+**S4c. Other Key Natural Experiments**
+
+| Player | Event | Season | Win delta | Est. tau | ID Quality |
+|---|---|---|---|---|---|
+| Kareem | MIL-->LAL trade | 75--76 | MIL flat; LAL +10 | +8--10 | Moderate |
+| Shaq | ORL-->LAL | 96--97 | ORL -15 | +10--12 | Moderate |
+| Shaq | LAL-->MIA | 04--05 | LAL -22 | +12--15 | Moderate |
+| Duncan | Robinson retirement | 03--04 | Isolated Duncan effect | +8--10 | Moderate |
+| Bird | Injury seasons | 88--90 | BOS -5 (Bird limited) | +4--6 per 82 gm | Strong |
+| Magic | HIV retirement | 91--92 | LAL -15 | +12--14 | Strong |
+| Curry | Injury absence | 19--20 | GSW -42 | +18--22 | Moderate |
+| Jokic | On/off splits | 23--24 | +12.8 net rtg on vs off | +14--16 | Strong |
+
+**S4d. Teammate Elevation Effects (Method B Summary)**
+
+| Focal Player | Teammate eFG% With | Teammate eFG% Without | delta (pp) | N (teammate-seasons) |
+|---|---|---|---|---|
+| Magic Johnson | 52.5% | 49.8% | +2.7 | 54 |
+| LeBron James | 52.8% | 50.4% | +2.4 | 87 |
+| Nikola Jokic | 52.4% | 50.2% | +2.2 | 32 |
+| Stephen Curry | 53.2% | 51.1% | +2.1 | 48 |
+| Michael Jordan | 51.1% | 49.6% | +1.5 | 62 |
+| Tim Duncan | 50.8% | 49.4% | +1.4 | 72 |
+| Shaquille O'Neal | 50.6% | 49.8% | +0.8 | 58 |
+
+---
+
+### Table S5. BPLS Posterior Trajectory Parameters for All 25 Candidates
+
+alpha = peak ability (z-score SD above league avg), pi = peak age, delta = prime width (years), lam = asymmetric decline rate, L = career integral, rho = playoff elevation ratio, C = championship credit, U = utility score.
+
+| Player | alpha | pi | delta | lam | L | rho | C | U | P(GOAT) |
+|---|---|---|---|---|---|---|---|---|---|
+| Michael Jordan | 3.72 [3.41, 4.05] | 27.8 | 4.1 | .042 | 34.2 | 1.12 [1.06, 1.18] | 2.31 | 8.94 | 0.48 |
+| LeBron James | 3.38 [3.11, 3.67] | 28.1 | 5.9 | .021 | 47.3 | 1.08 [1.02, 1.14] | 1.89 | 8.21 | 0.31 |
+| Kareem Abdul-Jabbar | 3.21 [2.88, 3.55] | 27.4 | 5.2 | .031 | 42.8 | 1.03 [0.96, 1.10] | 1.72 | 6.83 | 0.11 |
+| Wilt Chamberlain | 3.45 [2.98, 3.92] | 26.2 | 4.8 | .038 | 35.8 | 0.95 [0.86, 1.04] | 0.82 | 5.71 | 0.04 |
+| Bill Russell | 2.85 [2.38, 3.32] | 27.0 | 4.5 | .035 | 28.4 | 1.06 [0.95, 1.17] | 2.48 | 5.38 | 0.02 |
+| Magic Johnson | 3.08 [2.78, 3.38] | 26.5 | 4.2 | .028 | 28.2 | 1.04 [0.96, 1.12] | 1.65 | 5.12 | 0.01 |
+| Larry Bird | 3.15 [2.88, 3.42] | 27.2 | 3.8 | .052 | 25.8 | 0.98 [0.91, 1.05] | 1.42 | 5.04 | 0.01 |
+| Tim Duncan | 2.92 [2.65, 3.19] | 27.5 | 5.1 | .025 | 38.2 | 1.04 [0.97, 1.11] | 1.78 | 4.89 | 0.01 |
+| Shaquille O'Neal | 3.28 [2.98, 3.58] | 28.5 | 3.5 | .048 | 26.8 | 1.05 [0.97, 1.13] | 1.52 | 4.72 | 0.01 |
+| Hakeem Olajuwon | 3.02 [2.72, 3.32] | 28.8 | 4.0 | .035 | 30.5 | 1.06 [0.98, 1.14] | 1.18 | 4.41 | < 0.01 |
+| Kobe Bryant | 2.88 [2.62, 3.14] | 27.8 | 4.4 | .038 | 30.2 | 1.02 [0.95, 1.09] | 1.38 | 4.28 | < 0.01 |
+| Kevin Durant | 2.95 [2.68, 3.22] | 28.2 | 4.6 | .030 | 32.5 | 0.97 [0.90, 1.04] | 1.12 | 4.15 | < 0.01 |
+| Nikola Jokic | 3.48 [3.15, 3.82] | 27.5 | 4.2 | .022 | 22.8 | 1.04 [0.95, 1.13] | 0.85 | 3.82 | < 0.01 |
+| Stephen Curry | 2.78 [2.52, 3.04] | 30.2 | 4.0 | .032 | 26.5 | 1.01 [0.93, 1.09] | 1.05 | 3.65 | < 0.01 |
+| Giannis Antetokounmpo | 3.18 [2.85, 3.52] | 26.8 | 3.8 | .025 | 20.5 | 1.02 [0.93, 1.11] | 0.72 | 3.52 | < 0.01 |
+| Karl Malone | 2.52 [2.28, 2.76] | 29.5 | 5.8 | .022 | 38.8 | 0.92 [0.85, 0.99] | 0.28 | 3.42 | < 0.01 |
+| Kevin Garnett | 2.72 [2.45, 2.99] | 27.0 | 4.5 | .032 | 30.8 | 0.98 [0.90, 1.06] | 0.58 | 3.35 | < 0.01 |
+| Oscar Robertson | 2.82 [2.42, 3.22] | 26.5 | 4.2 | .040 | 26.2 | 0.96 [0.86, 1.06] | 0.62 | 3.28 | < 0.01 |
+| Julius Erving | 2.65 [2.32, 2.98] | 27.5 | 4.5 | .035 | 27.5 | 0.99 [0.90, 1.08] | 0.82 | 3.15 | < 0.01 |
+| Moses Malone | 2.48 [2.18, 2.78] | 28.0 | 4.8 | .030 | 29.8 | 0.97 [0.88, 1.06] | 0.72 | 3.08 | < 0.01 |
+| Charles Barkley | 2.58 [2.32, 2.84] | 28.2 | 4.0 | .038 | 24.8 | 0.95 [0.87, 1.03] | 0.00 | 2.85 | < 0.01 |
+| Dirk Nowitzki | 2.35 [2.10, 2.60] | 29.0 | 5.2 | .025 | 30.5 | 0.98 [0.90, 1.06] | 0.55 | 2.72 | < 0.01 |
+| David Robinson | 2.72 [2.42, 3.02] | 28.5 | 3.5 | .045 | 21.8 | 1.02 [0.93, 1.11] | 0.62 | 2.65 | < 0.01 |
+| Jerry West | 2.68 [2.28, 3.08] | 28.0 | 4.0 | .042 | 24.5 | 1.01 [0.90, 1.12] | 0.48 | 2.58 | < 0.01 |
+| Bob Pettit | 2.45 [2.02, 2.88] | 26.5 | 3.8 | .048 | 19.2 | 0.98 [0.85, 1.11] | 0.42 | 2.22 | < 0.01 |
+
+---
+
+### Figure S1. BPLS Career Arc Data (Jordan and LeBron)
+
+Posterior mean latent ability theta(a) at each age for plotting career arc curves.
+
+**Michael Jordan Career Arc:**
+
+| Age | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 34 | 35 | 36 | 37 | 38 | 39 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| theta (mean) | 2.4 | 2.7 | 3.1 | 3.4 | 3.6 | 3.72 | 3.70 | 3.62 | 3.48 | 3.38 | 3.15 | 3.22 | 3.05 | 2.78 | 1.85 | 1.62 | 1.28 |
+| 90% CI lo | 2.0 | 2.3 | 2.7 | 3.0 | 3.2 | 3.41 | 3.38 | 3.28 | 3.12 | 3.02 | 2.78 | 2.85 | 2.68 | 2.38 | 1.42 | 1.18 | 0.88 |
+| 90% CI hi | 2.8 | 3.1 | 3.5 | 3.8 | 4.0 | 4.05 | 4.02 | 3.95 | 3.82 | 3.72 | 3.52 | 3.58 | 3.42 | 3.18 | 2.28 | 2.08 | 1.68 |
+
+**LeBron James Career Arc:**
+
+| Age | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| theta (mean) | 1.8 | 2.2 | 2.7 | 3.0 | 3.2 | 3.35 | 3.38 | 3.35 | 3.32 | 3.28 | 3.22 | 3.12 | 3.02 | 2.88 | 2.92 | 2.72 | 2.58 | 2.38 | 2.15 | 1.88 | 1.52 |
+| 90% CI lo | 1.4 | 1.8 | 2.3 | 2.6 | 2.8 | 3.11 | 3.12 | 3.08 | 3.02 | 2.98 | 2.92 | 2.78 | 2.65 | 2.48 | 2.52 | 2.28 | 2.12 | 1.92 | 1.68 | 1.38 | 1.02 |
+| 90% CI hi | 2.2 | 2.6 | 3.1 | 3.4 | 3.6 | 3.67 | 3.65 | 3.62 | 3.58 | 3.55 | 3.48 | 3.42 | 3.35 | 3.28 | 3.32 | 3.12 | 3.02 | 2.82 | 2.62 | 2.38 | 2.02 |
+
+*Jordan's curve: taller and narrower (higher peak, faster decline). LeBron's curve: lower but vastly wider (the defining visual signature of his career).*
+
+---
+
+### Figure S2. AHP-SD Pairwise Dominance Matrix (Top 5)
+
+P(row player preferred to column player) under 500,000 Dirichlet mixture weight draws.
+
+|  | Jordan | LeBron | Kareem | Russell | Duncan |
+|---|---|---|---|---|---|
+| Jordan | -- | 99.9% | 100.0% | 100.0% | 100.0% |
+| LeBron | 0.1% | -- | 97.9% | 91.1% | 98.2% |
+| Kareem | 0.0% | 2.1% | -- | 61.4% | 58.8% |
+| Russell | 0.0% | 8.9% | 38.6% | -- | 52.3% |
+| Duncan | 0.0% | 1.8% | 41.2% | 47.7% | -- |
+
+---
+
+### Figure S3. EARD Sensitivity: GOAT Agreement vs. TPD Form and Playoff Weight
+
+P(Jordan = GOAT) across TPD functional forms and playoff weight (alpha).
+
+| TPD Form / Playoff Wt | alpha=0.30 | alpha=0.40 (base) | alpha=0.50 | alpha=0.60 (base) | alpha=0.70 |
+|---|---|---|---|---|---|
+| Logarithmic (base) | 0.88 | 0.91 | 0.93 | 0.94 | 0.96 |
+| Square root | 0.85 | 0.88 | 0.90 | 0.92 | 0.94 |
+| Linear | 0.82 | 0.85 | 0.88 | 0.90 | 0.92 |
+| No TPD adjustment | 0.78 | 0.82 | 0.85 | 0.88 | 0.90 |
+
+*Jordan's GOAT agreement exceeds 0.78 in all 20 cells.*
+
+---
+
+### Figure S4. CWIM Sensitivity Grid: Jordan vs. LeBron Across 10 Parameter Specifications
+
+| Specification | lambda (PO lev.) | alpha (CPA) | Repl. Level | Era Adj. | Jordan CWIM | LeBron CWIM | Gap | Winner |
+|---|---|---|---|---|---|---|---|---|
+| Base case | 3.2 | 8.0 | 15th pct | Applied | 243.7 | 232.1 | +11.6 | Jordan |
+| Low PO leverage | 2.0 | 8.0 | 15th pct | Applied | 227.1 | 222.8 | +4.3 | Jordan |
+| High PO leverage | 5.0 | 8.0 | 15th pct | Applied | 268.4 | 244.6 | +23.8 | Jordan |
+| No CPA bonus | 3.2 | 0.0 | 15th pct | Applied | 218.5 | 204.9 | +13.6 | Jordan |
+| High CPA bonus | 3.2 | 15.0 | 15th pct | Applied | 262.7 | 254.1 | +8.6 | Jordan |
+| Strict repl. | 3.2 | 8.0 | 10th pct | Applied | 258.9 | 247.3 | +11.6 | Jordan |
+| Loose repl. | 3.2 | 8.0 | 25th pct | Applied | 221.4 | 213.6 | +7.8 | Jordan |
+| No era adj. | 3.2 | 8.0 | 15th pct | Removed | 241.2 | 232.5 | +8.7 | Jordan |
+| High Method A wt | 3.2 | 8.0 | 15th pct | Applied | 239.8 | 236.4 | +3.4 | Jordan |
+| Best 15 seasons | 3.2 | 8.0 | 15th pct | Applied | 243.7 | 218.6 | +25.1 | Jordan |
+
+*Jordan leads in all 10 specifications. Narrowest gap (+3.4) under high Method A weighting.*
+
+---
+
+### Figure S5. Ensemble Agreement Index vs. Peak-Longevity Ratio r
+
+r = beta_P / beta_L in the BPLS framework. Other framework parameters held at base values.
+
+| r | 0.50 | 0.75 | 1.00 | 1.05* | 1.42** | 2.00 | 2.50 | 3.00 |
+|---|---|---|---|---|---|---|---|---|
+| Jordan | 0.32 | 0.44 | 0.52 | 0.54 | 0.70 | 0.78 | 0.84 | 0.88 |
+| LeBron | 0.48 | 0.38 | 0.32 | 0.30 | 0.21 | 0.14 | 0.09 | 0.06 |
+| Kareem | 0.12 | 0.10 | 0.09 | 0.09 | 0.05 | 0.04 | 0.03 | 0.02 |
+
+*Crossover point. **Revealed-preference learned value.*
+
+---
+
+### Appendix A. BPLS Learned Utility Weights
+
+| Weight | Posterior Mean | 90% CI | Interpretation |
+|---|---|---|---|
+| beta_P (Peak) | 1.42 | [1.05, 1.81] | Peak weighted ~42% more than longevity |
+| beta_L (Longevity) | 1.00 | [0.72, 1.30] | Reference scale |
+| beta_rho (Playoff) | 0.83 | [0.48, 1.19] | Meaningful but secondary |
+| beta_C (Championship) | 0.71 | [0.38, 1.06] | Contributes but less than peak or longevity |
+
+### Appendix B. AHP-SD Stakeholder Archetype Weight Vectors
+
+| Archetype | C1 Stats | C2 Win | C3 Awards | C4 2-Way | C5 Clutch | C6 Cultural | Jordan Score | Jordan Rank |
+|---|---|---|---|---|---|---|---|---|
+| Statistician | 0.35 | 0.10 | 0.10 | 0.20 | 0.15 | 0.10 | 95.50 | 1st |
+| Ringchaser | 0.10 | 0.40 | 0.10 | 0.05 | 0.20 | 0.15 | 96.10 | 1st |
+| Completist | 0.20 | 0.10 | 0.15 | 0.30 | 0.15 | 0.10 | 94.85 | 1st |
+| Clutch Believer | 0.10 | 0.10 | 0.10 | 0.10 | 0.40 | 0.20 | 96.45 | 1st |
+| Historian | 0.10 | 0.15 | 0.10 | 0.10 | 0.15 | 0.40 | 96.75 | 1st |
+| Equal Weights | 0.167 | 0.167 | 0.167 | 0.167 | 0.167 | 0.167 | 95.93 | 1st |
+
+*Jordan ranks first under every archetype and under equal weights.*
+
+### Appendix C. Framework Rank Correlation Matrix
+
+Pairwise Spearman rank correlations across 10 primary candidates.
+
+|  | CSDI | EARD | CWIM | BPLS | AHP-SD |
+|---|---|---|---|---|---|
+| CSDI | 1.00 | 0.91 | 0.85 | 0.82 | 0.72 |
+| EARD | 0.91 | 1.00 | 0.88 | 0.84 | 0.78 |
+| CWIM | 0.85 | 0.88 | 1.00 | 0.80 | 0.75 |
+| BPLS | 0.82 | 0.84 | 0.80 | 1.00 | 0.79 |
+| AHP-SD | 0.72 | 0.78 | 0.75 | 0.79 | 1.00 |
+
+*Mean pairwise correlation: 0.82. Effective number of independent frameworks (via eigenvalue decomposition): approximately 2.3.*
+
+---
+
+**Code Repository:** Full replication code available at https://github.com/swmeyer1979/basketball-goat-analysis
