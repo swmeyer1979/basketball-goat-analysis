@@ -16,19 +16,19 @@ This repository contains the complete paper, data, analysis code, and results fo
 
 ## Key Result
 
-Four of five frameworks identify **Michael Jordan** as the most probable GOAT. The fifth (CSDI) produces a statistical tie with LeBron holding a marginal point-estimate lead.
+Three of five frameworks identify **Michael Jordan** as the most probable GOAT. The CSDI now favors LeBron after the addition of a Playmaking/Versatility sub-index. The BPLS finds the two within overlapping posteriors.
 
 | Framework | Result | Confidence |
 |-----------|--------|------------|
-| CSDI | Statistical tie (LeBron 3.29, Jordan 3.24) | Jordan leads 3/4 alternative weighting schemes |
+| CSDI | LeBron leads (3.42 vs 3.18) | LeBron leads 3/5 weighting schemes; Jordan leads 2/5 |
 | EARD | Michael Jordan (9.72) | Rank 1 in 87%+ of bootstrap specs |
 | CWIM | Michael Jordan (243.7 WAR) | Leads 9/10 sensitivity specs |
 | BPLS | Michael Jordan | P(Jordan) = 0.48; P(LeBron) = 0.31 |
-| AHP-SD | Michael Jordan | Ranked #1 under 99.9% of 500K weight vectors |
+| AHP-SD | Michael Jordan (7 criteria) | Ranked #1 under 96.2% of 500K weight vectors |
 
-**Cross-method agreement index: 0.70** (not a calibrated probability; see Section 4.2 of the paper for caveats)
+**Cross-method agreement index: 0.66** (narrowed from 0.70 after adding playmaking; not a calibrated probability)
 
-LeBron James is the only candidate within the margin of statistical uncertainty (agreement index = 0.21). The frameworks share a common data substrate and structural playoff weighting bias, so convergence reflects robustness across a meaningful range of analytical approaches, not five fully independent confirmations (effective independent frameworks ~ 2.3; see Section 5.10).
+LeBron James is the only candidate within the margin of statistical uncertainty (agreement index = 0.25, up from 0.21). Adding playmaking validated peer reviewers' concern that its omission overstated the certainty of the Jordan result. The frameworks share a common data substrate and structural playoff weighting bias (effective independent frameworks ~ 2.3; see Section 5.10).
 
 ## Reproducing the Analysis
 
