@@ -8,9 +8,9 @@
 
 ## Abstract
 
-We construct five partially dependent analytical frameworks to evaluate the basketball GOAT question: three that estimate performance impact (CSDI, EARD, CWIM) and two that model evaluator preferences (BPLS, AHP-SD). They share a common data substrate, overlapping BPM-family metrics, and structural postseason weighting, yielding between 1.4 and 2.3 effective independent measurements depending on estimation method. A latent variable ensemble model, treating each framework as a noisy correlated measurement of an underlying "greatness" variable, produces P(G_Jordan > G_LeBron) = 0.76 [0.71--0.91]. The impact-only sub-ensemble gives 0.69; the preference-only sub-ensemble gives 0.83. Jordan is favored under constructs that weight peak performance and postseason amplification. LeBron is the only serious alternative, and the disagreement is largely explained by how one values playmaking and career longevity: under specifications that weight these dimensions heavily, LeBron overtakes Jordan. Ablation studies confirm that Jordan's advantage survives removal of BPM-family inputs and championship credit but not removal of postseason emphasis, identifying playoff amplification as the single load-bearing structural assumption.
+We construct three performance-impact frameworks (CSDI, EARD, CWIM) and two preference-modeling frameworks (BPLS, AHP-SD) to evaluate the basketball GOAT question. The core ensemble uses the three impact frameworks, which share a common data substrate and overlapping BPM-family metrics but differ in analytical approach. A latent variable model treating each as a noisy correlated measurement of an underlying impact variable produces P(G_Jordan > G_LeBron) = 0.69 [0.62--0.81] from the impact ensemble alone. The preference frameworks (reported separately as a check, not averaged into the headline result) give 0.83, reflecting expert rankings that weight peak over longevity by 1.4:1. Ablation studies identify the structural hinge: Jordan's advantage survives removal of BPM-family inputs (raw box scores still favor him) and removal of championship credit, but not removal of postseason emphasis — on regular-season data alone, LeBron leads decisively. Playoff amplification is the single load-bearing assumption. LeBron is the only serious alternative; the disagreement is largely explained by how one values playmaking and career longevity.
 
-**Keywords:** sports analytics, multi-criteria decision analysis, Bayesian hierarchical models, causal inference, era adjustment, basketball
+**Keywords:** sports analytics, multi-criteria decision analysis, Bayesian hierarchical models, win-impact estimation, era adjustment, basketball
 
 ---
 
@@ -24,13 +24,23 @@ Previous work has typically picked one methodology — career statistics [1], WA
 
 ### 1.2 Our Approach: Methodological Triangulation
 
-Our approach borrows from psychometrics: **convergent validity** [5]. Build multiple instruments with different biases. If they agree, the agreement is more trustworthy than any single reading. We build five:
+Our approach borrows from psychometrics: **convergent validity** [5]. Build multiple instruments with different biases. If they agree, the agreement is more trustworthy than any single reading. We build five, classified by what they measure:
+
+| Framework | Type | What it estimates |
+|---|---|---|
+| CSDI | Impact | Composite statistical performance |
+| EARD | Impact | Era-adjusted relative dominance |
+| CWIM | Impact | Structured win-impact estimation |
+| BPLS | Preference | Expert-revealed career valuation |
+| AHP-SD | Preference | Multi-stakeholder criterion weighting |
+
+The three impact frameworks form the core ensemble. The two preference frameworks are reported separately as a check — they model how evaluators rank careers, not how much players contributed to winning. We do not average them into the headline result because they answer a different question.
 
 1. **Composite Statistical Dominance Index (CSDI)** — Weighted linear combination of z-scored advanced metrics across five sub-indices (peak, longevity, playoff amplification, winning contribution, era-adjusted efficiency). Roots in classical psychometric composite construction.
 
 2. **Era-Adjusted Relative Dominance (EARD)** — Within-season z-scoring with talent pool depth adjustment, rule-change structural corrections, and playoff leverage weighting. Roots in cross-cultural measurement theory and standardized testing.
 
-3. **Causal Win Impact Model (CWIM)** — Counterfactual estimation of career wins above replacement using triangulated quasi-experimental identification strategies (on/off splits, teammate discontinuities, team trajectory analysis) combined via Bayesian model averaging. Roots in the Rubin causal model [6].
+3. **Career Win Impact Model (CWIM)** — Structured estimation of career wins above replacement using three triangulated approximation strategies (on/off splits, teammate discontinuities, team trajectory analysis) combined via Bayesian model averaging. Inspired by the Rubin potential outcomes framework [6], though the identification assumptions are far from the rigor that framework requires.
 
 4. **Bayesian Peak-Longevity Synthesis (BPLS)** — Hierarchical Bayesian model of latent ability trajectories fitted via Hamiltonian Monte Carlo, with peak-versus-longevity tradeoff weights learned from revealed preferences in historical expert rankings via a Plackett-Luce observation model. Roots in Bayesian nonparametrics and preference learning [7].
 
@@ -40,9 +50,9 @@ The methods draw from a common data substrate (Basketball Reference career stati
 
 ### 1.3 What Are We Measuring?
 
-The five frameworks do not all answer the same question. CWIM estimates objective win impact — how many games did this player cause his team to win? EARD measures relative statistical dominance within era. These are performance-estimation tasks. AHP-SD, by contrast, samples across evaluative philosophies and explicitly includes normative criteria (Cultural/Historical Significance). BPLS learns from expert rankings, which encode cultural preferences as well as performance assessments. CSDI occupies middle ground — its sub-indices are statistically derived, but the weighting scheme reflects the analyst's judgment about what matters.
+The five frameworks answer two different questions. CSDI, EARD, and CWIM estimate performance impact — how much did this player contribute to winning, how dominant was he relative to contemporaries? These form the core ensemble. BPLS and AHP-SD model evaluator preferences — how do experts rank careers, what criteria do stakeholders weight? These are reported separately.
 
-We do not resolve this tension. Instead, we report it. The paper asks: does it matter whether you frame "greatest" as an impact-estimation problem or a preference-aggregation problem? If both framings produce the same answer, the answer is robust to the philosophical ambiguity. If they diverge, the divergence tells you something about which dimensions are driving the disagreement. The latent ensemble model (Section 3.6) averages across both framings, which is a weakness (it mixes unlike objects) but also a feature (it tests robustness across the full range of what "greatest" might mean). We report sub-ensemble results for impact-only and preference-only groupings so readers can see where the two framings agree and where they diverge.
+We keep this separation explicit because mixing the two introduces ontological confusion. A tape measure and a voting system are both useful, but averaging them produces a number that is neither a measurement nor a vote. The headline result comes from the impact ensemble. The preference frameworks serve as a cross-check: if they agree with the impact result, the agreement is informative. If they disagree, the disagreement reveals whether the controversy is about on-court performance or about what "greatest" means.
 
 ### 1.4 Scope and Limitations
 
@@ -127,9 +137,9 @@ Career EARD aggregates a player's top 15 seasons with declining weights, plus a 
 
 Robustness is assessed via 10,000 bootstrap resamples of all free parameters (±25%).
 
-### 3.3 Framework 3: Causal Win Impact Model (CWIM)
+### 3.3 Framework 3: Career Win Impact Model (CWIM)
 
-The CWIM borrows the language and structure of the Rubin potential outcomes framework, though the identification assumptions required for strict causal interpretation are not fully met (see Section 5.7). For player i in season s:
+The CWIM estimates career wins above replacement using the structure (but not the identification rigor) of the Rubin potential outcomes framework. The causal language is aspirational; the actual identification is loose, and the output should be read as a structured approximation, not a clean causal estimate (see Section 5.7). For player i in season s:
 
 > τ(i,s) = Y_t(1) – Y_t(0)
 
@@ -199,7 +209,7 @@ The posterior for each player is:
 
 The quantity of interest — P(G_Jordan > G_LeBron) — is computed analytically as Φ((μ_Jordan − μ_LeBron) / √(2τ²)), where Φ is the standard normal CDF. This is a coherent posterior probability, not an average of unlike objects. The result is sensitive to the minimum eigenvalue assumption; we report a sensitivity range across min_eig ∈ [0.05, 0.30].
 
-**Impact vs. preference sub-ensembles.** The five frameworks answer two different questions. CWIM, EARD, and CSDI attempt to estimate basketball performance impact — how much did this player contribute to winning, how dominant was he relative to contemporaries? BPLS and AHP-SD encode evaluator preferences — how do experts rank careers, what criteria do stakeholders value? Averaging across both is a choice that blurs this distinction. We therefore report the latent model for three ensembles: (1) all five frameworks, (2) impact-only (CWIM, EARD, CSDI), and (3) preference-only (BPLS, AHP-SD). If the two sub-ensembles agree, the result is robust to the ontological question. If they diverge, the divergence tells you whether the disagreement is about what happened on the court or about what "greatness" means.
+**Core vs. check ensembles.** The headline result uses the three impact frameworks (CSDI, EARD, CWIM) only. These estimate on-court performance and share a common target quantity (how much did this player contribute to winning?). The preference frameworks (BPLS, AHP-SD) are reported separately as a consistency check — they model how evaluators rank careers, which is a different question. We report all three groupings (impact-only, preference-only, and the combined five-framework model) so readers can see where the two framings agree and where they diverge. The combined model is included for completeness but is not the headline because it averages unlike objects.
 
 ---
 
@@ -225,32 +235,30 @@ Table 1 summarizes each framework's top 5 ranking with associated uncertainty me
 
 Three of five frameworks (EARD, CWIM, AHP-SD) identify Michael Jordan as the most probable GOAT. The CSDI favors LeBron after the addition of Playmaking/Versatility. The BPLS finds the two within overlapping posteriors (Jordan 0.48, LeBron 0.31). All five place Kareem Abdul-Jabbar in the top 4.
 
-We estimate the latent variable ensemble model described in Section 3.6. The model treats each framework's cardinal score as a noisy measurement of a shared latent "greatness" variable G_i, with correlated residuals estimated from the between-framework Spearman correlations. Table 2 reports the posterior estimates.
+We estimate the latent variable ensemble model (Section 3.6) using the three impact frameworks as the core ensemble.
 
-**Table 2: Latent Ensemble Model — Posterior Greatness Estimates**
+**Table 2: Core Impact Ensemble — Posterior Estimates**
 
 | Player | Posterior G_i | 95% CI | P(Best) |
 |---|---|---|---|
-| Michael Jordan | +1.83 | [+1.43, +2.23] | 0.76 |
-| LeBron James | +1.63 | [+1.23, +2.03] | 0.24 |
-| Kareem Abdul-Jabbar | +0.74 | [+0.34, +1.14] | <0.01 |
-| Tim Duncan | +0.00 | [−0.40, +0.40] | <0.01 |
-| Bill Russell | −0.43 | [−0.83, −0.03] | <0.01 |
-| Other (6 players) | −0.63 to −1.08 | — | <0.01 |
+| Michael Jordan | +1.68 | [+1.22, +2.14] | 0.69 |
+| LeBron James | +1.52 | [+1.06, +1.98] | 0.31 |
+| Kareem Abdul-Jabbar | +0.62 | [+0.16, +1.08] | <0.01 |
+| Other (7 players) | −0.22 to −1.08 | — | <0.01 |
 
-> **P(G_Jordan > G_LeBron) = 0.76  [sensitivity range: 0.71--0.91]**
+> **P(G_Jordan > G_LeBron) = 0.69  [sensitivity range: 0.62--0.81]**
 
-The posterior probability 0.76 is a coherent quantity — it is the probability, under the fitted latent model, that Jordan's true greatness exceeds LeBron's, properly accounting for shared dependencies across frameworks via the correlated residual structure. The sensitivity range reflects variation in the minimum eigenvalue assumption for the residual covariance (Section 3.6). Framework loadings are similar (λ = 0.87--0.96), with AHP-SD loading lowest (0.87) due to its greater structural distance from the other frameworks. CSDI is the only framework biased toward LeBron (residual bias = −0.61); EARD, CWIM, and AHP-SD tilt toward Jordan (bias ≈ +0.21); BPLS is neutral.
+This is the headline result: a 69% probability, under the impact ensemble, that Jordan's on-court contribution exceeds LeBron's. CSDI is the only framework biased toward LeBron (it captures his playmaking advantage); EARD and CWIM tilt toward Jordan. The sensitivity range reflects variation in the minimum eigenvalue assumption for the residual covariance.
 
-**Table 2b: Sub-Ensemble Results — Impact vs. Preference**
+**Table 2b: Preference Check and Combined Model**
 
-| Ensemble | Frameworks | P(G_Jordan > G_LeBron) | Interpretation |
+| Ensemble | Frameworks | P(G_Jordan > G_LeBron) | Role |
 |---|---|---|---|
-| Full (5) | CSDI, EARD, CWIM, BPLS, AHP-SD | 0.76 [0.71--0.91] | All frameworks |
-| Impact-only (3) | CSDI, EARD, CWIM | 0.69 [0.62--0.81] | Performance estimation only |
-| Preference-only (2) | BPLS, AHP-SD | 0.83 [0.78--0.94] | Evaluator preference only |
+| **Impact (core)** | CSDI, EARD, CWIM | **0.69 [0.62--0.81]** | Headline result |
+| Preference (check) | BPLS, AHP-SD | 0.83 [0.78--0.94] | Consistency check |
+| Combined (all 5) | All | 0.76 [0.71--0.91] | For completeness |
 
-The sub-ensembles tell a clear story. The impact-only ensemble (which tries to estimate what happened on the court) gives Jordan a smaller edge (0.69) because CSDI now favors LeBron. The preference-only ensemble (which models how experts and stakeholders rank careers) gives Jordan a larger edge (0.83) because expert rankings weight peak performance 42% more than longevity. Both favor Jordan, but for different reasons and by different margins. The disagreement between 0.69 and 0.83 is the gap between "who contributed more to winning?" and "who do evaluators consider greatest?" — an ontological distinction the full ensemble averages over.
+The preference frameworks agree with the impact ensemble in direction but give Jordan a larger edge (0.83 vs. 0.69). This is expected: expert rankings weight peak performance 42% more than longevity (BPLS revealed-preference ratio 1.42:1), and AHP-SD's normative criteria (Cultural/Historical Significance) favor Jordan's cultural dominance. The preference result is informative as a cross-check but should not be read as evidence about on-court performance.
 
 *Footnote: An earlier version of this paper reported a descriptive "agreement index" (Jordan 0.66, LeBron 0.25) computed by averaging each framework's specification-frequency measure. A reviewer correctly identified this as incoherent — averaging a bootstrap frequency, a Bayesian posterior, and a Monte Carlo dominance proportion has no formal interpretation. The latent ensemble model replaces it with a proper posterior probability.*
 
@@ -332,16 +340,13 @@ Because both Jordan (1984--2003) and LeBron (2003--present) played in the modern
 
 ### 5.1 The Fundamental Finding: Convergent Validity
 
-Saying "Jordan is the GOAT" is conventional wisdom. That's not a contribution. The contribution is showing that five frameworks with different biases converge on it.
+Saying "Jordan is the GOAT" is conventional wisdom. The contribution is showing which assumptions that claim rests on and where it breaks.
 
-The logic of convergent validity [5] is straightforward. If a framework biased toward longevity (CWIM) and one that learns its weights from data (BPLS) and one that samples across evaluative philosophies (AHP-SD) all land on the same player, the result probably isn't an artifact of any single bias. It survived opposing methodological headwinds. Specifically:
+The three impact frameworks (CSDI, EARD, CWIM) produce a latent posterior of P(G_Jordan > G_LeBron) = 0.69. Two of three favor Jordan; one (CSDI) favors LeBron after incorporating playmaking. The preference frameworks (BPLS, AHP-SD), reported separately, give Jordan a larger edge (0.83) because expert rankings weight peak over longevity.
 
-- CWIM is purely cumulative, with no peak bonus. It should favor LeBron's longevity. Jordan still leads.
-- BPLS learns its weights from 14 published expert rankings and could have landed anywhere. The learned weights favor peak at 1.42:1.
-- AHP-SD samples 500,000 weight vectors across six evaluative archetypes. Jordan leads in 96.2% of them.
-- CSDI and EARD use different sub-index constructions and different metrics. Both rank Jordan and LeBron in the same order.
+The convergence across impact frameworks is real but narrow. CWIM is cumulative with no peak bonus — it should favor LeBron's longevity, yet Jordan still leads (because playoff amplification overrides the longevity gap). CSDI and EARD use different sub-index constructions and different metrics but agree on the top 2 ordering. The frameworks share BPM-family metrics and postseason weighting (Section 5.10), so the effective number of independent signals is approximately 1.4-2.3, not 3.
 
-This is convergence, not certainty. The posterior probability P(G_Jordan > G_LeBron) = 0.76, not 1.0. The BPLS framework quantifies exactly where LeBron overtakes (r < 1.05). And the five frameworks are not fully independent — they share BPM-family metrics and structural playoff weighting (Section 5.10). What the convergence does establish is that the result isn't fragile. It doesn't depend on any one modeling choice.
+What the convergence establishes is not that Jordan is certainly the GOAT. It is that his edge over LeBron in the impact domain is not an artifact of any single metric choice — the BPM-free ablation confirms this (Section 5.12). What the convergence does *not* establish is that the edge is independent of postseason emphasis — the playoff-free ablation shows it is not.
 
 ### 5.2 The Nature of the Uncertainty
 
@@ -503,15 +508,15 @@ The convergence result is partially robust. The BPM-free ablation shows the find
 
 ## 6. Conclusion
 
-The latent ensemble gives P(G_Jordan > G_LeBron) = 0.76. The impact-only sub-ensemble gives 0.69. The preference-only sub-ensemble gives 0.83.
+The impact ensemble gives P(G_Jordan > G_LeBron) = 0.69. The preference check gives 0.83.
 
-Impact estimation favors Jordan narrowly (0.69). Preference aggregation favors him more strongly (0.83). The gap between those two numbers is the gap between "who contributed more?" and "who do people rank highest?" Both point the same direction. Neither is decisive.
+The 0.69 is the number that matters. It comes from three frameworks that estimate on-court performance, with correlated noise properly modeled. It says: given what we can measure about basketball impact, Jordan is more likely the greater player, but LeBron has a 31% chance of being the answer — a real minority, not a rounding error.
 
-The ablation that matters most: remove postseason emphasis from CWIM, and LeBron leads 114.5 to 71.2 WAR. Playoff amplification is the load-bearing beam. The other two ablations (BPM-free, championship-free) leave Jordan's position intact or stronger. The result depends on postseason data, and it should — because that's where the question gets hard.
+The ablations say where that 0.69 comes from. Remove BPM-family metrics: Jordan still leads. Remove championships: Jordan still leads. Remove postseason emphasis: LeBron leads 114.5 to 71.2 WAR. One beam. That's where the weight is.
 
-LeBron's 24% posterior share is not a rounding error. It represents longevity, playmaking, and weak-roster carry performances that are historically unprecedented. Under specifications that weight these dimensions heavily, he wins.
+LeBron's 31% is not charity. It represents 21 elite seasons, 10,871 assists, 40,474 career points, and three Finals runs where he carried lottery-caliber rosters. Under specifications that weight longevity and playmaking over peak and playoffs, he is the GOAT.
 
-The answer: **conditional on a construct that values peak and postseason performance, Jordan is favored. Conditional on a construct that values longevity and playmaking, LeBron is favored. The first construct is the majority position among both the frameworks tested and the expert rankings surveyed. But it is a constructed majority, not a discovered fact.**
+**Jordan is favored because playoff amplification is real, measurable, and historically unprecedented. LeBron is the alternative because career accumulation and playmaking are also real, measurable, and historically unprecedented. The disagreement is about which of those things "greatest" means. That is a question about values, not about basketball.**
 
 ---
 
