@@ -101,6 +101,22 @@ All supplementary materials are included in both the PDF and the markdown file:
 - **Appendix B**: AHP-SD stakeholder archetype weight vectors
 - **Appendix C**: Framework rank correlation matrix (mean rho = 0.82, effective N = 2.3)
 
+## Paper Structure
+
+The Discussion section (Section 5) covers 11 subsections:
+
+1. **5.1** Convergent validity — what the agreement across methods does and doesn't prove
+2. **5.2** Nature of the uncertainty — methodological vs. epistemic, value judgments
+3. **5.3** Playoff amplification — Jordan's 44% BPM elevation, mechanisms
+4. **5.4** Teammate quality — Pippen counterfactual, symmetric treatment of LeBron's co-stars
+5. **5.5** Position and versatility — LeBron's playmaking underweighted across frameworks
+6. **5.6** What would change the result — five scenarios
+7. **5.7** Limitations — eight identified, including shared BPM dependence and single-GOAT framing
+8. **5.8** Greatest career vs. greatest player — the Hendrix analogy, revealed-preference ratio of 1.4:1
+9. **5.9** Rule changes — hand-checking, zone defense, three-point revolution
+10. **5.10** Shared dependencies — BPM bias, structural playoff priors, effective independence ~2.3
+11. **5.11** Implications for sports analytics — triangulation over single-metric solutions
+
 ## Peer Review
 
 The paper underwent review by four independent expert panels (statistician, sports scientist, decision scientist, adversarial reviewer). All returned "Major Revisions." Key concerns addressed in the current version:
@@ -111,6 +127,7 @@ The paper underwent review by four independent expert panels (statistician, spor
 - AHP-SD dominance reduced from 100% to 99.9%; score uncertainty acknowledged
 - Added playmaking/versatility gap acknowledgment and LeBron weak-roster carry analysis
 - Added Section 5.9 (rule changes) and Section 5.10 (shared bias and effective independence)
+- Two subsequent writing passes (humanization + /write refinement) tightened prose and removed AI-generated texture
 
 ## License
 
