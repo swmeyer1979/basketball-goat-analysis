@@ -355,10 +355,14 @@ def main(
 
     # Final summary line
     top_player = max(ensemble.items(), key=lambda kv: kv[1])
-    p_latent = latent_res.get("P_jordan_gt_lebron", 0.0)
-    print(f"\nConclusion: P({top_player[0]} = GOAT) = {top_player[1]:.2f} [ensemble]")
-    print(f"            P(Jordan > LeBron) = {p_latent:.2f} [latent ensemble]")
-    print("All 5 frameworks converge on this result.\n")
+    p_impact = latent_res.get("impact_only", {}).get("P_jordan_gt_lebron", 0.0)
+    p_pref = latent_res.get("preference_only", {}).get("P_jordan_gt_lebron", 0.0)
+    p_full = latent_res.get("P_jordan_gt_lebron", 0.0)
+    print(f"\nConclusion:")
+    print(f"  Impact ensemble (CSDI/EARD/CWIM):  P(Jordan > LeBron) = {p_impact:.2f}")
+    print(f"  Preference check (BPLS/AHP-SD):    P(Jordan > LeBron) = {p_pref:.2f}")
+    print(f"  Combined (all 5):                  P(Jordan > LeBron) = {p_full:.2f}")
+    print(f"  Ablation hinge: playoff amplification\n")
 
     return all_results
 

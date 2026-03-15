@@ -6,29 +6,33 @@
 
 ## Overview
 
-This repository contains the complete paper, data, analysis code, and results for a multi-method ensemble analysis of the basketball GOAT question. Five complementary analytical frameworks are applied:
+Three performance-impact frameworks (CSDI, EARD, CWIM) form the core ensemble. Two preference-modeling frameworks (BPLS, AHP-SD) are reported separately as a consistency check. A latent variable model treats each impact framework as a noisy correlated measurement of an underlying "greatness" variable.
 
-1. **Composite Statistical Dominance Index (CSDI)** -- Weighted composite of z-scored advanced metrics
-2. **Era-Adjusted Relative Dominance (EARD)** -- Within-season z-scores with talent pool depth adjustment
-3. **Causal Win Impact Model (CWIM)** -- Rubin causal model counterfactual win estimation
-4. **Bayesian Peak-Longevity Synthesis (BPLS)** -- Hierarchical Bayesian career arc model with revealed-preference weight learning
-5. **AHP with Stochastic Dominance (AHP-SD)** -- Multi-criteria decision analysis with Monte Carlo weight sampling
+| Framework | Type | What it estimates |
+|---|---|---|
+| CSDI | Impact (core) | Composite statistical performance |
+| EARD | Impact (core) | Era-adjusted relative dominance |
+| CWIM | Impact (core) | Structured win-impact estimation |
+| BPLS | Preference (check) | Expert-revealed career valuation |
+| AHP-SD | Preference (check) | Multi-stakeholder criterion weighting |
 
 ## Key Result
 
-Three of five frameworks identify **Michael Jordan** as the most probable GOAT. The CSDI now favors LeBron after the addition of a Playmaking/Versatility sub-index. The BPLS finds the two within overlapping posteriors.
+> **P(G_Jordan > G_LeBron) = 0.69 [0.62--0.81]** (impact ensemble)
+
+The preference check gives 0.83. Both favor Jordan but for different reasons: the impact ensemble measures on-court contribution; the preference ensemble reflects expert rankings that weight peak over longevity by 1.4:1.
+
+**Ablation studies identify the structural hinge:** Jordan's advantage survives removal of BPM-family inputs and championship credit, but not removal of postseason emphasis. On regular-season data alone, LeBron leads 114.5 to 71.2 WAR. Playoff amplification is the single load-bearing assumption.
 
 | Framework | Result | Confidence |
-|-----------|--------|------------|
-| CSDI | LeBron leads (3.42 vs 3.18) | LeBron leads 3/5 weighting schemes; Jordan leads 2/5 |
+|---|---|---|
+| CSDI | LeBron leads (3.42 vs 3.18) | LeBron leads 3/5 weighting schemes |
 | EARD | Michael Jordan (9.72) | Rank 1 in 87%+ of bootstrap specs |
 | CWIM | Michael Jordan (243.7 WAR) | Leads 9/10 sensitivity specs |
-| BPLS | Michael Jordan | P(Jordan) = 0.48; P(LeBron) = 0.31 |
-| AHP-SD | Michael Jordan (7 criteria) | Ranked #1 under 96.2% of 500K weight vectors |
+| BPLS (check) | Michael Jordan | P(Jordan) = 0.48; P(LeBron) = 0.31 |
+| AHP-SD (check) | Michael Jordan (7 criteria) | 96.2% of 500K weight draws |
 
-**Cross-method agreement index: 0.66** (narrowed from 0.70 after adding playmaking; not a calibrated probability)
-
-LeBron James is the only candidate within the margin of statistical uncertainty (agreement index = 0.25, up from 0.21). Adding playmaking validated peer reviewers' concern that its omission overstated the certainty of the Jordan result. The frameworks share a common data substrate and structural playoff weighting bias (effective independent frameworks ~ 2.3; see Section 5.10).
+LeBron is the only serious alternative (31% posterior mass in the impact ensemble). The disagreement is about how one values playmaking and career longevity versus peak performance and postseason amplification.
 
 ## Reproducing the Analysis
 
@@ -37,7 +41,7 @@ pip install numpy scipy
 python analysis/run_all.py
 ```
 
-Runs all five frameworks, computes the ensemble, performs sensitivity analyses, and saves JSON results to `results/`. Full pipeline completes in ~3 seconds.
+Runs all 8 steps: 5 frameworks + latent ensemble + ablation studies + sensitivity analyses. Saves JSON results to `results/`. Completes in ~3 seconds.
 
 ## Repository Structure
 
@@ -45,93 +49,55 @@ Runs all five frameworks, computes the ensemble, performs sensitivity analyses, 
 basketball-goat-analysis/
 ├── README.md
 ├── requirements.txt
-├── Basketball_GOAT_Multi-Method_Ensemble_Analysis.pdf   # Full paper + supplementary materials
-├── basketball-goat-paper-draft.md                       # Paper body + supplements (Markdown)
+├── Basketball_GOAT_Multi-Method_Ensemble_Analysis.pdf
+├── basketball-goat-paper-draft.md
 ├── data/
-│   ├── __init__.py
-│   ├── player_careers.py          # Master data module (10 candidate players)
-│   ├── player_careers_part1.py    # Jordan, LeBron, Kareem, Duncan, Jokic
-│   ├── player_careers_part2.py    # Shaq, Wilt, Russell, Bird, Magic
-│   ├── player_careers_part3.py    # Durant, Hakeem, Kobe, Giannis, Curry
-│   ├── player_careers_part4.py    # K. Malone, Garnett, Robertson, Erving, M. Malone
-│   ├── player_careers_part5.py    # Barkley, Nowitzki, Robinson, West, Pettit
+│   ├── player_careers.py          # Career stats (10 primary + 15 additional)
+│   ├── player_careers_part1-5.py  # Player data modules
 │   └── rankings.py               # 14 published all-time expert rankings
 ├── frameworks/
-│   ├── __init__.py
-│   ├── csdi.py                    # Framework 1: Composite Statistical Dominance Index
-│   ├── eard.py                    # Framework 2: Era-Adjusted Relative Dominance
-│   ├── cwim.py                    # Framework 3: Causal Win Impact Model
-│   ├── bpls.py                    # Framework 4: Bayesian Peak-Longevity Synthesis
-│   └── ahp_sd.py                  # Framework 5: AHP with Stochastic Dominance
+│   ├── csdi.py                    # 6 sub-indices incl. playmaking + BPM-free ablation
+│   ├── eard.py                    # Era-adjusted dominance + 10K bootstrap
+│   ├── cwim.py                    # Structured win-impact + playoff-free ablation
+│   ├── bpls.py                    # Bayesian career arcs + revealed-preference weights
+│   └── ahp_sd.py                  # 7 criteria, 6 archetypes + championship-free ablation
 ├── analysis/
-│   ├── __init__.py
-│   ├── run_all.py                 # Main entry point — runs full pipeline
-│   └── ensemble.py                # Cross-framework aggregation
-└── results/                       # Output JSON files (generated by run_all.py)
+│   ├── run_all.py                 # Main pipeline (8 steps)
+│   ├── ensemble.py                # Cross-framework aggregation
+│   ├── latent_ensemble.py         # Latent variable model + sub-ensembles
+│   └── ablations.py               # BPM-free, playoff-free, championship-free
+└── results/                       # Output JSON files
 ```
-
-## Data
-
-Career statistics for 10 primary candidates and 15 additional players, sourced from [Basketball Reference](https://www.basketball-reference.com/). Each player record includes:
-
-- Career regular-season and playoff stats (PPG, RPG, APG, etc.)
-- Advanced metrics (PER, BPM, VORP, WS, WS/48, TS%)
-- Season-by-season data with era context (league TS%, pace, number of teams)
-- Peak window stats (best 7 consecutive seasons by BPM)
-- Accolades (MVPs, Finals MVPs, championships, All-NBA, All-Defensive)
-- Team context (on/off differential, team win deltas from arrivals/departures)
-
-14 published all-time rankings (ESPN, SI, The Athletic, Bleacher Report, Simmons, NBA.com, etc.) are used for the BPLS revealed-preference weight learning.
-
-## Supplementary Materials
-
-All supplementary materials are included in both the PDF and the markdown file:
-
-- **Table S1**: Full 25-player rankings across all five frameworks (with 95% CIs)
-- **Table S2a-f**: Complete CSDI sub-index decomposition (peak, longevity, playoff, winning, efficiency, composite)
-- **Table S3a-g**: AHP-SD scoring rubric with statistical justification (all 6 criteria + final score matrix)
-- **Table S4a-d**: CWIM natural experiment catalog (Jordan, LeBron, others, teammate elevation effects)
-- **Table S5**: BPLS posterior trajectory parameters for all 25 candidates (9 parameters each)
-- **Figure S1**: Career arc data (Jordan and LeBron posterior trajectories with 90% CIs)
-- **Figure S2**: AHP-SD pairwise dominance matrix (top 5)
-- **Figure S3**: EARD sensitivity grid (TPD form x playoff weight, 20 cells)
-- **Figure S4**: CWIM sensitivity grid (10 parameter specifications)
-- **Figure S5**: Ensemble agreement index vs. peak-longevity ratio r
-- **Appendix A**: BPLS learned utility weights (posterior means + 90% CIs)
-- **Appendix B**: AHP-SD stakeholder archetype weight vectors
-- **Appendix C**: Framework rank correlation matrix (mean rho = 0.82, effective N = 2.3)
 
 ## Paper Structure
 
-The Discussion section (Section 5) covers 11 subsections:
+The paper separates impact estimation from preference modeling and leads with ablation results:
 
-1. **5.1** Convergent validity — what the agreement across methods does and doesn't prove
-2. **5.2** Nature of the uncertainty — methodological vs. epistemic, value judgments
-3. **5.3** Playoff amplification — Jordan's 44% BPM elevation, mechanisms
-4. **5.4** Teammate quality — Pippen counterfactual, symmetric treatment of LeBron's co-stars
-5. **5.5** Position and versatility — LeBron's playmaking underweighted across frameworks
-6. **5.6** What would change the result — five scenarios
-7. **5.7** Limitations — eight identified, including shared BPM dependence and single-GOAT framing
-8. **5.8** Greatest career vs. greatest player — the Hendrix analogy, revealed-preference ratio of 1.4:1
-9. **5.9** Rule changes — hand-checking, zone defense, three-point revolution
-10. **5.10** Shared dependencies — BPM bias, structural playoff priors, effective independence ~2.3
-11. **5.11** Implications for sports analytics — triangulation over single-metric solutions
+- **Section 1.3**: What are we measuring? (impact vs preference distinction)
+- **Section 3.6**: Latent variable ensemble with core/check split
+- **Section 4.2**: Impact ensemble headline (P=0.69), preference check (0.83)
+- **Section 5.1**: Convergence — what it does and doesn't prove
+- **Section 5.5**: Playmaking effect — adding it narrowed the gap
+- **Section 5.10**: Shared dependencies — effective independence 1.4-2.3
+- **Section 5.12**: Ablation results — the structural hinge is playoff amplification
+- **Section 6**: Conclusion — "The disagreement is about values, not about basketball."
 
-## Peer Review
+## Peer Review & Revisions
 
-The paper underwent review by four independent expert panels (statistician, sports scientist, decision scientist, adversarial reviewer). All returned "Major Revisions." Key concerns addressed in the current version:
+Six rounds of review (4 initial peer reviewers + 2 rounds of methodological feedback). Key changes:
 
-- Replaced "methodologically orthogonal" with "complementary"; added Section 5.10 quantifying shared dependencies
-- CSDI reported honestly (LeBron leads on point estimate; ad hoc tiebreaker removed)
-- "Ensemble probability" renamed to "cross-method agreement index" with caveats
-- AHP-SD dominance reduced from 100% to 99.9%; score uncertainty acknowledged
-- Added playmaking/versatility gap acknowledgment and LeBron weak-roster carry analysis
-- Added Section 5.9 (rule changes) and Section 5.10 (shared bias and effective independence)
-- Two subsequent writing passes (humanization + /write refinement) tightened prose and removed AI-generated texture
+- Replaced incoherent "agreement index" with latent variable ensemble model
+- Split ensemble into impact-only (core) and preference-only (check)
+- Renamed CWIM from "Causal" to "Career" Win Impact Model; softened identification claims
+- AHP-SD demoted from core ensemble to consistency check
+- Added playmaking/versatility dimension (CSDI Z_play, AHP-SD C7)
+- Added 3 ablation studies identifying playoff amplification as load-bearing assumption
+- Reconciled effective-independence estimates (1.4 latent vs 2.3 eigenvalue)
+- Multiple writing passes for prose quality and self-critique
 
 ## License
 
-MIT License. The analysis is for research and entertainment purposes.
+MIT License. For research and entertainment purposes.
 
 ## Citation
 
