@@ -1,0 +1,56 @@
+{
+  "csdi_sensitivity": {
+    "default": {
+      "rank1": "Michael Jordan",
+      "score": 1.2197382869238453
+    },
+    "equal": {
+      "rank1": "Michael Jordan",
+      "score": 1.038682470015032
+    },
+    "peak_heavy": {
+      "rank1": "Michael Jordan",
+      "score": 1.4117149838752368
+    },
+    "playoff_heavy": {
+      "rank1": "Michael Jordan",
+      "score": 1.4275123819284252
+    },
+    "longevity_heavy": {
+      "rank1": "LeBron James",
+      "score": 1.223455241165464
+    },
+    "playmaking_heavy": {
+      "rank1": "Michael Jordan",
+      "score": 1.1084363245722615
+    }
+  },
+  "eard_bootstrap": {
+    "jordan_pct": 87.23175965665236,
+    "lebron_pct": 12.768240343347639
+  },
+  "cwim_sensitivity": {
+    "Baseline (lambda=3.2, alpha=8.0)": "Michael Jordan",
+    "High playoff leverage (lambda=4.5)": "Michael Jordan",
+    "Low playoff leverage (lambda=2.0)": "LeBron James",
+    "No CPA bonus (alpha=0.0)": "Michael Jordan",
+    "High CPA bonus (alpha=12.0)": "Michael Jordan",
+    "Stricter replacement (+0.010)": "Michael Jordan",
+    "Generous replacement (-0.010)": "Michael Jordan",
+    "Strong pre-1990 era discount (0.85)": "Michael Jordan",
+    "Method A dominant (wA=0.7)": "Michael Jordan",
+    "Season cap: top 15 seasons": "Michael Jordan"
+  },
+  "cwim_jordan_leads_all": false,
+  "bpls_peak_longevity_ratio": 0.0,
+  "bpls_beta": [],
+  "ahp_jackknife_jordan_pct": {
+    "C1_Statistical": 81.05924236969479,
+    "C2_Winning": 75.60402416096645,
+    "C3_Awards": 77.9951198047922,
+    "C4_TwoWay": 77.92911716468659,
+    "C5_Clutch": 77.78211128445139,
+    "C6_Cultural": 73.09892395695829,
+    "C7_Playmaking": 99.9909996399856
+  }
+}

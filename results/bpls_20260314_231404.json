@@ -1,0 +1,272 @@
+{
+  "names": [
+    "Michael Jordan",
+    "LeBron James",
+    "Kareem Abdul-Jabbar",
+    "Bill Russell",
+    "Wilt Chamberlain",
+    "Magic Johnson",
+    "Tim Duncan",
+    "Larry Bird",
+    "Shaquille O'Neal",
+    "Hakeem Olajuwon"
+  ],
+  "arc_params": {
+    "Michael Jordan": {
+      "alpha": 3.72,
+      "pi": 27.8,
+      "delta": 4.1,
+      "lam": 0.042
+    },
+    "LeBron James": {
+      "alpha": 3.62,
+      "pi": 28.5,
+      "delta": 5.2,
+      "lam": 0.028
+    },
+    "Kareem Abdul-Jabbar": {
+      "alpha": 3.33,
+      "pi": 26.8,
+      "delta": 5.8,
+      "lam": 0.031
+    },
+    "Bill Russell": {
+      "alpha": 3.3,
+      "pi": 26.0,
+      "delta": 4.2,
+      "lam": 0.04
+    },
+    "Wilt Chamberlain": {
+      "alpha": 3.54,
+      "pi": 25.5,
+      "delta": 3.8,
+      "lam": 0.055
+    },
+    "Magic Johnson": {
+      "alpha": 3.14,
+      "pi": 26.5,
+      "delta": 4.5,
+      "lam": 0.033
+    },
+    "Tim Duncan": {
+      "alpha": 3.22,
+      "pi": 26.2,
+      "delta": 5.1,
+      "lam": 0.045
+    },
+    "Larry Bird": {
+      "alpha": 3.46,
+      "pi": 27.5,
+      "delta": 3.9,
+      "lam": 0.062
+    },
+    "Shaquille O'Neal": {
+      "alpha": 3.02,
+      "pi": 26.3,
+      "delta": 4.7,
+      "lam": 0.048
+    },
+    "Hakeem Olajuwon": {
+      "alpha": 3.04,
+      "pi": 27.5,
+      "delta": 5.0,
+      "lam": 0.038
+    }
+  },
+  "features": {
+    "Michael Jordan": {
+      "P": 3.72,
+      "L": 35.28243130733961,
+      "rho": 1.173913043478261,
+      "C": 2.000114208935169
+    },
+    "LeBron James": {
+      "P": 3.62,
+      "L": 43.38301015589995,
+      "rho": 1.101123595505618,
+      "C": 1.3084380248572387
+    },
+    "Kareem Abdul-Jabbar": {
+      "P": 3.33,
+      "L": 41.78235200883561,
+      "rho": 0.9333333333333333,
+      "C": 1.3937353039973126
+    },
+    "Bill Russell": {
+      "P": 3.3,
+      "L": 31.426449918291297,
+      "rho": 1.1153846153846154,
+      "C": 2.011333557272422
+    },
+    "Wilt Chamberlain": {
+      "P": 3.54,
+      "L": 30.091395200294492,
+      "rho": 0.9800000000000001,
+      "C": 0.39999999999999997
+    },
+    "Magic Johnson": {
+      "P": 3.14,
+      "L": 32.27646174093348,
+      "rho": 1.118421052631579,
+      "C": 1.3480080618071884
+    },
+    "Tim Duncan": {
+      "P": 3.22,
+      "L": 35.173420566297715,
+      "rho": 1.0975609756097562,
+      "C": 1.299788377561303
+    },
+    "Larry Bird": {
+      "P": 3.46,
+      "L": 30.310395195447818,
+      "rho": 1.0108695652173914,
+      "C": 0.8421363789049378
+    },
+    "Shaquille O'Neal": {
+      "P": 3.02,
+      "L": 30.9996656510566,
+      "rho": 1.0588235294117647,
+      "C": 1.1609422237151494
+    },
+    "Hakeem Olajuwon": {
+      "P": 3.04,
+      "L": 34.11267842219667,
+      "rho": 1.2777777777777777,
+      "C": 0.6358784010749076
+    }
+  },
+  "weights": {
+    "beta_P": 2.0933,
+    "beta_L": 1.0,
+    "beta_rho": -0.1484,
+    "beta_C": 1.1232
+  },
+  "utilities": {
+    "Michael Jordan": 5.244637632803681,
+    "LeBron James": 4.703958997926207,
+    "Kareem Abdul-Jabbar": 2.15483783900514,
+    "Bill Russell": 0.6590328895418578,
+    "Wilt Chamberlain": -0.8916203307565163,
+    "Magic Johnson": -2.119743982582616,
+    "Tim Duncan": -0.8126360768503679,
+    "Larry Bird": -0.6185480522760206,
+    "Shaquille O'Neal": -3.833087931839174,
+    "Hakeem Olajuwon": -4.486830984972183
+  },
+  "goat_probability": {
+    "Michael Jordan": 0.498,
+    "LeBron James": 0.3472,
+    "Kareem Abdul-Jabbar": 0.0716,
+    "Bill Russell": 0.0308,
+    "Wilt Chamberlain": 0.0184,
+    "Magic Johnson": 0.008,
+    "Tim Duncan": 0.0128,
+    "Larry Bird": 0.0032,
+    "Shaquille O'Neal": 0.0032,
+    "Hakeem Olajuwon": 0.0068
+  },
+  "rankings": [
+    [
+      "Michael Jordan",
+      5.2446
+    ],
+    [
+      "LeBron James",
+      4.704
+    ],
+    [
+      "Kareem Abdul-Jabbar",
+      2.1548
+    ],
+    [
+      "Bill Russell",
+      0.659
+    ],
+    [
+      "Larry Bird",
+      -0.6185
+    ],
+    [
+      "Tim Duncan",
+      -0.8126
+    ],
+    [
+      "Wilt Chamberlain",
+      -0.8916
+    ],
+    [
+      "Magic Johnson",
+      -2.1197
+    ],
+    [
+      "Shaquille O'Neal",
+      -3.8331
+    ],
+    [
+      "Hakeem Olajuwon",
+      -4.4868
+    ]
+  ],
+  "bootstrap_stats": {
+    "Michael Jordan": {
+      "mean_rank": 1.81,
+      "p_goat": 0.498,
+      "utility_mean": 4.445,
+      "utility_sd": 2.1726
+    },
+    "LeBron James": {
+      "mean_rank": 2.11,
+      "p_goat": 0.3472,
+      "utility_mean": 3.921,
+      "utility_sd": 2.2773
+    },
+    "Kareem Abdul-Jabbar": {
+      "mean_rank": 4.82,
+      "p_goat": 0.0716,
+      "utility_mean": 0.495,
+      "utility_sd": 2.2825
+    },
+    "Bill Russell": {
+      "mean_rank": 4.83,
+      "p_goat": 0.0308,
+      "utility_mean": 0.4693,
+      "utility_sd": 2.1619
+    },
+    "Wilt Chamberlain": {
+      "mean_rank": 7.24,
+      "p_goat": 0.0184,
+      "utility_mean": -1.9318,
+      "utility_sd": 2.1649
+    },
+    "Magic Johnson": {
+      "mean_rank": 6.72,
+      "p_goat": 0.008,
+      "utility_mean": -1.3515,
+      "utility_sd": 2.3084
+    },
+    "Tim Duncan": {
+      "mean_rank": 5.87,
+      "p_goat": 0.0128,
+      "utility_mean": -0.5497,
+      "utility_sd": 2.3343
+    },
+    "Larry Bird": {
+      "mean_rank": 6.81,
+      "p_goat": 0.0032,
+      "utility_mean": -1.4804,
+      "utility_sd": 2.1966
+    },
+    "Shaquille O'Neal": {
+      "mean_rank": 8.3,
+      "p_goat": 0.0032,
+      "utility_mean": -3.1377,
+      "utility_sd": 2.1892
+    },
+    "Hakeem Olajuwon": {
+      "mean_rank": 6.48,
+      "p_goat": 0.0068,
+      "utility_mean": -1.2036,
+      "utility_sd": 2.3217
+    }
+  }
+}

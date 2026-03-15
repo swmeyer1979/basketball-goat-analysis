@@ -1,0 +1,685 @@
+{
+  "names": [
+    "Michael Jordan",
+    "LeBron James",
+    "Kareem Abdul-Jabbar",
+    "Bill Russell",
+    "Wilt Chamberlain",
+    "Magic Johnson",
+    "Tim Duncan",
+    "Larry Bird",
+    "Shaquille O'Neal",
+    "Hakeem Olajuwon"
+  ],
+  "cwim_scores": [
+    243.7,
+    229.61012163988585,
+    166.99250638233968,
+    147.4130650247785,
+    120.98996846373329,
+    154.07373479501425,
+    190.26825349151522,
+    139.14212344195823,
+    173.2140111127797,
+    120.47760925063822
+  ],
+  "rankings": [
+    [
+      "Michael Jordan",
+      243.7
+    ],
+    [
+      "LeBron James",
+      229.61012163988585
+    ],
+    [
+      "Tim Duncan",
+      190.26825349151522
+    ],
+    [
+      "Shaquille O'Neal",
+      173.2140111127797
+    ],
+    [
+      "Kareem Abdul-Jabbar",
+      166.99250638233968
+    ],
+    [
+      "Magic Johnson",
+      154.07373479501425
+    ],
+    [
+      "Bill Russell",
+      147.4130650247785
+    ],
+    [
+      "Larry Bird",
+      139.14212344195823
+    ],
+    [
+      "Wilt Chamberlain",
+      120.98996846373329
+    ],
+    [
+      "Hakeem Olajuwon",
+      120.47760925063822
+    ]
+  ],
+  "sensitivity": {
+    "Baseline (lambda=3.2, alpha=8.0)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        229.6
+      ],
+      [
+        "Tim Duncan",
+        190.3
+      ],
+      [
+        "Shaquille O'Neal",
+        173.2
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        167.0
+      ],
+      [
+        "Magic Johnson",
+        154.1
+      ],
+      [
+        "Bill Russell",
+        147.4
+      ],
+      [
+        "Larry Bird",
+        139.1
+      ],
+      [
+        "Wilt Chamberlain",
+        121.0
+      ],
+      [
+        "Hakeem Olajuwon",
+        120.5
+      ]
+    ],
+    "High playoff leverage (lambda=4.5)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        202.8
+      ],
+      [
+        "Tim Duncan",
+        173.1
+      ],
+      [
+        "Shaquille O'Neal",
+        152.7
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        152.5
+      ],
+      [
+        "Magic Johnson",
+        151.5
+      ],
+      [
+        "Bill Russell",
+        147.8
+      ],
+      [
+        "Larry Bird",
+        136.9
+      ],
+      [
+        "Hakeem Olajuwon",
+        116.5
+      ],
+      [
+        "Wilt Chamberlain",
+        111.8
+      ]
+    ],
+    "Low playoff leverage (lambda=2.0)": [
+      [
+        "LeBron James",
+        277.3
+      ],
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "Tim Duncan",
+        220.9
+      ],
+      [
+        "Shaquille O'Neal",
+        209.8
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        192.7
+      ],
+      [
+        "Magic Johnson",
+        158.6
+      ],
+      [
+        "Bill Russell",
+        146.8
+      ],
+      [
+        "Larry Bird",
+        143.1
+      ],
+      [
+        "Wilt Chamberlain",
+        137.2
+      ],
+      [
+        "Hakeem Olajuwon",
+        127.6
+      ]
+    ],
+    "No CPA bonus (alpha=0.0)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        231.4
+      ],
+      [
+        "Tim Duncan",
+        190.8
+      ],
+      [
+        "Shaquille O'Neal",
+        174.0
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        166.8
+      ],
+      [
+        "Magic Johnson",
+        153.7
+      ],
+      [
+        "Bill Russell",
+        144.6
+      ],
+      [
+        "Larry Bird",
+        140.0
+      ],
+      [
+        "Wilt Chamberlain",
+        122.9
+      ],
+      [
+        "Hakeem Olajuwon",
+        121.5
+      ]
+    ],
+    "High CPA bonus (alpha=12.0)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        228.8
+      ],
+      [
+        "Tim Duncan",
+        190.0
+      ],
+      [
+        "Shaquille O'Neal",
+        172.9
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        167.1
+      ],
+      [
+        "Magic Johnson",
+        154.2
+      ],
+      [
+        "Bill Russell",
+        148.8
+      ],
+      [
+        "Larry Bird",
+        138.7
+      ],
+      [
+        "Wilt Chamberlain",
+        120.1
+      ],
+      [
+        "Hakeem Olajuwon",
+        120.0
+      ]
+    ],
+    "Stricter replacement (+0.010)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        230.0
+      ],
+      [
+        "Tim Duncan",
+        190.5
+      ],
+      [
+        "Shaquille O'Neal",
+        173.4
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        166.4
+      ],
+      [
+        "Magic Johnson",
+        153.8
+      ],
+      [
+        "Bill Russell",
+        147.2
+      ],
+      [
+        "Larry Bird",
+        138.9
+      ],
+      [
+        "Wilt Chamberlain",
+        120.6
+      ],
+      [
+        "Hakeem Olajuwon",
+        119.8
+      ]
+    ],
+    "Generous replacement (-0.010)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        229.3
+      ],
+      [
+        "Tim Duncan",
+        190.0
+      ],
+      [
+        "Shaquille O'Neal",
+        173.1
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        167.6
+      ],
+      [
+        "Magic Johnson",
+        154.3
+      ],
+      [
+        "Bill Russell",
+        147.7
+      ],
+      [
+        "Larry Bird",
+        139.4
+      ],
+      [
+        "Wilt Chamberlain",
+        121.4
+      ],
+      [
+        "Hakeem Olajuwon",
+        121.1
+      ]
+    ],
+    "Strong pre-1990 era discount (0.85)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        229.6
+      ],
+      [
+        "Tim Duncan",
+        190.3
+      ],
+      [
+        "Shaquille O'Neal",
+        173.2
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        156.0
+      ],
+      [
+        "Magic Johnson",
+        146.7
+      ],
+      [
+        "Bill Russell",
+        141.4
+      ],
+      [
+        "Larry Bird",
+        132.3
+      ],
+      [
+        "Hakeem Olajuwon",
+        120.5
+      ],
+      [
+        "Wilt Chamberlain",
+        113.1
+      ]
+    ],
+    "Method A dominant (wA=0.7)": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        218.6
+      ],
+      [
+        "Tim Duncan",
+        188.5
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        176.1
+      ],
+      [
+        "Bill Russell",
+        161.9
+      ],
+      [
+        "Shaquille O'Neal",
+        161.3
+      ],
+      [
+        "Magic Johnson",
+        157.0
+      ],
+      [
+        "Larry Bird",
+        151.2
+      ],
+      [
+        "Hakeem Olajuwon",
+        140.5
+      ],
+      [
+        "Wilt Chamberlain",
+        131.2
+      ]
+    ],
+    "Season cap: top 15 seasons": [
+      [
+        "Michael Jordan",
+        243.7
+      ],
+      [
+        "LeBron James",
+        196.9
+      ],
+      [
+        "Tim Duncan",
+        172.3
+      ],
+      [
+        "Shaquille O'Neal",
+        155.0
+      ],
+      [
+        "Magic Johnson",
+        154.1
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        148.7
+      ],
+      [
+        "Bill Russell",
+        147.4
+      ],
+      [
+        "Larry Bird",
+        139.1
+      ],
+      [
+        "Wilt Chamberlain",
+        121.0
+      ],
+      [
+        "Hakeem Olajuwon",
+        113.3
+      ]
+    ]
+  },
+  "jordan_leads_all_specs": false,
+  "goat_probability": {
+    "Michael Jordan": 0.68,
+    "LeBron James": 0.24,
+    "Kareem Abdul-Jabbar": 0.05,
+    "Bill Russell": 0.0043,
+    "Wilt Chamberlain": 0.0043,
+    "Magic Johnson": 0.0043,
+    "Tim Duncan": 0.0043,
+    "Larry Bird": 0.0043,
+    "Shaquille O'Neal": 0.0043,
+    "Hakeem Olajuwon": 0.0043
+  },
+  "raw_results": {
+    "Michael Jordan": {
+      "name": "Michael Jordan",
+      "era": 1992,
+      "method_a": 291.6,
+      "method_b": 206.3,
+      "method_c": 166.0,
+      "rs_war": 71.3,
+      "po_war": 52.0,
+      "cpa": 6.1,
+      "cwim": 243.7,
+      "cwim_lower": 209.4,
+      "cwim_upper": 278.0,
+      "weights": {
+        "method_a": 0.1,
+        "method_b": 0.4,
+        "method_c": 0.5
+      }
+    },
+    "LeBron James": {
+      "name": "LeBron James",
+      "era": 2013,
+      "method_a": 388.5,
+      "method_b": 238.3,
+      "method_c": 235.6,
+      "rs_war": 114.5,
+      "po_war": 34.7,
+      "cpa": 4.1,
+      "cwim": 229.6,
+      "cwim_lower": 196.7,
+      "cwim_upper": 262.5,
+      "weights": {
+        "method_a": 0.5,
+        "method_b": 0.3,
+        "method_c": 0.2
+      }
+    },
+    "Kareem Abdul-Jabbar": {
+      "name": "Kareem Abdul-Jabbar",
+      "era": 1978,
+      "method_a": 313.7,
+      "method_b": 169.5,
+      "method_c": 202.3,
+      "rs_war": 73.3,
+      "po_war": 27.9,
+      "cpa": 4.4,
+      "cwim": 167.0,
+      "cwim_lower": 137.0,
+      "cwim_upper": 197.0,
+      "weights": {
+        "method_a": 0.1,
+        "method_b": 0.4,
+        "method_c": 0.5
+      }
+    },
+    "Bill Russell": {
+      "name": "Bill Russell",
+      "era": 1962,
+      "method_a": 239.9,
+      "method_b": 68.4,
+      "method_c": 114.7,
+      "rs_war": 39.8,
+      "po_war": 31.6,
+      "cpa": 6.4,
+      "cwim": 147.4,
+      "cwim_lower": 112.2,
+      "cwim_upper": 182.7,
+      "weights": {
+        "method_a": 0.1,
+        "method_b": 0.4,
+        "method_c": 0.5
+      }
+    },
+    "Wilt Chamberlain": {
+      "name": "Wilt Chamberlain",
+      "era": 1965,
+      "method_a": 252.0,
+      "method_b": 69.6,
+      "method_c": 182.7,
+      "rs_war": 52.8,
+      "po_war": 20.9,
+      "cpa": 1.2,
+      "cwim": 121.0,
+      "cwim_lower": 85.7,
+      "cwim_upper": 156.2,
+      "weights": {
+        "method_a": 0.1,
+        "method_b": 0.4,
+        "method_c": 0.5
+      }
+    },
+    "Magic Johnson": {
+      "name": "Magic Johnson",
+      "era": 1987,
+      "method_a": 211.2,
+      "method_b": 125.8,
+      "method_c": 125.1,
+      "rs_war": 49.0,
+      "po_war": 31.5,
+      "cpa": 4.2,
+      "cwim": 154.1,
+      "cwim_lower": 131.6,
+      "cwim_upper": 176.5,
+      "weights": {
+        "method_a": 0.1,
+        "method_b": 0.4,
+        "method_c": 0.5
+      }
+    },
+    "Tim Duncan": {
+      "name": "Tim Duncan",
+      "era": 2005,
+      "method_a": 354.0,
+      "method_b": 91.2,
+      "method_c": 146.1,
+      "rs_war": 85.5,
+      "po_war": 31.4,
+      "cpa": 4.2,
+      "cwim": 190.3,
+      "cwim_lower": 139.6,
+      "cwim_upper": 240.9,
+      "weights": {
+        "method_a": 0.5,
+        "method_b": 0.3,
+        "method_c": 0.2
+      }
+    },
+    "Larry Bird": {
+      "name": "Larry Bird",
+      "era": 1986,
+      "method_a": 244.0,
+      "method_b": 64.8,
+      "method_c": 146.9,
+      "rs_war": 45.3,
+      "po_war": 28.5,
+      "cpa": 2.6,
+      "cwim": 139.1,
+      "cwim_lower": 103.2,
+      "cwim_upper": 175.0,
+      "weights": {
+        "method_a": 0.1,
+        "method_b": 0.4,
+        "method_c": 0.5
+      }
+    },
+    "Shaquille O'Neal": {
+      "name": "Shaquille O'Neal",
+      "era": 2001,
+      "method_a": 264.9,
+      "method_b": 218.2,
+      "method_c": 190.6,
+      "rs_war": 86.4,
+      "po_war": 26.0,
+      "cpa": 3.7,
+      "cwim": 173.2,
+      "cwim_lower": 154.1,
+      "cwim_upper": 192.4,
+      "weights": {
+        "method_a": 0.5,
+        "method_b": 0.3,
+        "method_c": 0.2
+      }
+    },
+    "Hakeem Olajuwon": {
+      "name": "Hakeem Olajuwon",
+      "era": 1994,
+      "method_a": 262.8,
+      "method_b": 72.8,
+      "method_c": 124.4,
+      "rs_war": 43.0,
+      "po_war": 23.6,
+      "cpa": 2.0,
+      "cwim": 120.5,
+      "cwim_lower": 83.6,
+      "cwim_upper": 157.4,
+      "weights": {
+        "method_a": 0.1,
+        "method_b": 0.4,
+        "method_c": 0.5
+      }
+    }
+  }
+}
