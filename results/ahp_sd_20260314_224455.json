@@ -1,0 +1,449 @@
+{
+  "scores": [
+    [
+      82.5,
+      80.1,
+      84.2,
+      48.0,
+      81.6,
+      79.7,
+      62.0
+    ],
+    [
+      80.0,
+      57.0,
+      65.8,
+      35.8,
+      69.6,
+      51.1,
+      95.0
+    ],
+    [
+      70.1,
+      74.2,
+      72.6,
+      37.8,
+      40.3,
+      66.2,
+      45.0
+    ],
+    [
+      62.1,
+      83.9,
+      42.1,
+      57.0,
+      46.5,
+      61.1,
+      40.0
+    ],
+    [
+      79.6,
+      27.7,
+      63.5,
+      34.0,
+      41.1,
+      50.0,
+      38.0
+    ],
+    [
+      71.6,
+      63.1,
+      44.3,
+      30.7,
+      47.0,
+      44.0,
+      92.0
+    ],
+    [
+      70.1,
+      63.4,
+      42.2,
+      39.0,
+      51.4,
+      43.1,
+      35.0
+    ],
+    [
+      77.3,
+      40.3,
+      44.3,
+      25.4,
+      44.9,
+      38.5,
+      72.0
+    ],
+    [
+      73.1,
+      52.2,
+      34.3,
+      20.2,
+      44.0,
+      34.7,
+      30.0
+    ],
+    [
+      66.0,
+      29.3,
+      25.7,
+      46.3,
+      57.2,
+      23.5,
+      42.0
+    ]
+  ],
+  "names": [
+    "Michael Jordan",
+    "LeBron James",
+    "Kareem Abdul-Jabbar",
+    "Bill Russell",
+    "Wilt Chamberlain",
+    "Magic Johnson",
+    "Tim Duncan",
+    "Larry Bird",
+    "Shaquille O'Neal",
+    "Hakeem Olajuwon"
+  ],
+  "pct_rank1": {
+    "Michael Jordan": 81.1408,
+    "LeBron James": 18.854599999999998,
+    "Kareem Abdul-Jabbar": 0.0,
+    "Bill Russell": 0.0038000000000000004,
+    "Wilt Chamberlain": 0.0,
+    "Magic Johnson": 0.0007999999999999999,
+    "Tim Duncan": 0.0,
+    "Larry Bird": 0.0,
+    "Shaquille O'Neal": 0.0,
+    "Hakeem Olajuwon": 0.0
+  },
+  "fosd_matrix": [
+    [
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  ],
+  "prob_matrix": [
+    [
+      0.5,
+      0.811446,
+      1.0,
+      0.999962,
+      1.0,
+      0.903152,
+      1.0,
+      0.996742,
+      1.0,
+      1.0
+    ],
+    [
+      0.188554,
+      0.5,
+      0.884044,
+      0.87852,
+      1.0,
+      0.99825,
+      0.99986,
+      1.0,
+      1.0,
+      0.999982
+    ],
+    [
+      0.0,
+      0.115956,
+      0.5,
+      0.61415,
+      0.986532,
+      0.488406,
+      0.979524,
+      0.771296,
+      0.999978,
+      0.977292
+    ],
+    [
+      3.8e-05,
+      0.12148,
+      0.38585,
+      0.5,
+      0.91161,
+      0.45737,
+      0.980476,
+      0.718004,
+      0.998732,
+      0.985446
+    ],
+    [
+      0.0,
+      0.0,
+      0.013468,
+      0.08839,
+      0.5,
+      0.06245,
+      0.386532,
+      0.283012,
+      0.858016,
+      0.78615
+    ],
+    [
+      0.096848,
+      0.00175,
+      0.511594,
+      0.54263,
+      0.93755,
+      0.5,
+      0.954346,
+      0.997092,
+      1.0,
+      0.989488
+    ],
+    [
+      0.0,
+      0.00014,
+      0.020476,
+      0.019524,
+      0.613468,
+      0.045654,
+      0.5,
+      0.480312,
+      0.999992,
+      0.893016
+    ],
+    [
+      0.003258,
+      0.0,
+      0.228704,
+      0.281996,
+      0.716988,
+      0.002908,
+      0.519688,
+      0.5,
+      0.962656,
+      0.928058
+    ],
+    [
+      0.0,
+      0.0,
+      2.2e-05,
+      0.001268,
+      0.141984,
+      0.0,
+      8e-06,
+      0.037344,
+      0.5,
+      0.397392
+    ],
+    [
+      0.0,
+      1.8e-05,
+      0.022708,
+      0.014554,
+      0.21385,
+      0.010512,
+      0.106984,
+      0.071942,
+      0.602608,
+      0.5
+    ]
+  ],
+  "jackknife": {
+    "C1_Statistical": {
+      "Michael Jordan": 81.05924236969479,
+      "LeBron James": 18.92975719028761,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.011000440017600704,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.0,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "C2_Winning": {
+      "Michael Jordan": 75.60402416096645,
+      "LeBron James": 24.39397575903036,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.002000080003200128,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.0,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "C3_Awards": {
+      "Michael Jordan": 77.9951198047922,
+      "LeBron James": 21.971878875155006,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.02900116004640186,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.004000160006400256,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "C4_TwoWay": {
+      "Michael Jordan": 77.92911716468659,
+      "LeBron James": 22.068882755310213,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.001000040001600064,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.001000040001600064,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "C5_Clutch": {
+      "Michael Jordan": 77.78211128445139,
+      "LeBron James": 22.17488699547982,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.02900116004640186,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.014000560022400896,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "C6_Cultural": {
+      "Michael Jordan": 73.09892395695829,
+      "LeBron James": 26.88307532301292,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.017000680027201086,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.001000040001600064,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "C7_Playmaking": {
+      "Michael Jordan": 99.9909996399856,
+      "LeBron James": 0.0,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.009000360014400577,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.0,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    }
+  },
+  "jordan_idx": 0
+}

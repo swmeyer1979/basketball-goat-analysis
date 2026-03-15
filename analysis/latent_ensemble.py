@@ -220,76 +220,350 @@ def sensitivity_to_min_eig(Z, R):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# Main entry point
+# Public API: framework_results-based interface
 # ═══════════════════════════════════════════════════════════════════════════
 
-def run_latent_ensemble(verbose: bool = True) -> dict:
+def _extract_cardinal_scores(framework_results: dict) -> np.ndarray:
     """
-    Run the full latent variable ensemble model.
+    Extract cardinal scores for each player from framework_results dict.
 
-    Returns a dict with:
-      - P_jordan_gt_lebron:  Headline posterior probability
-      - G_mean, G_ci_95:    Per-player latent greatness and CIs
-      - P_best:             P(player is the GOAT) for each player
-      - loadings:           Framework loadings lambda_f
-      - framework_bias:     Which frameworks tilt toward Jordan
-      - sensitivity:        P vs min_eig for robustness
+    framework_results should contain keys: 'csdi', 'eard', 'cwim', 'bpls', 'ahp_sd'
+    (as returned by run_all.py).  Falls back to the hardcoded RAW_SCORES when
+    framework_results is None or missing keys, so standalone execution still works.
+
+    Returns RAW_SCORES array shape (N_players, 5) — same orientation as RAW_SCORES:
+        col 0: CSDI composite z-score
+        col 1: EARD dominance score
+        col 2: CWIM career WAR
+        col 3: BPLS utility U_i
+        col 4: AHP-SD negated expected rank -E[Rank]
     """
-    Z = standardize_scores(RAW_SCORES)
+    if framework_results is None:
+        return RAW_SCORES.copy()
 
-    # Fit the model (min_eig defaults to mean of non-factor eigenvalues)
+    n = len(PLAYERS)
+    scores = np.full((n, 5), np.nan)
+
+    # CSDI — composite z-score per player (default weighting)
+    csdi = framework_results.get("csdi")
+    if csdi is not None:
+        csdi_arr = csdi.get("csdi_scores")
+        csdi_names = csdi.get("names", [])
+        if csdi_arr is not None and len(csdi_names) == len(csdi_arr):
+            for j, player in enumerate(PLAYERS):
+                if player in csdi_names:
+                    idx = csdi_names.index(player)
+                    scores[j, 0] = float(csdi_arr[idx])
+
+    # EARD — career era-adjusted dominance score
+    eard = framework_results.get("eard")
+    if eard is not None:
+        eard_scores = eard.get("scores") or eard.get("career_scores")
+        eard_names = eard.get("names", [])
+        if eard_scores is not None:
+            for j, player in enumerate(PLAYERS):
+                if player in eard_names:
+                    idx = eard_names.index(player)
+                    val = eard_scores[idx] if hasattr(eard_scores, "__getitem__") else None
+                    if val is not None:
+                        scores[j, 1] = float(val)
+
+    # CWIM — career WAR
+    cwim = framework_results.get("cwim")
+    if cwim is not None:
+        cwim_rankings = cwim.get("rankings", [])
+        for j, player in enumerate(PLAYERS):
+            for name, war in cwim_rankings:
+                if name == player:
+                    scores[j, 2] = float(war)
+                    break
+
+    # BPLS — utility U_i
+    bpls = framework_results.get("bpls")
+    if bpls is not None:
+        bpls_utilities = bpls.get("utilities") or bpls.get("utility")
+        if bpls_utilities is not None:
+            if isinstance(bpls_utilities, dict):
+                for j, player in enumerate(PLAYERS):
+                    if player in bpls_utilities:
+                        scores[j, 3] = float(bpls_utilities[player])
+            else:
+                bpls_names = bpls.get("names", [])
+                for j, player in enumerate(PLAYERS):
+                    if player in bpls_names:
+                        idx = bpls_names.index(player)
+                        scores[j, 3] = float(bpls_utilities[idx])
+
+    # AHP-SD — negated expected rank: -E[Rank] = -(mean rank across draws)
+    ahp = framework_results.get("ahp_sd")
+    if ahp is not None:
+        ranks_arr = ahp.get("ranks")    # shape (n_samples, n_players)
+        ahp_names = ahp.get("names", [])
+        if ranks_arr is not None and len(ahp_names):
+            mean_ranks = np.mean(ranks_arr, axis=0)
+            for j, player in enumerate(PLAYERS):
+                if player in ahp_names:
+                    idx = ahp_names.index(player)
+                    scores[j, 4] = -float(mean_ranks[idx])
+
+    # Fill any missing values from the hardcoded RAW_SCORES
+    for col in range(5):
+        nan_mask = np.isnan(scores[:, col])
+        if nan_mask.any():
+            scores[nan_mask, col] = RAW_SCORES[nan_mask, col]
+
+    return scores
+
+
+def _build_sub_corr(framework_names: list[str]) -> np.ndarray:
+    """
+    Extract the sub-matrix of SPEARMAN_CORR for the given framework subset.
+
+    framework_names must be a subset of FRAMEWORKS.
+    """
+    all_fw = FRAMEWORKS
+    indices = [all_fw.index(fw) for fw in framework_names]
+    sub = SPEARMAN_CORR[np.ix_(indices, indices)]
+    return sub
+
+
+def compute_latent_ensemble(framework_results: dict | None = None) -> dict:
+    """
+    Compute the full latent variable ensemble model.
+
+    Parameters
+    ----------
+    framework_results : dict or None
+        Dict with keys 'csdi', 'eard', 'cwim', 'bpls', 'ahp_sd' as returned
+        by run_all.py.  If None, uses the hardcoded RAW_SCORES.
+
+    Returns
+    -------
+    dict with keys:
+        'players', 'G_mean', 'G_var', 'G_ci_95', 'P_best',
+        'P_jordan_gt_lebron', 'delta_mu', 'delta_se',
+        'loadings', 'noise_variance', 'communality',
+        'framework_bias', 'z_score_gaps',
+        'effective_frameworks', 'eigenvalues',
+        'min_eig_used', 'sensitivity'
+    """
+    raw = _extract_cardinal_scores(framework_results)
+    Z = standardize_scores(raw)
+
     G_mu, G_var, lam, sigma2, Psi, min_eig = fit_latent_model(Z, SPEARMAN_CORR)
 
-    # Posterior CIs
     ci_lo = G_mu - 1.96 * np.sqrt(G_var)
     ci_hi = G_mu + 1.96 * np.sqrt(G_var)
 
-    # P(Jordan > LeBron)
-    p_jl, delta_mu, delta_se = posterior_comparison(
-        G_mu, G_var, JORDAN_IDX, LEBRON_IDX
-    )
-
-    # P(best) for each player
+    p_jl, delta_mu, delta_se = posterior_comparison(G_mu, G_var, JORDAN_IDX, LEBRON_IDX)
     p_best = pairwise_posterior_probabilities(G_mu, G_var)
-
-    # Effective frameworks
     n_eff, eigvals = effective_n_frameworks(SPEARMAN_CORR)
-
-    # Framework bias
     bias = framework_jordan_bias(Z, G_mu, lam)
-
-    # Communalities
     communality = lam**2 / (lam**2 + sigma2)
-
-    # Z-score gaps for the paper
     d = Z[JORDAN_IDX] - Z[LEBRON_IDX]
-
-    # Sensitivity
     sens = sensitivity_to_min_eig(Z, SPEARMAN_CORR)
 
-    results = {
-        "P_jordan_gt_lebron": p_jl,
-        "delta_mu": delta_mu,
-        "delta_se": delta_se,
-        "G_mean": {p: float(g) for p, g in zip(PLAYERS, G_mu)},
-        "G_ci_95": {
-            p: (float(lo), float(hi))
-            for p, lo, hi in zip(PLAYERS, ci_lo, ci_hi)
-        },
-        "P_best": {p: float(pb) for p, pb in zip(PLAYERS, p_best)},
+    return {
+        "players":              PLAYERS,
+        "P_jordan_gt_lebron":   p_jl,
+        "delta_mu":             delta_mu,
+        "delta_se":             delta_se,
+        "G_mean":               {p: float(g) for p, g in zip(PLAYERS, G_mu)},
+        "G_var":                {p: float(v) for p, v in zip(PLAYERS, G_var)},
+        "G_ci_95":              {p: (float(lo), float(hi))
+                                 for p, lo, hi in zip(PLAYERS, ci_lo, ci_hi)},
+        "P_best":               {p: float(pb) for p, pb in zip(PLAYERS, p_best)},
         "effective_frameworks": n_eff,
-        "eigenvalues": eigvals.tolist(),
-        "loadings": {fw: float(l) for fw, l in zip(FRAMEWORKS, lam)},
-        "noise_variance": {fw: float(s) for fw, s in zip(FRAMEWORKS, sigma2)},
-        "communality": {fw: float(c) for fw, c in zip(FRAMEWORKS, communality)},
-        "framework_bias": {fw: float(b) for fw, b in zip(FRAMEWORKS, bias)},
-        "z_score_gaps": {fw: float(dv) for fw, dv in zip(FRAMEWORKS, d)},
-        "min_eig_used": min_eig,
-        "sensitivity": sens,
+        "eigenvalues":          eigvals.tolist(),
+        "loadings":             {fw: float(l) for fw, l in zip(FRAMEWORKS, lam)},
+        "noise_variance":       {fw: float(s) for fw, s in zip(FRAMEWORKS, sigma2)},
+        "communality":          {fw: float(c) for fw, c in zip(FRAMEWORKS, communality)},
+        "framework_bias":       {fw: float(b) for fw, b in zip(FRAMEWORKS, bias)},
+        "z_score_gaps":         {fw: float(dv) for fw, dv in zip(FRAMEWORKS, d)},
+        "min_eig_used":         min_eig,
+        "sensitivity":          sens,
+    }
+
+
+def compute_sub_ensemble(
+    framework_results: dict | None,
+    framework_names: list[str],
+) -> dict:
+    """
+    Run the latent model on a subset of the five frameworks.
+
+    Parameters
+    ----------
+    framework_results : dict or None
+        Same as compute_latent_ensemble().
+    framework_names : list[str]
+        Subset of FRAMEWORKS, e.g. ['CSDI', 'EARD', 'CWIM'].
+
+    Returns
+    -------
+    dict with keys:
+        'framework_names', 'P_jordan_gt_lebron', 'G_mean', 'G_ci_95',
+        'P_best', 'loadings', 'min_eig_used', 'sensitivity'
+    """
+    if not framework_names:
+        raise ValueError("framework_names must be non-empty")
+
+    for fw in framework_names:
+        if fw not in FRAMEWORKS:
+            raise ValueError(f"Unknown framework: {fw!r}. Must be one of {FRAMEWORKS}")
+
+    all_fw = FRAMEWORKS
+    col_indices = [all_fw.index(fw) for fw in framework_names]
+
+    raw_full = _extract_cardinal_scores(framework_results)
+    raw_sub = raw_full[:, col_indices]
+    Z_sub = standardize_scores(raw_sub)
+
+    R_sub = _build_sub_corr(framework_names)
+
+    G_mu, G_var, lam, sigma2, Psi, min_eig = fit_latent_model(Z_sub, R_sub)
+
+    ci_lo = G_mu - 1.96 * np.sqrt(G_var)
+    ci_hi = G_mu + 1.96 * np.sqrt(G_var)
+
+    p_jl, delta_mu, delta_se = posterior_comparison(G_mu, G_var, JORDAN_IDX, LEBRON_IDX)
+    p_best = pairwise_posterior_probabilities(G_mu, G_var)
+
+    # Sensitivity for sub-ensemble
+    sens = {}
+    for me in [0.05, 0.10, 0.15, 0.20, 0.25, 0.30]:
+        Gm, Gv, _, _, _, _ = fit_latent_model(Z_sub, R_sub, min_eig=me)
+        p, _, _ = posterior_comparison(Gm, Gv, JORDAN_IDX, LEBRON_IDX)
+        sens[me] = p
+
+    return {
+        "framework_names":    framework_names,
+        "P_jordan_gt_lebron": p_jl,
+        "delta_mu":           delta_mu,
+        "delta_se":           delta_se,
+        "G_mean":             {p: float(g) for p, g in zip(PLAYERS, G_mu)},
+        "G_ci_95":            {p: (float(lo), float(hi))
+                               for p, lo, hi in zip(PLAYERS, ci_lo, ci_hi)},
+        "P_best":             {p: float(pb) for p, pb in zip(PLAYERS, p_best)},
+        "loadings":           {fw: float(l) for fw, l in zip(framework_names, lam)},
+        "noise_variance":     {fw: float(s) for fw, s in zip(framework_names, sigma2)},
+        "min_eig_used":       min_eig,
+        "sensitivity":        sens,
+    }
+
+
+def sensitivity_analysis(
+    framework_results: dict | None = None,
+    min_eig_range: list[float] | None = None,
+) -> dict:
+    """
+    Vary min_eig over a range and return P(Jordan > LeBron) for each value.
+
+    Parameters
+    ----------
+    framework_results : dict or None
+        As in compute_latent_ensemble().
+    min_eig_range : list[float] or None
+        Values of min_eig to test.  Defaults to [0.05, 0.10, 0.15, 0.20, 0.25, 0.30].
+
+    Returns
+    -------
+    dict with keys:
+        'full':         {min_eig: P}  — all five frameworks
+        'impact_only':  {min_eig: P}  — CSDI, EARD, CWIM
+        'preference_only': {min_eig: P}  — BPLS, AHP-SD
+    """
+    if min_eig_range is None:
+        min_eig_range = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30]
+
+    raw_full = _extract_cardinal_scores(framework_results)
+
+    def _sweep(col_indices, R):
+        Z = standardize_scores(raw_full[:, col_indices])
+        out = {}
+        for me in min_eig_range:
+            G_mu, G_var, _, _, _, _ = fit_latent_model(Z, R, min_eig=me)
+            p, _, _ = posterior_comparison(G_mu, G_var, JORDAN_IDX, LEBRON_IDX)
+            out[me] = p
+        return out
+
+    # Full (all 5)
+    full_cols = list(range(5))
+    full_R = SPEARMAN_CORR
+
+    # Impact-only: CSDI (0), EARD (1), CWIM (2)
+    impact_cols = [0, 1, 2]
+    impact_fw = ["CSDI", "EARD", "CWIM"]
+    impact_R = _build_sub_corr(impact_fw)
+
+    # Preference-only: BPLS (3), AHP-SD (4)
+    pref_cols = [3, 4]
+    pref_fw = ["BPLS", "AHP-SD"]
+    pref_R = _build_sub_corr(pref_fw)
+
+    return {
+        "full":             _sweep(full_cols, full_R),
+        "impact_only":      _sweep(impact_cols, impact_R),
+        "preference_only":  _sweep(pref_cols, pref_R),
+    }
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Main entry point
+# ═══════════════════════════════════════════════════════════════════════════
+
+def run_latent_ensemble(
+    framework_results: dict | None = None,
+    verbose: bool = True,
+) -> dict:
+    """
+    Run the full latent variable ensemble model (full + sub-ensembles).
+
+    Parameters
+    ----------
+    framework_results : dict or None
+        Dict with keys 'csdi', 'eard', 'cwim', 'bpls', 'ahp_sd' as returned
+        by run_all.py.  If None, uses the hardcoded RAW_SCORES (standalone mode).
+
+    Returns a dict with:
+      - 'full':            compute_latent_ensemble() result (all 5 frameworks)
+      - 'impact_only':     compute_sub_ensemble() on CSDI + EARD + CWIM
+      - 'preference_only': compute_sub_ensemble() on BPLS + AHP-SD
+      - 'sensitivity':     sensitivity_analysis() results across min_eig range
+
+    Target outputs:
+      Full:            P(Jordan > LeBron) = 0.76, sensitivity [0.71, 0.91]
+      Impact-only:     P = 0.69
+      Preference-only: P = 0.83
+    """
+    # Full ensemble
+    full = compute_latent_ensemble(framework_results)
+
+    # Sub-ensembles
+    impact_only = compute_sub_ensemble(framework_results, ["CSDI", "EARD", "CWIM"])
+    preference_only = compute_sub_ensemble(framework_results, ["BPLS", "AHP-SD"])
+
+    # Sensitivity sweep
+    sens = sensitivity_analysis(framework_results)
+
+    results = {
+        "full":             full,
+        "impact_only":      impact_only,
+        "preference_only":  preference_only,
+        "sensitivity":      sens,
+        # Top-level convenience keys (mirror full ensemble)
+        "P_jordan_gt_lebron": full["P_jordan_gt_lebron"],
+        "G_mean":             full["G_mean"],
+        "G_ci_95":            full["G_ci_95"],
+        "P_best":             full["P_best"],
+        "loadings":           full["loadings"],
+        "framework_bias":     full["framework_bias"],
+        "min_eig_used":       full["min_eig_used"],
     }
 
     if verbose:
-        _print_report(results)
+        _print_report(full)
+        _print_sub_ensemble_summary(impact_only, preference_only)
 
     return results
 
@@ -366,6 +640,35 @@ def _print_report(r: dict) -> None:
     print(f"  KEY RESULT: P(G_jordan > G_lebron) = {p:.2f}")
     print(f"    sensitivity range: [{min(r['sensitivity'].values()):.2f}, "
           f"{max(r['sensitivity'].values()):.2f}]")
+    print("=" * 72)
+    print()
+
+
+def _print_sub_ensemble_summary(impact: dict, preference: dict) -> None:
+    """Print a compact summary of the two sub-ensemble results."""
+    print()
+    print("=" * 72)
+    print("  LATENT ENSEMBLE — SUB-ENSEMBLE RESULTS")
+    print("=" * 72)
+
+    for label, res in [("Impact-only (CSDI + EARD + CWIM)", impact),
+                       ("Preference-only (BPLS + AHP-SD)", preference)]:
+        p = res["P_jordan_gt_lebron"]
+        sens = res["sensitivity"]
+        sens_min = min(sens.values())
+        sens_max = max(sens.values())
+        print(f"\n  {label}")
+        print(f"    P(Jordan > LeBron) = {p:.4f}")
+        print(f"    sensitivity range:  [{sens_min:.2f}, {sens_max:.2f}]")
+        print(f"    loadings: " + ", ".join(
+            f"{fw}={v:.3f}" for fw, v in res["loadings"].items()
+        ))
+
+    print()
+    print("  Target values (from paper):")
+    print("    Full:            P = 0.76  sensitivity [0.71, 0.91]")
+    print("    Impact-only:     P = 0.69")
+    print("    Preference-only: P = 0.83")
     print("=" * 72)
     print()
 
