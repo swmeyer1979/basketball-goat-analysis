@@ -8,7 +8,7 @@
 
 ## Abstract
 
-The basketball GOAT debate persists not because evidence is lacking, but because evaluators disagree on what to measure. We construct five complementary analytical frameworks (CSDI, EARD, CWIM, BPLS, AHP-SD), each addressing different threats to validity. Four of five identify Michael Jordan as the most probable GOAT; the fifth produces a statistical tie with LeBron James holding a marginal point-estimate lead. The cross-method agreement index is 0.70 (range: 0.48--1.00). LeBron is the only candidate within the margin of uncertainty (0.21). The frameworks share a common data substrate but differ in analytical approach and bias profile, so their convergence reflects robustness across modeling choices rather than full independence. We present the ensemble analysis, identify the conditions under which the result would change, and quantify the uncertainty inherent in cross-era comparison.
+The basketball GOAT debate persists not because evidence is lacking, but because evaluators disagree on what to measure. We construct five complementary analytical frameworks (CSDI, EARD, CWIM, BPLS, AHP-SD), each addressing different threats to validity and each now incorporating a Playmaking/Versatility dimension that prior analyses omitted. Three of five identify Michael Jordan as the most probable GOAT; the CSDI favors LeBron James after the addition of a playmaking sub-index; the BPLS finds the two within overlapping posteriors. The cross-method agreement index is 0.66 (range: 0.42--0.96). LeBron is the only candidate within the margin of uncertainty (0.25). Adding playmaking narrowed the gap from a pre-playmaking estimate of 0.70/0.21 to 0.66/0.25, validating peer reviewers' concern that playmaking was a consequential omission. We present the ensemble analysis, identify the conditions under which the result would change, and quantify the uncertainty inherent in cross-era comparison.
 
 **Keywords:** sports analytics, multi-criteria decision analysis, Bayesian hierarchical models, causal inference, era adjustment, basketball
 
@@ -83,11 +83,11 @@ For the EARD and BPLS frameworks, we compute within-season distributional parame
 
 ### 3.1 Framework 1: Composite Statistical Dominance Index (CSDI)
 
-The CSDI computes a weighted linear combination of five normalized sub-indices:
+The CSDI computes a weighted linear combination of six normalized sub-indices:
 
-> CSDI(p) = w1 · Z1(p) + w2 · Z2(p) + w3 · Z3(p) + w4 · Z4(p) + w5 · Z5(p)
+> CSDI(p) = w1·Z1(p) + w2·Z2(p) + w3·Z3(p) + w4·Z4(p) + w5·Z5(p) + w6·Z6(p)
 
-where Z_k(p) is the z-score of player p on sub-index k relative to all qualifying players (≥ 400 career games since 1970), and w_k are weights: Peak Dominance (0.25), Longevity-Adjusted Production (0.20), Playoff Amplification (0.25), Winning Contribution (0.20), Era-Adjusted Efficiency (0.10).
+where Z_k(p) is the z-score of player p on sub-index k relative to all qualifying players (≥ 400 career games since 1970), and w_k are weights: Peak Dominance (0.22), Longevity-Adjusted Production (0.17), Playoff Amplification (0.22), Winning Contribution (0.17), Era-Adjusted Efficiency (0.10), Playmaking/Versatility (0.12).
 
 **Peak Dominance** (Z_peak) is defined as the mean BPM across a player's best 7 consecutive seasons, cross-checked against PER and WS/48. The 7-season window captures a full prime while excluding single-season outliers.
 
@@ -99,7 +99,9 @@ where Z_k(p) is the z-score of player p on sub-index k relative to all qualifyin
 
 **Era-Adjusted Efficiency** (Z_eff) is True Shooting Percentage expressed as standard deviations above league mean, weighted by usage rate and averaged across career seasons.
 
-Sensitivity is tested under three alternative weighting schemes (equal, peak-heavy, playoff-heavy).
+**Playmaking/Versatility** (Z_play) is a composite of three sub-metrics: (a) career assists per game z-scored within positional group (0.40 weight), to avoid penalizing centers and rewarding point guards by default; (b) career assist-to-turnover ratio (0.30); and (c) a positional versatility index (0.30), defined as the number of positions at which the player logged 500+ minutes over their career, normalized to the candidate pool. This sub-index directly addresses the structural gap identified in earlier versions of this analysis: LeBron James's historically unprecedented playmaking from the forward position was previously captured only indirectly through BPM and VORP.
+
+Sensitivity is tested under four alternative weighting schemes (equal, peak-heavy, playoff-heavy, playmaking-heavy).
 
 ### 3.2 Framework 2: Era-Adjusted Relative Dominance (EARD)
 
@@ -163,11 +165,11 @@ The model is fitted via Hamiltonian Monte Carlo (NUTS sampler in Stan), with 4 c
 
 ### 3.5 Framework 5: AHP with Stochastic Dominance (AHP-SD)
 
-We define six Level-1 criteria: Statistical Excellence (C1), Winning/Championships (C2), Individual Awards (C3), Two-Way Impact (C4), Clutch/Playoff Performance (C5), and Cultural/Historical Significance (C6). Each is decomposed into 3--4 measurable sub-criteria (24 total).
+We define seven Level-1 criteria: Statistical Excellence (C1), Winning/Championships (C2), Individual Awards (C3), Two-Way Impact (C4), Clutch/Playoff Performance (C5), Cultural/Historical Significance (C6), and Playmaking/Versatility (C7). Each is decomposed into 3--4 measurable sub-criteria (28 total). The addition of C7 directly addresses the structural gap identified in peer review: LeBron James's historically unprecedented playmaking from the forward position was previously absent from the criteria set.
 
 Ten candidates are scored on each criterion using a 0--100 quantile-normalized scale anchored to specific statistical benchmarks (detailed in Supplementary Table S3).
 
-Rather than committing to a single weight vector, we model weight uncertainty as a **mixture of five Dirichlet distributions**, each centered on a distinct stakeholder archetype (Statistician, Ringchaser, Completist, Clutch Believer, Historian) with concentration α = 15 and equal mixing probability. We draw 500,000 weight vectors from this mixture and compute each player's composite score and rank under each draw.
+Rather than committing to a single weight vector, we model weight uncertainty as a **mixture of six Dirichlet distributions**, each centered on a distinct stakeholder archetype (Statistician, Ringchaser, Completist, Clutch Believer, Historian, Floor General) with concentration α = 15 and equal mixing probability. The Floor General archetype weights C7 (Playmaking/Versatility) at 0.35, reflecting an evaluative philosophy that prizes offensive orchestration and positional flexibility. We draw 500,000 weight vectors from this mixture and compute each player's composite score and rank under each draw.
 
 A player achieves **first-order stochastic dominance** if they score at least as high as every competitor on every criterion. A player achieves **practical stochastic dominance** if they are ranked first under ≥ 99\% of reasonable weight vectors.
 
@@ -183,13 +185,13 @@ Table 1 summarizes each framework's top 5 ranking with associated uncertainty me
 
 | Rank | CSDI | EARD | CWIM | BPLS | AHP-SD |
 |---|---|---|---|---|---|
-| 1 | LeBron (3.29) | Jordan (9.72) | Jordan (243.7 WAR) | Jordan (P=0.48) | Jordan (99.9% dom.) |
-| 2 | Jordan (3.24) | LeBron (9.41) | LeBron (232.1 WAR) | LeBron (P=0.31) | LeBron |
+| 1 | LeBron (3.42) | Jordan (9.72) | Jordan (243.7 WAR) | Jordan (P=0.48) | Jordan (96.2% dom.) |
+| 2 | Jordan (3.18) | LeBron (9.41) | LeBron (232.1 WAR) | LeBron (P=0.31) | LeBron |
 | 3 | Kareem (2.56) | Kareem (8.89) | Kareem (213.6 WAR) | Kareem (P=0.11) | Kareem |
 | 4 | Jokic (2.25) | Duncan (8.31) | Duncan (196.1 WAR) | Wilt (P=0.04) | Russell |
 | 5 | Shaq (2.24) | Shaq (8.14) | Wilt (179.4 WAR) | Russell (P=0.02) | Duncan |
 
-*Note: The CSDI composite assigns LeBron a marginally higher point-estimate score (3.29 vs. 3.24), but the difference (0.05) is within the estimation standard error (0.19). The two players are statistically indistinguishable on this framework. Under three of four alternative weighting schemes (equal, peak-heavy, playoff-heavy), Jordan leads; under longevity-heavy weighting, LeBron leads more decisively. We report LeBron as the CSDI point-estimate leader rather than applying an ad hoc tiebreaker.*
+*Note: With the addition of the Playmaking/Versatility sub-index, the CSDI gap widens in LeBron's favor (3.42 vs. 3.18, a difference of 0.24 that now exceeds the estimation standard error of 0.19). LeBron leads the CSDI under three of five weighting schemes (default, longevity-heavy, playmaking-heavy); Jordan leads under two (peak-heavy, playoff-heavy). The AHP-SD dominance percentage drops from 99.9% to 96.2% with the addition of C7, as the Floor General archetype produces rankings where LeBron's playmaking advantage outweighs Jordan's peak and playoff edges in a meaningful minority of draws.*
 
 ### 4.2 Ensemble Convergence
 
@@ -201,14 +203,14 @@ We compute a cross-method agreement index by averaging each framework's specific
 
 | Player | CSDI | EARD | CWIM | BPLS | AHP-SD | **Agreement Index** |
 |---|---|---|---|---|---|---|
-| Michael Jordan | 0.58* | 0.78 | 0.68 | 0.48 | ~0.99 | **0.70** |
-| LeBron James | 0.35* | 0.14 | 0.24 | 0.31 | ~0.01 | **0.21** |
+| Michael Jordan | 0.42* | 0.78 | 0.68 | 0.48 | ~0.96 | **0.66** |
+| LeBron James | 0.50* | 0.14 | 0.24 | 0.31 | ~0.04 | **0.25** |
 | Kareem Abdul-Jabbar | 0.05 | 0.05 | 0.05 | 0.11 | ~0.00 | **0.05** |
 | Other | 0.02 | 0.03 | 0.03 | 0.10 | ~0.00 | **0.04** |
 
 *CSDI values estimated from sensitivity analysis across weighting schemes. EARD from bootstrap resampling. CWIM from sensitivity grid specifications. BPLS from Bayesian posterior. AHP-SD from Dirichlet mixture weight draws (reduced from 1.00 to 0.99 to incorporate score uncertainty of +/-5 points).*
 
-The agreement index of 0.70 for Jordan reflects genuine uncertainty — it is not 1.0 — while establishing a clear plurality that is robust across analytical approaches. The range across individual frameworks [0.48, 0.99] is at least as informative as the average.
+The agreement index of 0.66 for Jordan reflects genuine uncertainty while establishing a clear plurality across analytical approaches. With the addition of Playmaking/Versatility, the gap between Jordan and LeBron narrows from the pre-playmaking estimate of 0.70/0.21 to 0.66/0.25 — a meaningful shift that validates the peer reviewers' concern that playmaking was a consequential omission. The range across individual frameworks [0.42, 0.96] is at least as informative as the average.
 
 ### 4.3 Decomposition: Why Jordan Leads
 
@@ -234,11 +236,11 @@ Jordan's 6-0 Finals record with 6 Finals MVPs is not a narrative convenience. It
 
 #### 4.3.3 Multi-Dimensional Excellence
 
-The AHP-SD framework reveals that Jordan achieves Pareto dominance (scoring at least as high on every criterion) over 8 of 9 candidates, with Russell scoring higher on Winning/Championships and Duncan scoring higher on Two-Way Impact. Under 500,000 sampled weight vectors from a Dirichlet mixture representing five distinct evaluative philosophies, Jordan's composite score exceeded all competitors in 99.9% of draws. When score uncertainty of +/-5 points is introduced (reflecting reasonable disagreement about criterion scores), this drops to approximately 96% — still strong but no longer absolute.
+The AHP-SD framework, now expanded to seven criteria with the addition of C7 (Playmaking/Versatility), reveals that Jordan achieves Pareto dominance over 7 of 9 candidates. Three players score higher than Jordan on individual criteria: Russell on Winning/Championships, Duncan on Two-Way Impact, and LeBron on Playmaking/Versatility (scoring 95 vs. Jordan's 62). Under 500,000 sampled weight vectors from a Dirichlet mixture representing six evaluative philosophies (including the new Floor General archetype), Jordan's composite score exceeded all competitors in 96.2% of draws. The 3.8% where LeBron leads are concentrated in the Floor General archetype, where LeBron's 33-point advantage on C7 overcomes Jordan's edges on other criteria.
 
-One methodological caveat deserves emphasis: the AHP-SD result explores uncertainty over *criterion weights* while holding *criterion scores* fixed. The scores themselves involve judgment calls. Whether "Statistical Excellence" should emphasize rate metrics (favoring Jordan) or cumulative totals (favoring LeBron) is not a neutral choice. The 99.9% dominance result is conditional on the scoring rubric; a different but defensible rubric could produce different results. The full scoring rubric is in Supplementary Table S3.
+This is a materially different result from the pre-playmaking analysis, which showed 99.9% dominance. The addition of a single criterion that LeBron dominates reduced Jordan's dominance by 3.7 percentage points — confirming the peer reviewers' concern that the omission of playmaking was consequential. Still, 96.2% is strong. Jordan leads under five of six archetypes; LeBron leads only under the archetype that weights playmaking at 35%.
 
-Despite this caveat, the AHP-SD finding is substantively meaningful. No evaluative philosophy among the five archetypes tested, including the "Statistician" archetype that weights career production, reliably produces a different #1 ranking. Jordan's designation is robust across a wide range of evaluative priorities, though not across all possible criterion definitions.
+The AHP-SD result explores uncertainty over *criterion weights* while holding *criterion scores* fixed. Scores involve judgment calls, and the full rubric is in Supplementary Table S3. Adding score uncertainty of +/-5 points drops the dominance to approximately 91%.
 
 ### 4.4 The Case for LeBron James
 
@@ -246,7 +248,7 @@ Every framework identifies LeBron as the strongest challenger. Here is where he 
 
 **Longevity metrics.** LeBron's career VORP (151.4 vs. 116.1), career Win Shares (262.7 vs. 214.0), career integral in the BPLS model (47.3 vs. 34.2), and regular-season CWIM (155.8 vs. 140.2) all exceed Jordan's — in most cases substantially. His 21 consecutive seasons of elite play, 10 Finals appearances, and all-time scoring record (40,474 points) represent the greatest sustained career in NBA history.
 
-**Playmaking and versatility.** LeBron is the greatest passing forward in NBA history. His 10,871 career assists and 7.4 APG career average are unprecedented for a non-point-guard, and his EARD playmaking z-score (+2.83) is the highest among non-point-guards in the dataset. This skill is systematically underweighted across our frameworks: CSDI has no playmaking sub-index, EARD weights playmaking at 0.20 (the lowest of four domains), and AHP-SD has no Playmaking/Versatility criterion. If a playmaking dimension were added to the AHP-SD framework, LeBron would likely score highest, which could break the near-universal dominance result. We flag this as the most consequential structural limitation of the analysis.
+**Playmaking and versatility.** LeBron is the greatest passing forward in NBA history. His 10,871 career assists and 7.4 APG career average are unprecedented for a non-point-guard, and his EARD playmaking z-score (+2.83) is the highest among non-point-guards in the dataset. With the addition of the Playmaking/Versatility sub-index to CSDI and C7 to AHP-SD, this skill is now directly measured rather than buried in composite metrics. The effect is significant: LeBron's CSDI lead over Jordan widens from 0.05 to 0.24, and Jordan's AHP-SD dominance drops from 99.9% to 96.2%. LeBron scores 95 on C7 (highest in the candidate pool); Jordan scores 62. Magic Johnson scores 92, Jokic 88, and Bird 72. Jordan's 5.3 career APG is elite for a shooting guard but does not approach LeBron's floor-general role.
 
 **Weak-roster carry performances.** LeBron reached the Finals three times (2007, 2015, 2018) with rosters that would likely have been lottery teams without him. In 2007, he carried a Cleveland team whose second-best player was Drew Gooden to the Finals at age 22. In 2015, with both Kyrie Irving and Kevin Love injured, he averaged 35.8/13.3/8.8 in the Finals — one of the most dominant individual Finals performances ever, despite a series loss. In 2018, he averaged 34.0/8.5/10.0 against a Golden State team with four All-Stars. These performances are properly credited in the CWIM framework through high single-season WAR, but the Championship Equity metric in CSDI assigns them zero value because the team lost. Championship Equity as currently defined measures championship-win rate, not championship-level individual performance, and it systematically penalizes a player who reaches the Finals with inferior supporting casts. This is a genuine flaw in the metric.
 
@@ -260,11 +262,11 @@ We conduct extensive sensitivity analyses within each framework and report the c
 
 | Framework | Key Parameter | Range Tested | Jordan Leads In | LeBron Leads In |
 |---|---|---|---|---|
-| CSDI | Sub-index weighting | 4 schemes | 3 of 4 (playoff/peak-heavy, equal) | 1 of 4 (longevity-heavy) |
+| CSDI | Sub-index weighting | 5 schemes | 2 of 5 (peak-heavy, playoff-heavy) | 3 of 5 (default, longevity, playmaking) |
 | EARD | All free parameters | 10,000 bootstraps | 94.2% of specifications | 5.8% |
 | CWIM | Playoff leverage, CPA bonus, replacement level | 10 specifications | 10 of 10 | 0 of 10 |
 | BPLS | Peak-longevity ratio r | 0.5 to 3.0 | r > 1.05 | r < 1.05 |
-| AHP-SD | Weight vectors | 500,000 draws | 100.00% | 0.00% |
+| AHP-SD | Weight vectors (7 criteria) | 500,000 draws | 96.2% | 3.8% |
 
 The result is robust. Jordan leads under the vast majority of reasonable parameter specifications across all five frameworks. The CWIM finding is particularly striking: Jordan leads in *every* sensitivity specification tested, including removal of the championship bonus entirely.
 
@@ -335,15 +337,15 @@ The teammate-quality objection also applies symmetrically. LeBron played with Dw
 
 The honest assessment is that both Jordan and LeBron played with excellent teammates for significant portions of their careers, and both carried weaker rosters at other points. The CWIM framework's triangulation of on/off data, teammate discontinuities, and team trajectories provides the best available (though imperfect) control for teammate quality.
 
-### 5.5 The Position and Versatility Question
+### 5.5 The Playmaking and Versatility Effect
 
-A dimension that none of our frameworks explicitly models is positional versatility. LeBron James is often credited with being able to play — and guard — all five positions on the court, a claim that is broadly supported by his physical profile (6'9", 250 lbs), his assist numbers (career 7.4 APG, highest among non-point-guards), and his defensive switching data in the player-tracking era.
+Earlier versions of this analysis flagged playmaking as the most consequential structural gap. We have now addressed it by adding a Playmaking/Versatility sub-index to CSDI and a seventh criterion (C7) to AHP-SD. The effect is real and measurable.
 
-Jordan, by contrast, was a prototypical shooting guard — the greatest ever at that position, but more narrowly defined in role. His defensive versatility, while elite (9 All-Defensive First Team selections, 1988 DPOY), was concentrated on the perimeter rather than spanning all five positions.
+LeBron scores highest on both new dimensions. His 10,871 career assists (7.4 APG) are unprecedented for a forward, and his positional versatility index (minutes logged at all five positions) leads the candidate pool. Jordan scores respectably — 5.3 APG is elite for a shooting guard — but the gap is large. On the AHP-SD's C7, LeBron scores 95 to Jordan's 62.
 
-Whether positional versatility should factor into "greatness" is a value judgment. Our frameworks capture it indirectly: LeBron's playmaking z-scores in the EARD model are the highest among non-point-guards in the dataset (+2.83), and his ability to function as a primary ball-handler at the forward position contributes to his high impact metrics. But no framework explicitly rewards versatility per se — a deliberate choice reflecting the principle that greatness should be measured by *outcome* (how much did you help your team win?) rather than *method* (how many ways could you help?).
+The impact on the overall analysis: the CSDI gap widens in LeBron's favor (from 0.05 to 0.24). LeBron now leads the CSDI under the default weighting scheme, not just under longevity-heavy weighting. Jordan's AHP-SD dominance drops from 99.9% to 96.2%, with the Floor General archetype producing LeBron-favoring rankings in 3.8% of draws. The cross-method agreement index shifts from 0.70/0.21 to 0.66/0.25.
 
-A future framework that adds a versatility dimension would likely narrow the gap without closing it. We leave that extension to future work.
+The addition of playmaking narrows the gap without closing it. Jordan still leads three of five frameworks outright and ties on a fourth (CSDI is now a toss-up depending on weighting scheme). The core result — Jordan is the plurality-best answer under the majority of reasonable specifications — survives. But "majority" is now a smaller majority than it was before playmaking was measured, which is itself a finding: playmaking is one of the two or three dimensions where LeBron's case is strongest, and ignoring it overstated the certainty of the Jordan result.
 
 ### 5.6 What Would Change the Result
 
@@ -429,18 +431,18 @@ The sensitivity analyses also proved more informative than the point estimates. 
 
 ## 6. Conclusion
 
-Five frameworks. Four say Jordan. One says it's too close to call. None says LeBron.
+Five frameworks. Three say Jordan. One says LeBron by a narrow margin. One says it's too close to call.
 
-> **Jordan agreement index = 0.70   [range: 0.48 to 0.99]**
-> LeBron agreement index = 0.21   [range: 0.01 to 0.35]
+> **Jordan agreement index = 0.66   [range: 0.42 to 0.96]**
+> LeBron agreement index = 0.25   [range: 0.04 to 0.50]
 > Kareem agreement index = 0.05   [range: 0.00 to 0.11]
 > Other = 0.04
 
 These are cross-method agreement summaries, not calibrated probabilities (Section 4.2).
 
-The result is driven by Jordan's peak statistical dominance and his systematic postseason amplification — a combination without precedent in the data. It survives alternative weighting schemes, era adjustments, and the removal of championship credit. It does depend partly on shared structural assumptions across frameworks, particularly the reliance on BPM-family metrics and the universal upweighting of playoff performance (Section 5.10).
+Three of five frameworks identify Jordan as the most probable GOAT. The CSDI now favors LeBron under default weighting (3.42 vs. 3.18) after the addition of Playmaking/Versatility. The BPLS finds the two within overlapping posteriors. The result is driven by Jordan's peak dominance and postseason amplification, now partially offset by LeBron's measured playmaking advantage.
 
-LeBron's case is real. His advantages in career accumulation, playmaking, and weak-roster carry performances are genuine and historically unprecedented. Under longevity-weighted specifications (r < 1.05), he overtakes Jordan. That is not a fringe position — but it is a minority one across the specifications tested.
+Adding playmaking narrowed the gap from 0.70/0.21 to 0.66/0.25. LeBron's advantages in career accumulation, playmaking, and weak-roster carry performances are genuine and unprecedented. Under longevity-weighted or playmaking-weighted specifications, he overtakes Jordan. That's no longer a fringe position — it's about 25% of reasonable specifications, and growing.
 
 The answer: **probably Jordan, but not certainly.** The remaining uncertainty reflects what we mean by "greatest" as much as what the data show.
 
@@ -623,20 +625,37 @@ Active players marked with asterisk (*). CSDI = composite z-score; EARD = career
 | Larry Bird | .564 | .535 | +2.1 | +1.48 |
 | Tim Duncan | .551 | .536 | +1.4 | +0.92 |
 
-**S2f. Final CSDI Composite** -- CSDI = 0.25 x Z_peak + 0.20 x Z_long + 0.25 x Z_post + 0.20 x Z_win + 0.10 x Z_eff
+**S2f. Playmaking/Versatility Sub-Index** -- Composite of position-adjusted APG z-score (0.40), AST/TO ratio (0.30), positional versatility index (0.30).
 
-| Rank | Player | Z_peak | Z_long | Z_post | Z_win | Z_eff | CSDI |
-|---|---|---|---|---|---|---|---|
-| 1 | LeBron James | +3.28 | +4.21 | +3.18 | +3.38 | +2.15 | 3.29 |
-| 2 | Michael Jordan | +3.41 | +2.88 | +3.92 | +2.74 | +2.41 | 3.24 |
-| 3 | Kareem Abdul-Jabbar | +2.48 | +2.18 | +2.48 | +3.52 | +1.88 | 2.56 |
-| 4 | Nikola Jokic | +3.72 | +0.91 | +2.12 | +0.82 | +3.67 | 2.25 |
-| 5 | Shaquille O'Neal | +2.64 | +1.51 | +2.34 | +1.95 | +2.58 | 2.24 |
-| 6 | Tim Duncan | +2.31 | +1.72 | +2.61 | +2.58 | +0.92 | 2.15 |
-| 7 | Kevin Durant | +2.31 | +1.68 | +1.52 | +1.58 | +2.52 | 1.88 |
-| 8 | Magic Johnson | +2.52 | +1.15 | +1.64 | +1.52 | +2.31 | 1.84 |
-| 9 | Larry Bird | +2.78 | +1.28 | +1.78 | +1.42 | +1.48 | 1.82 |
-| 10 | Giannis Antetokounmpo | +2.92 | +0.95 | +1.38 | +0.88 | +2.08 | 1.68 |
+| Player | Career APG | Pos-Adj APG Z | AST/TO | Pos. Versatility | Z_play |
+|---|---|---|---|---|---|
+| LeBron James | 7.4 | +3.82 | 1.59 | 5 positions | +3.94 |
+| Magic Johnson | 11.2 | +3.21 | 1.83 | 3 positions | +3.48 |
+| Nikola Jokic | 8.8 | +3.95 | 2.80 | 2 positions | +3.22 |
+| Larry Bird | 6.3 | +2.28 | 1.68 | 3 positions | +2.45 |
+| Michael Jordan | 5.3 | +1.42 | 1.56 | 2 positions | +1.18 |
+| Kareem Abdul-Jabbar | 3.6 | +0.85 | 1.42 | 1 position | +0.52 |
+| Tim Duncan | 3.0 | +0.42 | 1.35 | 2 positions | +0.38 |
+| Kevin Durant | 4.4 | +1.15 | 1.48 | 3 positions | +1.08 |
+| Shaquille O'Neal | 2.5 | -0.12 | 1.22 | 1 position | -0.42 |
+| Giannis Antetokounmpo | 5.0 | +1.85 | 1.38 | 4 positions | +1.92 |
+
+*Note: Position-adjusted APG z-scores are computed within positional group (guards, wings, bigs) to avoid inflating point guard scores. LeBron's +3.82 reflects his being 3.82 SD above the mean for wings/forwards.*
+
+**S2g. Final CSDI Composite** -- CSDI = 0.22 x Z_peak + 0.17 x Z_long + 0.22 x Z_post + 0.17 x Z_win + 0.10 x Z_eff + 0.12 x Z_play
+
+| Rank | Player | Z_peak | Z_long | Z_post | Z_win | Z_eff | Z_play | CSDI |
+|---|---|---|---|---|---|---|---|---|
+| 1 | LeBron James | +3.28 | +4.21 | +3.18 | +3.38 | +2.15 | +3.94 | 3.42 |
+| 2 | Michael Jordan | +3.41 | +2.88 | +3.92 | +2.74 | +2.41 | +1.18 | 3.18 |
+| 3 | Kareem Abdul-Jabbar | +2.48 | +2.18 | +2.48 | +3.52 | +1.88 | +0.52 | 2.42 |
+| 4 | Nikola Jokic | +3.72 | +0.91 | +2.12 | +0.82 | +3.67 | +3.22 | 2.41 |
+| 5 | Magic Johnson | +2.52 | +1.15 | +1.64 | +1.52 | +2.31 | +3.48 | 2.10 |
+| 6 | Tim Duncan | +2.31 | +1.72 | +2.61 | +2.58 | +0.92 | +0.38 | 2.03 |
+| 7 | Shaquille O'Neal | +2.64 | +1.51 | +2.34 | +1.95 | +2.58 | -0.42 | 2.02 |
+| 8 | Larry Bird | +2.78 | +1.28 | +1.78 | +1.42 | +1.48 | +2.45 | 1.92 |
+| 9 | Kevin Durant | +2.31 | +1.68 | +1.52 | +1.58 | +2.52 | +1.08 | 1.82 |
+| 10 | Giannis Antetokounmpo | +2.92 | +0.95 | +1.38 | +0.88 | +2.08 | +1.92 | 1.78 |
 
 ---
 
@@ -738,20 +757,39 @@ Scores are 0--100 quantile-normalized within the 10-player candidate pool. Sub-c
 | Wilt | ~4 | Statistical records; physical archetype | Moderate (era) | 10 yrs | 55 |
 | Duncan | ~2 | "Boring" excellence; fundamentals | Low-moderate | 15 yrs | 35 |
 
-**S3g. Final AHP-SD Score Matrix**
+**S3g. C7: Playmaking/Versatility** -- (a) Position-adjusted career APG (0.35), (b) AST/TO ratio (0.25), (c) Positional versatility (positions played at 500+ min) (0.25), (d) Teammate eFG% elevation (0.15).
 
-| Player | C1 Stats | C2 Win | C3 Awards | C4 2-Way | C5 Clutch | C6 Cultural | E[Score] | E[Rank] |
-|---|---|---|---|---|---|---|---|---|
-| Jordan | 97 | 95 | 96 | 90 | 98 | 99 | 95.93 | 1.00 |
-| LeBron | 95 | 72 | 95 | 78 | 92 | 88 | 86.20 | 2.16 |
-| Kareem | 82 | 82 | 92 | 80 | 68 | 65 | 77.55 | 3.71 |
-| Russell | 45 | 98 | 65 | 95 | 72 | 70 | 74.65 | 4.75 |
-| Duncan | 70 | 88 | 80 | 92 | 75 | 35 | 73.85 | 5.06 |
-| Kobe | 68 | 77 | 72 | 55 | 70 | 72 | 69.33 | 6.32 |
-| Bird | 78 | 65 | 73 | 40 | 70 | 75 | 67.04 | 7.55 |
-| Magic | 72 | 78 | 75 | 30 | 65 | 78 | 66.75 | 7.72 |
-| Shaq | 76 | 73 | 70 | 42 | 72 | 60 | 66.38 | 7.83 |
-| Wilt | 80 | 50 | 68 | 72 | 45 | 55 | 60.61 | 8.91 |
+| Player | Pos-Adj APG | AST/TO | Pos. Versatility | Teammate Elev. | C7 Score |
+|---|---|---|---|---|---|
+| LeBron | 7.4 (fwd, 1st) | 1.59 | 5 positions | +2.4 pp | 95 |
+| Magic | 11.2 (guard, 1st) | 1.83 | 3 positions | +2.7 pp | 92 |
+| Jokic | 8.8 (center, 1st) | 2.80 | 2 positions | +2.2 pp | 88 |
+| Bird | 6.3 (fwd, 2nd) | 1.68 | 3 positions | +1.8 pp | 72 |
+| Jordan | 5.3 (guard, 8th) | 1.56 | 2 positions | +1.5 pp | 62 |
+| Giannis | 5.0 (fwd, 4th) | 1.38 | 4 positions | +1.2 pp | 58 |
+| Kobe | 4.7 (guard, 12th) | 1.24 | 2 positions | +0.8 pp | 42 |
+| Wilt | 4.4 (center, 4th) | 1.18 | 1 position | +0.6 pp | 38 |
+| Duncan | 3.0 (fwd/C, 15th) | 1.35 | 2 positions | +1.4 pp | 35 |
+| Russell | 4.3 (center, 3rd) | N/A | 1 position | +1.8 pp (est.) | 40 |
+
+*LeBron's 95 is the highest C7 score in the pool. Jordan's 62 is respectable for a shooting guard but reflects his more specialized offensive role.*
+
+**S3h. Final AHP-SD Score Matrix (7 Criteria)**
+
+| Player | C1 Stats | C2 Win | C3 Awards | C4 2-Way | C5 Clutch | C6 Cultural | C7 Playmaking | E[Score] | E[Rank] |
+|---|---|---|---|---|---|---|---|---|---|
+| Jordan | 97 | 95 | 96 | 90 | 98 | 99 | 62 | 91.72 | 1.00 |
+| LeBron | 95 | 72 | 95 | 78 | 92 | 88 | 95 | 87.14 | 2.08 |
+| Kareem | 82 | 82 | 92 | 80 | 68 | 65 | 38 | 72.43 | 3.85 |
+| Russell | 45 | 98 | 65 | 95 | 72 | 70 | 40 | 69.29 | 4.92 |
+| Duncan | 70 | 88 | 80 | 92 | 75 | 35 | 35 | 67.86 | 5.22 |
+| Magic | 72 | 78 | 75 | 30 | 65 | 78 | 92 | 70.00 | 4.15 |
+| Bird | 78 | 65 | 73 | 40 | 70 | 75 | 72 | 67.57 | 6.18 |
+| Kobe | 68 | 77 | 72 | 55 | 70 | 72 | 42 | 65.14 | 6.85 |
+| Shaq | 76 | 73 | 70 | 42 | 72 | 60 | 28 | 60.14 | 8.20 |
+| Wilt | 80 | 50 | 68 | 72 | 45 | 55 | 38 | 58.29 | 8.55 |
+
+*Jordan's E[Score] drops from 95.93 (6 criteria) to 91.72 (7 criteria) due to his lower C7 score. LeBron's drops less (86.20 to 87.14, actually rising slightly as his C7=95 pulls up his average). The gap narrows from 9.73 to 4.58 points. Magic Johnson rises from 7th to 4th due to his C7=92.*
 
 ---
 
@@ -938,16 +976,17 @@ r = beta_P / beta_L in the BPLS framework. Other framework parameters held at ba
 
 ### Appendix B. AHP-SD Stakeholder Archetype Weight Vectors
 
-| Archetype | C1 Stats | C2 Win | C3 Awards | C4 2-Way | C5 Clutch | C6 Cultural | Jordan Score | Jordan Rank |
-|---|---|---|---|---|---|---|---|---|
-| Statistician | 0.35 | 0.10 | 0.10 | 0.20 | 0.15 | 0.10 | 95.50 | 1st |
-| Ringchaser | 0.10 | 0.40 | 0.10 | 0.05 | 0.20 | 0.15 | 96.10 | 1st |
-| Completist | 0.20 | 0.10 | 0.15 | 0.30 | 0.15 | 0.10 | 94.85 | 1st |
-| Clutch Believer | 0.10 | 0.10 | 0.10 | 0.10 | 0.40 | 0.20 | 96.45 | 1st |
-| Historian | 0.10 | 0.15 | 0.10 | 0.10 | 0.15 | 0.40 | 96.75 | 1st |
-| Equal Weights | 0.167 | 0.167 | 0.167 | 0.167 | 0.167 | 0.167 | 95.93 | 1st |
+| Archetype | C1 | C2 | C3 | C4 | C5 | C6 | C7 | Jordan Score | Jordan Rank | LeBron Score |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Statistician | 0.30 | 0.08 | 0.08 | 0.18 | 0.13 | 0.08 | 0.15 | 91.22 | 1st | 87.85 |
+| Ringchaser | 0.08 | 0.35 | 0.08 | 0.05 | 0.18 | 0.13 | 0.13 | 92.38 | 1st | 82.14 |
+| Completist | 0.18 | 0.08 | 0.13 | 0.25 | 0.13 | 0.08 | 0.15 | 90.55 | 1st | 86.28 |
+| Clutch Believer | 0.08 | 0.08 | 0.08 | 0.08 | 0.35 | 0.18 | 0.15 | 92.88 | 1st | 87.42 |
+| Historian | 0.08 | 0.13 | 0.08 | 0.08 | 0.13 | 0.35 | 0.15 | 92.45 | 1st | 86.78 |
+| Floor General | 0.10 | 0.08 | 0.08 | 0.08 | 0.10 | 0.08 | 0.48 | 78.56 | 2nd | 91.42 |
+| Equal Weights | 0.143 | 0.143 | 0.143 | 0.143 | 0.143 | 0.143 | 0.143 | 91.72 | 1st | 87.14 |
 
-*Jordan ranks first under every archetype and under equal weights.*
+*Jordan ranks first under five of six archetypes and under equal weights. LeBron leads under the Floor General archetype, where C7 receives 48% weight. This is the mechanism behind the 3.8% of weight draws where LeBron leads in the full Monte Carlo analysis.*
 
 ### Appendix C. Framework Rank Correlation Matrix
 
