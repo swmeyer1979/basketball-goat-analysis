@@ -421,7 +421,7 @@ The five frameworks, while analytically distinct, share dependencies that weaken
 
 **Shared metric dependence.** BPM and its derivatives (VORP, Win Shares) are used by all five frameworks to varying degrees (see Table A in Section 2.2). BPM is a box-score regression model that overvalues high-usage scorers and undervalues off-ball contributors and defensive specialists — precisely the profile distinction between Jordan and LeBron. If BPM's biases systematically favor Jordan's player archetype, convergence across frameworks partly reflects shared dependence on BPM rather than five independent confirmations. A stronger test would substitute EPM, DARKO, or RAPM-family metrics into at least one framework and verify that the ranking holds. We identify this as the highest-priority extension for future work.
 
-**Shared structural priors.** All five frameworks incorporate some form of postseason weighting — playoff leverage in CWIM (λ = 3.2), 60/40 playoff weighting in EARD, Playoff Amplification as a 25%-weighted sub-index in CSDI, playoff elevation ratio in BPLS, and Clutch/Playoff as an AHP-SD criterion. Since Jordan's most separating characteristic is playoff amplification, the shared decision to upweight postseason performance creates correlated bias across frameworks. To assess the impact, we note that removing all postseason bonuses from CWIM (setting λ = 1.0, α = 0) produces Jordan: 218.5 WAR vs. LeBron: 204.9 WAR — Jordan still leads, with the gap slightly widening from 11.6 to 13.6 wins. This is the opposite of what one might expect: it means the playoff weighting in the base case slightly *compresses* the Jordan-LeBron gap in CWIM rather than inflating it. The core result survives the ablation, and the shared playoff weighting does not appear to be the mechanism driving Jordan's CWIM advantage.
+**Shared structural priors.** All five frameworks incorporate some form of postseason weighting — playoff leverage in CWIM (λ = 3.2), 60/40 playoff weighting in EARD, Playoff Amplification as a 25%-weighted sub-index in CSDI, playoff elevation ratio in BPLS, and Clutch/Playoff as an AHP-SD criterion. Since Jordan's most separating characteristic is playoff amplification, the shared decision to upweight postseason performance creates correlated bias across frameworks. Full ablation results (Section 5.12) confirm that removing all postseason signal from CWIM reverses the ranking: LeBron leads 114.5 to 71.2 WAR on regular-season data alone, reflecting his 21-season longevity advantage. Even at parity weighting (playoffs at 1x, no championship bonus), LeBron leads 149.2 to 123.2. This confirms that playoff amplification is load-bearing for Jordan's CWIM advantage — not a minor weighting choice but a structural driver of the result. However, the BPM-free and championship-free ablations (Section 5.12) show that the convergence survives removal of the other two shared dependencies, meaning the convergence is not an artifact of any single shared bias.
 
 **Effective independence.** Pairwise Spearman rank correlations across the five frameworks range from 0.72 (CSDI-AHP-SD) to 0.91 (CSDI-EARD), with a mean of 0.82. The effective number of independent frameworks, estimated via eigenvalue decomposition of the correlation matrix, is approximately 2.3. The convergence argument is therefore weaker than five fully independent confirmations but substantially stronger than a single analysis. The convergence provides evidence of robustness across a meaningful range of analytical approaches — not five independent replications of the same finding, but something considerably more than one.
 
@@ -432,6 +432,40 @@ Beyond the specific GOAT result, this study illustrates what methodological tria
 The same approach could be applied to other "greatest ever" debates — baseball (Ruth vs. Mays vs. Bonds vs. Trout), soccer (Pele vs. Maradona vs. Messi), hockey (Gretzky vs. Orr vs. Lemieux) — and to position-specific rankings within a sport. The core insight holds in all of them: *agreement across methods* carries more evidentiary weight than the output of any single method, however sophisticated.
 
 The sensitivity analyses also proved more informative than the point estimates. Knowing that Jordan leads under 94.2% of EARD bootstrap specifications is more useful than knowing his EARD score is 9.72 — it answers the question a skeptical reader actually cares about: is this result fragile or robust? Future sports analytics work should report robustness analyses as standard practice, not an afterthought.
+
+### 5.12 Ablation Results
+
+A reviewer correctly identified the central methodological weakness of the original analysis: the five frameworks share BPM-family metrics, structural playoff weighting, and championship valuation, reducing the effective number of independent confirmations to approximately 2.3. We address this directly with three ablation studies, each removing a different shared dependency entirely and reporting how the rankings move.
+
+**Ablation 1: BPM-Free CSDI.** We replace all BPM, VORP, Win Shares, PER, and WS/48 inputs in the CSDI framework with a composite of raw box-score statistics only: PPG, RPG, APG, SPG, BPG, TS%, and usage rate. All five sub-indices (Peak Dominance, Longevity, Playoff Amplification, Winning Contribution, and Era-Adjusted Efficiency) are recomputed from these inputs with no derived advanced metrics.
+
+Result: Jordan leads 1.462 to LeBron's 1.026, a gap of 0.436 standard deviations — *wider* than the 0.24 gap in the original CSDI. Jordan's raw box-score profile (30.1 PPG, 2.35 SPG, 10 scoring titles, 33.4 playoff PPG) is sufficiently dominant that BPM-family metrics are not required to establish his advantage. Removing BPM-family inputs strengthens rather than weakens Jordan's position. Top 5: (1) Jordan 1.462, (2) LeBron 1.026, (3) Kareem 0.278, (4) Wilt 0.056, (5) Shaq 0.018.
+
+This ablation directly addresses the concern that "BPM overvalues high-usage scorers" — even with BPM removed entirely, the ranking is preserved with a wider margin.
+
+**Ablation 2: Playoff-Free CWIM.** We test two variants: (A) pure regular-season WAR with no playoff data of any kind, and (B) playoffs weighted at parity (1x, not 3.2x) with no championship bonus (α = 0).
+
+RS-Only result: LeBron leads 114.5 to Jordan's 71.2 WAR (gap: 43.2 WAR). Under parity weighting, LeBron leads 149.2 to Jordan's 123.2 (gap: 26.0 WAR). In both variants, LeBron's 21-season longevity advantage dominates when postseason leverage is removed.
+
+This is the ablation where the ranking reverses, and it reverses decisively. Jordan's CWIM advantage is not an artifact of a minor weighting choice — playoff amplification is the structural mechanism that drives his lead. Without it, LeBron's superior career accumulation (1,487 games vs. 1,072, 262.7 WS vs. 214.0) produces a clear regular-season advantage. The CWIM framework, by design, is a cumulative WAR model; it should favor LeBron without playoff leverage, and it does.
+
+**Correction:** An earlier version of this paper (Section 5.10) claimed that setting λ = 1.0, α = 0 produced Jordan: 218.5 vs. LeBron: 204.9. This was incorrect. The actual computation, verified by running the ablation code, shows LeBron leading under both RS-only and parity specifications. The erroneous claim has been corrected.
+
+**Ablation 3: Championship-Free AHP-SD.** We remove C2 (Winning/Championships) entirely from the AHP-SD framework and run the Monte Carlo analysis with five remaining criteria: C1 (Statistical Excellence), C3 (Individual Awards), C4 (Two-Way Impact), C5 (Clutch/Playoff Performance), and C6 (Cultural/Historical Significance).
+
+Result: Jordan is ranked #1 under 99.99% of 500,000 weight draws. LeBron does not overtake Jordan under any of the five stakeholder archetypes (Statistician, Ringchaser, Completist, Clutch Believer, Historian). Jordan's scores on C1 (82.5 vs. 80.0), C3 (84.2 vs. 65.8), C5 (81.6 vs. 69.6), and C6 (79.7 vs. 51.1) are sufficiently dominant across four of five remaining criteria that removing championships has negligible impact.
+
+This result is perhaps the strongest of the three: Jordan's AHP-SD dominance is driven by statistical excellence, individual awards, and playoff performance, not by championship count. The championship criterion was not the mechanism.
+
+**Summary.** Jordan leads two of three ablations; the CWIM ablation reverses:
+
+| Ablation | Shared dependency removed | Jordan leads? | Gap |
+|---|---|---|---|
+| BPM-Free CSDI | BPM/VORP/WS metrics | Yes | +0.436 SD (wider than baseline) |
+| RS-Only CWIM | All postseason signal | **No** | -43.2 WAR (LeBron leads) |
+| Championship-Free AHP-SD | Championships (C2) | Yes | 99.99% dominance |
+
+The convergence result is partially robust. The BPM-free ablation shows the finding is not an artifact of shared advanced metrics. The championship-free ablation shows it is not an artifact of championship valuation. The CWIM ablation reveals that playoff amplification is genuinely load-bearing: it is the single most consequential shared dependency, and removing it causes the one framework most sensitive to cumulative career production to favor LeBron's longevity. This is the honest answer to the reviewer's question: the five-framework convergence draws real evidential strength from postseason data, and that dependence should be understood and reported rather than minimized.
 
 ---
 
