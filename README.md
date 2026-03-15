@@ -6,7 +6,7 @@
 
 ## Overview
 
-This repository contains the complete paper, data, analysis code, and results for a multi-method ensemble analysis of the basketball GOAT question. Five independent, methodologically orthogonal analytical frameworks are applied:
+This repository contains the complete paper, data, analysis code, and results for a multi-method ensemble analysis of the basketball GOAT question. Five complementary analytical frameworks are applied:
 
 1. **Composite Statistical Dominance Index (CSDI)** -- Weighted composite of z-scored advanced metrics
 2. **Era-Adjusted Relative Dominance (EARD)** -- Within-season z-scores with talent pool depth adjustment
@@ -16,19 +16,19 @@ This repository contains the complete paper, data, analysis code, and results fo
 
 ## Key Result
 
-All five frameworks independently identify **Michael Jordan** as the most probable GOAT:
+Four of five frameworks identify **Michael Jordan** as the most probable GOAT. The fifth (CSDI) produces a statistical tie with LeBron holding a marginal point-estimate lead.
 
-| Framework | GOAT | Confidence |
-|-----------|------|------------|
-| CSDI | Michael Jordan | Rank 1 in 4/5 weighting schemes |
-| EARD | Michael Jordan | EARD 9.72; rank 1 in 87%+ of bootstrap specs |
-| CWIM | Michael Jordan | 243.7 career WAR; leads 9/10 sensitivity specs |
-| BPLS | Michael Jordan | P(Jordan = GOAT) = 0.50 |
-| AHP-SD | Michael Jordan | Ranked #1 under 99.98% of 500K weight vectors |
+| Framework | Result | Confidence |
+|-----------|--------|------------|
+| CSDI | Statistical tie (LeBron 3.29, Jordan 3.24) | Jordan leads 3/4 alternative weighting schemes |
+| EARD | Michael Jordan (9.72) | Rank 1 in 87%+ of bootstrap specs |
+| CWIM | Michael Jordan (243.7 WAR) | Leads 9/10 sensitivity specs |
+| BPLS | Michael Jordan | P(Jordan) = 0.48; P(LeBron) = 0.31 |
+| AHP-SD | Michael Jordan | Ranked #1 under 99.9% of 500K weight vectors |
 
-**Ensemble probability: P(Jordan = GOAT) = 0.74**
+**Cross-method agreement index: 0.70** (not a calibrated probability; see Section 4.2 of the paper for caveats)
 
-LeBron James is the only candidate within the margin of statistical uncertainty (ensemble P = 0.20).
+LeBron James is the only candidate within the margin of statistical uncertainty (agreement index = 0.21). The frameworks share a common data substrate and structural playoff weighting bias, so convergence reflects robustness across a meaningful range of analytical approaches, not five fully independent confirmations (effective independent frameworks ~ 2.3; see Section 5.10).
 
 ## Reproducing the Analysis
 
@@ -37,7 +37,7 @@ pip install numpy scipy
 python analysis/run_all.py
 ```
 
-This runs all five frameworks, computes the ensemble, performs sensitivity analyses, and saves JSON results to `results/`. Full pipeline completes in ~3 seconds.
+Runs all five frameworks, computes the ensemble, performs sensitivity analyses, and saves JSON results to `results/`. Full pipeline completes in ~3 seconds.
 
 ## Repository Structure
 
@@ -45,8 +45,8 @@ This runs all five frameworks, computes the ensemble, performs sensitivity analy
 basketball-goat-analysis/
 ├── README.md
 ├── requirements.txt
-├── Basketball_GOAT_Multi-Method_Ensemble_Analysis.pdf   # Full paper + supplementary tables
-├── basketball-goat-paper-draft.md                       # Paper body (Markdown)
+├── Basketball_GOAT_Multi-Method_Ensemble_Analysis.pdf   # Full paper + supplementary materials
+├── basketball-goat-paper-draft.md                       # Paper body + supplements (Markdown)
 ├── data/
 │   ├── __init__.py
 │   ├── player_careers.py          # Master data module (10 candidate players)
@@ -83,15 +83,34 @@ Career statistics for 10 primary candidates and 15 additional players, sourced f
 
 14 published all-time rankings (ESPN, SI, The Athletic, Bleacher Report, Simmons, NBA.com, etc.) are used for the BPLS revealed-preference weight learning.
 
-## Supplementary Materials (in the PDF)
+## Supplementary Materials
 
-- **Table S1**: Full 25-player rankings across all five frameworks
-- **Table S2**: Complete CSDI sub-index decomposition (5 sub-tables)
-- **Table S3**: AHP-SD scoring rubric with statistical justification (6 criteria)
-- **Table S4**: CWIM natural experiment catalog (arrivals, departures, teammate effects)
-- **Table S5**: BPLS posterior trajectory parameters for all 25 candidates
-- **Figures S1-S5**: Career arcs, dominance matrices, sensitivity grids
-- **Appendices A-C**: Utility weights, sensitivity tables, archetype vectors
+All supplementary materials are included in both the PDF and the markdown file:
+
+- **Table S1**: Full 25-player rankings across all five frameworks (with 95% CIs)
+- **Table S2a-f**: Complete CSDI sub-index decomposition (peak, longevity, playoff, winning, efficiency, composite)
+- **Table S3a-g**: AHP-SD scoring rubric with statistical justification (all 6 criteria + final score matrix)
+- **Table S4a-d**: CWIM natural experiment catalog (Jordan, LeBron, others, teammate elevation effects)
+- **Table S5**: BPLS posterior trajectory parameters for all 25 candidates (9 parameters each)
+- **Figure S1**: Career arc data (Jordan and LeBron posterior trajectories with 90% CIs)
+- **Figure S2**: AHP-SD pairwise dominance matrix (top 5)
+- **Figure S3**: EARD sensitivity grid (TPD form x playoff weight, 20 cells)
+- **Figure S4**: CWIM sensitivity grid (10 parameter specifications)
+- **Figure S5**: Ensemble agreement index vs. peak-longevity ratio r
+- **Appendix A**: BPLS learned utility weights (posterior means + 90% CIs)
+- **Appendix B**: AHP-SD stakeholder archetype weight vectors
+- **Appendix C**: Framework rank correlation matrix (mean rho = 0.82, effective N = 2.3)
+
+## Peer Review
+
+The paper underwent review by four independent expert panels (statistician, sports scientist, decision scientist, adversarial reviewer). All returned "Major Revisions." Key concerns addressed in the current version:
+
+- Replaced "methodologically orthogonal" with "complementary"; added Section 5.10 quantifying shared dependencies
+- CSDI reported honestly (LeBron leads on point estimate; ad hoc tiebreaker removed)
+- "Ensemble probability" renamed to "cross-method agreement index" with caveats
+- AHP-SD dominance reduced from 100% to 99.9%; score uncertainty acknowledged
+- Added playmaking/versatility gap acknowledgment and LeBron weak-roster carry analysis
+- Added Section 5.9 (rule changes) and Section 5.10 (shared bias and effective independence)
 
 ## License
 
