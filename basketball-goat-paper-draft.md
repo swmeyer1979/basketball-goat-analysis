@@ -75,7 +75,7 @@ Each framework draws from a common data layer but processes it differently:
 
 ### 2.3 Era Adjustment Data
 
-For the EARD and BPLS frameworks, we compute within-season distributional parameters (mean, standard deviation) for each metric across all qualifying players ($\geq$ 41 games, $\geq$ 20 MPG) in each season. For the CWIM framework, we calibrate replacement level using expansion team performance data. For the AHP-SD framework, era adjustment is embedded in the scoring rubric.
+For the EARD and BPLS frameworks, we compute within-season distributional parameters (mean, standard deviation) for each metric across all qualifying players (≥ 41 games, ≥ 20 MPG) in each season. For the CWIM framework, we calibrate replacement level using expansion team performance data. For the AHP-SD framework, era adjustment is embedded in the scoring rubric.
 
 ---
 
@@ -85,19 +85,19 @@ For the EARD and BPLS frameworks, we compute within-season distributional parame
 
 The CSDI computes a weighted linear combination of five normalized sub-indices:
 
-$$\text{CSDI}(p) = \sum_{k=1}^{5} w_k \cdot Z_k(p)$$
+> CSDI(p) = w1 · Z1(p) + w2 · Z2(p) + w3 · Z3(p) + w4 · Z4(p) + w5 · Z5(p)
 
-where $Z_k(p)$ is the z-score of player $p$ on sub-index $k$ relative to all qualifying players ($\geq$ 400 career games since 1970), and $w_k$ are weights: Peak Dominance (0.25), Longevity-Adjusted Production (0.20), Playoff Amplification (0.25), Winning Contribution (0.20), Era-Adjusted Efficiency (0.10).
+where Z_k(p) is the z-score of player p on sub-index k relative to all qualifying players (≥ 400 career games since 1970), and w_k are weights: Peak Dominance (0.25), Longevity-Adjusted Production (0.20), Playoff Amplification (0.25), Winning Contribution (0.20), Era-Adjusted Efficiency (0.10).
 
-**Peak Dominance** ($Z_{\text{peak}}$) is defined as the mean BPM across a player's best 7 consecutive seasons, cross-checked against PER and WS/48. The 7-season window captures a full prime while excluding single-season outliers.
+**Peak Dominance** (Z_peak) is defined as the mean BPM across a player's best 7 consecutive seasons, cross-checked against PER and WS/48. The 7-season window captures a full prime while excluding single-season outliers.
 
-**Longevity-Adjusted Production** ($Z_{\text{long}}$) uses career VORP with a games-played normalization factor: $\text{Long}_p = \text{VORP}_p \times \min(1, G_p / 1000)$.
+**Longevity-Adjusted Production** (Z_long) uses career VORP with a games-played normalization factor: Long(p) = VORP(p) × min(1, GP/1000).
 
-**Playoff Amplification** ($Z_{\text{post}}$) is a composite of playoff-to-regular-season BPM ratio (0.40 weight), cumulative playoff VORP (0.35), and Championship Equity (0.25), defined as the player's share of Finals Win Shares across championship seasons.
+**Playoff Amplification** (Z_post) is a composite of playoff-to-regular-season BPM ratio (0.40 weight), cumulative playoff VORP (0.35), and Championship Equity (0.25), defined as the player's share of Finals Win Shares across championship seasons.
 
-**Winning Contribution** ($Z_{\text{win}}$) uses career Win Shares adjusted by marginal team performance: $\text{Win}_p = \text{WS}_p \times (1 + 0.15 \cdot \overline{\Delta W}_p)$, where $\overline{\Delta W}_p$ is the average on-court vs. off-court net rating differential.
+**Winning Contribution** (Z_win) uses career Win Shares adjusted by marginal team performance: Win(p) = WS(p) × (1 + 0.15 · ΔW(p)), where ΔW(p) is the average on-court vs. off-court net rating differential.
 
-**Era-Adjusted Efficiency** ($Z_{\text{eff}}$) is True Shooting Percentage expressed as standard deviations above league mean, weighted by usage rate and averaged across career seasons.
+**Era-Adjusted Efficiency** (Z_eff) is True Shooting Percentage expressed as standard deviations above league mean, weighted by usage rate and averaged across career seasons.
 
 Sensitivity is tested under three alternative weighting schemes (equal, peak-heavy, playoff-heavy).
 
@@ -105,27 +105,27 @@ Sensitivity is tested under three alternative weighting schemes (equal, peak-hea
 
 The EARD normalizes all statistics to per-100-possessions rates, then computes within-season z-scores:
 
-$$Z_{isk} = \frac{X_{isk} - \mu_{sk}}{\sigma_{sk}}$$
+> Z(i,s,k) = (X(i,s,k) – μ(s,k)) / σ(s,k)
 
 Z-scores are aggregated into four domains — Scoring (weight 0.25), Playmaking (0.20), Defense (0.25), Impact (0.30) — to produce a single-season raw EARD score. This is then adjusted by a Talent Pool Depth multiplier:
 
-$$\text{TPD}_s = \log_2(N_{\text{teams},s} / 8) \times \text{Integration}_s \times \text{International}_s \times \text{Pipeline}_s$$
+> TPD(s) = log₂(N_teams / 8) × Integration(s) × International(s) × Pipeline(s)
 
-where Integration, International, and Pipeline factors capture the historical expansion of the accessible talent pool. The adjusted EARD scales each season's z-scores by $\text{TPD}_s / \text{TPD}_{\max}$, ensuring modern-era dominance (against deeper talent) receives full weight while earlier-era dominance is proportionally discounted.
+where Integration, International, and Pipeline factors capture the historical expansion of the accessible talent pool. The adjusted EARD scales each season's z-scores by TPD(s) / TPD_max, ensuring modern-era dominance (against deeper talent) receives full weight while earlier-era dominance is proportionally discounted.
 
 Playoff and regular season are weighted 60/40 (playoffs receive higher weight due to superior competition and higher effort levels). A Playoff Depth multiplier (0.85 for first-round exit through 1.10 for championship) further differentiates postseason performance.
 
 Career EARD aggregates a player's top 15 seasons with declining weights, plus a modest longevity bonus of +0.02 per qualifying season beyond 10.
 
-Robustness is assessed via 10,000 bootstrap resamples of all free parameters ($\pm$25%).
+Robustness is assessed via 10,000 bootstrap resamples of all free parameters (±25%).
 
 ### 3.3 Framework 3: Causal Win Impact Model (CWIM)
 
-The CWIM adopts the Rubin potential outcomes framework. For player $i$ in season $s$:
+The CWIM adopts the Rubin potential outcomes framework. For player i in season s:
 
-$$\tau_{i,s} = Y_t(1) - Y_t(0)$$
+> τ(i,s) = Y_t(1) – Y_t(0)
 
-where $Y_t(1)$ is observed team wins and $Y_t(0)$ is the counterfactual wins with player $i$ replaced by a replacement-level player (defined at the 15th percentile of minutes-weighted WS/48, calibrated to produce a 24.1-win team).
+where Y_t(1) is observed team wins and Y_t(0) is the counterfactual wins with player i replaced by a replacement-level player (defined at the 15th percentile of minutes-weighted WS/48, calibrated to produce a 24.1-win team).
 
 Because the counterfactual is unobservable, we triangulate three quasi-experimental identification strategies:
 
@@ -135,31 +135,31 @@ Because the counterfactual is unobservable, we triangulate three quasi-experimen
 
 **Method C (Team Trajectory Analysis):** Examining team win totals before and after a player's arrival or departure, controlling for other simultaneous roster changes.
 
-Estimates are combined via Bayesian model averaging with method-specific weights reflecting data availability and credibility by era. For modern players (1996+): $w_A = 0.5$, $w_B = 0.3$, $w_C = 0.2$. For pre-1996 players: $w_A = 0.1$, $w_B = 0.4$, $w_C = 0.5$.
+Estimates are combined via Bayesian model averaging with method-specific weights reflecting data availability and credibility by era. For modern players (1996+): w_A = 0.5, w_B = 0.3, w_C = 0.2. For pre-1996 players: w_A = 0.1, w_B = 0.4, w_C = 0.5.
 
-Career CWIM decomposes into regular-season WAR, leverage-weighted playoff WAR ($\lambda = 3.2$), and a Championship Probability Added bonus ($\alpha = 8.0$ win-equivalents per championship, weighted by the player's fractional contribution).
+Career CWIM decomposes into regular-season WAR, leverage-weighted playoff WAR (λ = 3.2), and a Championship Probability Added bonus (α = 8.0 win-equivalents per championship, weighted by the player's fractional contribution).
 
 ### 3.4 Framework 4: Bayesian Peak-Longevity Synthesis (BPLS)
 
-For each player $i$, we model latent ability as a parametric career arc:
+For each player i, we model latent ability as a parametric career arc:
 
-$$\theta_i(a) = \alpha_i \cdot \exp\left(-\frac{(a - \pi_i)^2}{2\delta_i^2}\right) \cdot \left(1 - \lambda_i \cdot \max(0, a - \pi_i)\right)$$
+> θ(i,a) = α(i) · exp(–(a – π(i))² / 2δ(i)²) · (1 – λ(i) · max(0, a – π(i)))
 
-where $\alpha_i$ is peak ability, $\pi_i$ is peak age, $\delta_i$ is prime width, and $\lambda_i$ is asymmetric decline rate. Observed performance $Y_{it}$ is a noisy, availability-adjusted measurement of latent ability:
+where α(i) is peak ability, π(i) is peak age, δ(i) is prime width, and λ(i) is asymmetric decline rate. Observed performance Y(i,t) is a noisy, availability-adjusted measurement of latent ability:
 
-$$Y_{it} = \theta_i(a_{it}) \cdot g_{it} + \epsilon_{it}$$
+> Y(i,t) = θ(i, age(i,t)) · g(i,t) + ε(i,t)
 
-where $g_{it}$ is a games-played availability factor and $\epsilon_{it} \sim \mathcal{N}(0, \sigma^2_\epsilon / n_{it})$.
+where g(i,t) is a games-played availability factor and ε(i,t) ~ Normal(0, σ²/n(i,t)).
 
-From fitted trajectories, we derive Peak ($P_i = \alpha_i$) and Longevity ($L_i = \int \theta_i(a)\, da$), supplemented by a playoff elevation ratio $\rho_i$ and a championship credit score $C_i$.
+From fitted trajectories, we derive Peak (P(i) = α(i)) and Longevity (L(i) = ∫θ(i,a) da), supplemented by a playoff elevation ratio ρ(i) and a championship credit score C(i).
 
 The GOAT is identified by a utility function:
 
-$$U_i = \beta_P \widetilde{P}_i + \beta_L \widetilde{L}_i + \beta_\rho \widetilde{\rho}_i + \beta_C \widetilde{C}_i$$
+> U(i) = β_P · P̃(i) + β_L · L̃(i) + β_ρ · ρ̃(i) + β_C · C̃(i)
 
-where $\beta$ weights are **learned from data** — not assumed — via a Plackett-Luce observation model fitted to 14 published all-time expert rankings. This revealed-preference approach determines how much experts implicitly value peak versus longevity.
+where β weights are **learned from data** — not assumed — via a Plackett-Luce observation model fitted to 14 published all-time expert rankings. This revealed-preference approach determines how much experts implicitly value peak versus longevity.
 
-The model is fitted via Hamiltonian Monte Carlo (NUTS sampler in Stan), with 4 chains $\times$ 4,000 iterations. All $\hat{R} < 1.01$; minimum effective sample size > 800.
+The model is fitted via Hamiltonian Monte Carlo (NUTS sampler in Stan), with 4 chains × 4,000 iterations. All R̂ < 1.01; minimum effective sample size > 800.
 
 ### 3.5 Framework 5: AHP with Stochastic Dominance (AHP-SD)
 
@@ -167,9 +167,9 @@ We define six Level-1 criteria: Statistical Excellence (C1), Winning/Championshi
 
 Ten candidates are scored on each criterion using a 0--100 quantile-normalized scale anchored to specific statistical benchmarks (detailed in Supplementary Table S3).
 
-Rather than committing to a single weight vector, we model weight uncertainty as a **mixture of five Dirichlet distributions**, each centered on a distinct stakeholder archetype (Statistician, Ringchaser, Completist, Clutch Believer, Historian) with concentration $\alpha = 15$ and equal mixing probability. We draw 500,000 weight vectors from this mixture and compute each player's composite score and rank under each draw.
+Rather than committing to a single weight vector, we model weight uncertainty as a **mixture of five Dirichlet distributions**, each centered on a distinct stakeholder archetype (Statistician, Ringchaser, Completist, Clutch Believer, Historian) with concentration α = 15 and equal mixing probability. We draw 500,000 weight vectors from this mixture and compute each player's composite score and rank under each draw.
 
-A player achieves **first-order stochastic dominance** if they score at least as high as every competitor on every criterion. A player achieves **practical stochastic dominance** if they are ranked first under $\geq 99\%$ of reasonable weight vectors.
+A player achieves **first-order stochastic dominance** if they score at least as high as every competitor on every criterion. A player achieves **practical stochastic dominance** if they are ranked first under ≥ 99\% of reasonable weight vectors.
 
 ---
 
@@ -216,7 +216,7 @@ The convergence is explained by three empirical regularities that emerge indepen
 
 #### 4.3.1 Peak Dominance
 
-Jordan holds the highest peak performance score in four of five frameworks (EARD, CWIM, BPLS, AHP-SD), with Jokic's incomplete career currently producing a higher per-season peak in the CSDI. His best 7-year BPM average (+9.2, CSDI), his single-season EARD (4.21), his peak-season CWIM (22 wins above replacement), and his posterior peak ability ($\alpha = 3.72$ SD, BPLS) all represent the maximum values in their respective datasets. The AHP-SD scores him 97--99 on every individual criterion except Two-Way Impact (90), where he still exceeds all candidates except Bill Russell (95) and Tim Duncan (92).
+Jordan holds the highest peak performance score in four of five frameworks (EARD, CWIM, BPLS, AHP-SD), with Jokic's incomplete career currently producing a higher per-season peak in the CSDI. His best 7-year BPM average (+9.2, CSDI), his single-season EARD (4.21), his peak-season CWIM (22 wins above replacement), and his posterior peak ability (α = 3.72 SD, BPLS) all represent the maximum values in their respective datasets. The AHP-SD scores him 97--99 on every individual criterion except Two-Way Impact (90), where he still exceeds all candidates except Bill Russell (95) and Tim Duncan (92).
 
 The key data points: career 30.1 PPG (highest all-time among qualified players), PER 27.9 (highest all-time), playoff BPM +10.8 (highest all-time among players with 150+ playoff games), 10 scoring titles, 5 MVPs.
 
@@ -227,7 +227,7 @@ Jordan's performance systematically *increased* in the postseason — a property
 - **CSDI**: Playoff BPM (+10.8) exceeds regular-season BPM (+7.5) by 44%, the highest amplification ratio in the dataset.
 - **EARD**: Playoff EARD exceeded regular-season EARD in 11 of 15 qualifying seasons (ratio: 1.08).
 - **CWIM**: Leverage-weighted playoff WAR (78.3) is 56% of total career CWIM despite playoffs representing only ~20% of games played.
-- **BPLS**: Posterior playoff elevation ratio $\rho = 1.12$ [1.06, 1.18], the highest in the candidate set.
+- **BPLS**: Posterior playoff elevation ratio ρ = 1.12 [1.06, 1.18], the highest in the candidate set.
 - **AHP-SD**: Clutch/Playoff score of 98 (highest).
 
 Jordan's 6-0 Finals record with 6 Finals MVPs is not merely a narrative convenience — it reflects a statistically verifiable pattern of performing at the highest level in the highest-leverage games. His playoff PER of 33.4 and playoff scoring average of 33.4 PPG are both all-time records.
@@ -252,7 +252,7 @@ Every framework identifies LeBron as the strongest challenger, and intellectual 
 
 **Weak-roster carry performances.** LeBron reached the Finals three times (2007, 2015, 2018) with rosters that would likely have been lottery teams without him. In 2007, he carried a Cleveland team whose second-best player was Drew Gooden to the Finals at age 22. In 2015, with both Kyrie Irving and Kevin Love injured, he averaged 35.8/13.3/8.8 in the Finals — one of the most dominant individual Finals performances ever, despite a series loss. In 2018, he averaged 34.0/8.5/10.0 against a Golden State team with four All-Stars. These performances are properly credited in the CWIM framework through high single-season WAR, but the Championship Equity metric in CSDI assigns them zero value because the team lost. This is a limitation we acknowledge: Championship Equity as currently defined measures championship-win rate, not championship-level individual performance, and it systematically penalizes a player who reaches the Finals with inferior supporting casts.
 
-**Under what conditions would LeBron be the GOAT?** The BPLS framework provides the precise answer: when the peak-to-longevity weight ratio $r = \beta_P / \beta_L$ falls below approximately 1.05 (i.e., when longevity is weighted nearly equal to or above peak), LeBron and Jordan are tied or LeBron leads. The revealed-preference estimate from expert rankings is $r = 1.42$, comfortably in Jordan's favor. LeBron becomes the clear GOAT only when $r < 0.75$ — a specification requiring longevity to be weighted more than twice as heavily as peak, which contradicts the historical consensus.
+**Under what conditions would LeBron be the GOAT?** The BPLS framework provides the precise answer: when the peak-to-longevity weight ratio r = β_P / β_L falls below approximately 1.05 (i.e., when longevity is weighted nearly equal to or above peak), LeBron and Jordan are tied or LeBron leads. The revealed-preference estimate from expert rankings is r = 1.42, comfortably in Jordan's favor. LeBron becomes the clear GOAT only when r < 0.75 — a specification requiring longevity to be weighted more than twice as heavily as peak, which contradicts the historical consensus.
 
 ### 4.5 Sensitivity and Robustness
 
@@ -265,7 +265,7 @@ We conduct extensive sensitivity analyses within each framework and report the c
 | CSDI | Sub-index weighting | 4 schemes | 3 of 4 (playoff/peak-heavy, equal) | 1 of 4 (longevity-heavy) |
 | EARD | All free parameters | 10,000 bootstraps | 94.2% of specifications | 5.8% |
 | CWIM | Playoff leverage, CPA bonus, replacement level | 10 specifications | 10 of 10 | 0 of 10 |
-| BPLS | Peak-longevity ratio $r$ | 0.5 to 3.0 | $r > 1.05$ | $r < 1.05$ |
+| BPLS | Peak-longevity ratio r | 0.5 to 3.0 | r > 1.05 | r < 1.05 |
 | AHP-SD | Weight vectors | 500,000 draws | 100.00% | 0.00% |
 
 The result is robust. Jordan leads under the vast majority of reasonable parameter specifications across all five frameworks. The CWIM finding is particularly striking: Jordan leads in *every* sensitivity specification tested, including removal of the championship bonus entirely.
@@ -355,13 +355,13 @@ If a future framework were to add a versatility dimension, it would likely narro
 
 We identify four scenarios that could alter the ensemble consensus:
 
-1. **LeBron plays 2--3 more elite seasons.** The BPLS model projects that if LeBron maintains a z-score of 2.0+ for two additional seasons, $P(\text{LeBron})$ rises to approximately 0.35. Three additional seasons at this level could produce a near-tie.
+1. **LeBron plays 2--3 more elite seasons.** The BPLS model projects that if LeBron maintains a z-score of 2.0+ for two additional seasons, P(LeBron) rises to approximately 0.35. Three additional seasons at this level could produce a near-tie.
 
-2. **LeBron wins a 5th championship as the clear best player.** This would narrow the championship gap (5 vs. 6) and increase his CPA in the CWIM framework, though the marginal effect on the ensemble is estimated at $\Delta P \approx +0.04$.
+2. **LeBron wins a 5th championship as the clear best player.** This would narrow the championship gap (5 vs. 6) and increase his CPA in the CWIM framework, though the marginal effect on the ensemble is estimated at ΔP ≈ +0.04.
 
 3. **Improved defensive metrics become available retroactively.** If player-tracking defensive data (DRAPTOR, D-EPM) were extended to cover the 1990s, and if these data showed Jordan's perimeter defense was significantly more valuable than BPM estimates suggest, Jordan's advantage would widen. Conversely, if they showed LeBron's defensive peak (2009--2014) was underestimated by box-score metrics, the gap could narrow.
 
-4. **Active player careers complete.** Nikola Jokic's per-season impact metrics are the highest currently being produced. If he sustains his level for 6+ additional seasons with multiple championships, several frameworks project he could reach the Jordan-LeBron tier ($\text{CSDI} \approx 3.0$--$3.4$; $\text{EARD} \approx 8.9$--$9.5$).
+4. **Active player careers complete.** Nikola Jokic's per-season impact metrics are the highest currently being produced. If he sustains his level for 6+ additional seasons with multiple championships, several frameworks project he could reach the Jordan-LeBron tier (CSDI ≈ 3.0–3.4; EARD ≈ 8.9–9.5).
 
 5. **Novel frameworks that capture currently unmeasured dimensions.** If a rigorous framework for measuring leadership impact, locker-room chemistry effects, or opponent psychological intimidation were developed, the ranking could shift in ways we cannot currently predict. Jordan's legendary competitive intensity and LeBron's documented ability to transform franchise cultures would both score highly on such measures, but the relative ordering is unknown.
 
@@ -379,7 +379,7 @@ We acknowledge the following limitations, several of which are fundamental to an
 
 5. **The frameworks share a common data source.** While the analytical methods are independent, they all draw from Basketball Reference statistics. Any systematic errors in this data source would propagate through all five frameworks, creating a false appearance of convergence. We note, however, that Basketball Reference's data are derived from official NBA box scores and have been extensively validated by the sports analytics community.
 
-6. **Revealed-preference weight learning (BPLS) risks circularity.** If expert rankings are influenced by the same cultural narratives that favor Jordan (the "Jordan brand effect"), the learned weights may reproduce a culturally conditioned rather than empirically optimal tradeoff. We test for this by excluding post-1998 rankings (when Jordan's legacy was culturally cemented) and find the learned ratio shifts only marginally ($r = 1.38$ vs. $1.42$).
+6. **Revealed-preference weight learning (BPLS) risks circularity.** If expert rankings are influenced by the same cultural narratives that favor Jordan (the "Jordan brand effect"), the learned weights may reproduce a culturally conditioned rather than empirically optimal tradeoff. We test for this by excluding post-1998 rankings (when Jordan's legacy was culturally cemented) and find the learned ratio shifts only marginally (r = 1.38 vs. 1.42).
 
 7. **Sample size of the candidate pool.** Our analysis evaluates 25 candidates selected by prior expert consensus. This selection process may itself introduce bias — players who are already regarded as great receive more analytical attention, and players from underrepresented eras or undervalued playing styles may be systematically excluded. We mitigate this by using an inclusive selection criterion (top 10 in at least two major published rankings) but acknowledge that the candidate pool is not exhaustive.
 
@@ -393,7 +393,7 @@ Jordan's advantage lies in *rate* metrics — per-game, per-minute, per-possessi
 
 This distinction maps onto a deeper philosophical question: is "greatest" a stock variable (total accumulated excellence) or a flow variable (maximum instantaneous excellence)? Economic analogies are instructive. We do not call the wealthiest person in history the "greatest businessperson" — that title typically goes to someone whose peak influence, innovation, or dominance of their contemporaries was most pronounced (Rockefeller, Carnegie, Jobs), regardless of whether they died with the most total assets. Similarly, in music, the "greatest guitarist" is typically associated with peak virtuosity (Hendrix, Page) rather than career longevity (B.B. King's 60+ year career, while extraordinary, is not typically cited as evidence for GOAT status).
 
-The revealed-preference data in our BPLS framework suggests that basketball experts resolve this question similarly: peak matters approximately 42% more than longevity ($\beta_P / \beta_L = 1.42$). This ratio is not extreme — it does not dismiss longevity as irrelevant — but it meaningfully favors the player who reached the highest heights over the player who maintained high performance for the longest time.
+The revealed-preference data in our BPLS framework suggests that basketball experts resolve this question similarly: peak matters approximately 42% more than longevity (β_P / β_L = 1.42). This ratio is not extreme — it does not dismiss longevity as irrelevant — but it meaningfully favors the player who reached the highest heights over the player who maintained high performance for the longest time.
 
 This distinction is not a limitation of the analysis but a clarification of the question. "Greatest player" and "greatest career" are different questions with potentially different answers. Our ensemble analysis, by learning from revealed preferences how experts resolve this distinction, finds that the consensus leans toward "greatest player" (peak and intensity) over "greatest career" (total accumulation) by a ratio of approximately 1.4:1.
 
@@ -417,7 +417,7 @@ Reviewers of this work have correctly identified that the five frameworks, while
 
 **Shared metric dependence.** BPM and its derivatives (VORP, Win Shares) are used by all five frameworks to varying degrees (see Table A in Section 2.2). BPM is a box-score regression model that overvalues high-usage scorers and undervalues off-ball contributors and defensive specialists — precisely the profile distinction between Jordan and LeBron. If BPM's biases systematically favor Jordan's player archetype, convergence across frameworks partly reflects shared dependence on BPM rather than five independent confirmations. A stronger test would substitute EPM, DARKO, or RAPM-family metrics into at least one framework and verify that the ranking holds. We identify this as the highest-priority extension for future work.
 
-**Shared structural priors.** All five frameworks incorporate some form of postseason weighting — playoff leverage in CWIM ($\lambda = 3.2$), 60/40 playoff weighting in EARD, Playoff Amplification as a 25%-weighted sub-index in CSDI, playoff elevation ratio in BPLS, and Clutch/Playoff as an AHP-SD criterion. Since Jordan's most separating characteristic is playoff amplification, the shared decision to upweight postseason performance creates correlated bias across frameworks. To assess the impact, we note that removing all postseason bonuses from CWIM (setting $\lambda = 1.0$, $\alpha = 0$) produces Jordan: 218.5 WAR vs. LeBron: 204.9 WAR — Jordan still leads, but the gap narrows from 11.6 to 13.6 wins. This suggests the core result survives deweighting playoffs, though the margin changes.
+**Shared structural priors.** All five frameworks incorporate some form of postseason weighting — playoff leverage in CWIM (λ = 3.2), 60/40 playoff weighting in EARD, Playoff Amplification as a 25%-weighted sub-index in CSDI, playoff elevation ratio in BPLS, and Clutch/Playoff as an AHP-SD criterion. Since Jordan's most separating characteristic is playoff amplification, the shared decision to upweight postseason performance creates correlated bias across frameworks. To assess the impact, we note that removing all postseason bonuses from CWIM (setting λ = 1.0, α = 0) produces Jordan: 218.5 WAR vs. LeBron: 204.9 WAR — Jordan still leads, but the gap narrows from 11.6 to 13.6 wins. This suggests the core result survives deweighting playoffs, though the margin changes.
 
 **Effective independence.** Computing pairwise Spearman rank correlations across the five frameworks over our candidate pool yields correlations ranging from 0.72 (CSDI-AHP-SD) to 0.91 (CSDI-EARD), with a mean of 0.82. This is consistent with five frameworks that are substantially but not fully independent — the effective number of independent frameworks, estimated via eigenvalue decomposition of the correlation matrix, is approximately 2.3. The convergence argument is therefore weaker than five fully independent confirmations but stronger than a single analysis. We revise our framing accordingly: the convergence provides evidence of robustness across a meaningful range of analytical approaches, not five independent replications of the same finding.
 
@@ -437,10 +437,10 @@ We have conducted the most comprehensive quantitative assessment of the basketba
 
 The cross-method agreement index:
 
-$$\text{Jordan agreement index} = 0.70 \quad [\text{range: } 0.48 \text{ to } 0.99]$$
-$$\text{LeBron agreement index} = 0.21 \quad [\text{range: } 0.01 \text{ to } 0.35]$$
-$$\text{Kareem agreement index} = 0.05 \quad [\text{range: } 0.00 \text{ to } 0.11]$$
-$$\text{Other} = 0.04$$
+> **Jordan agreement index = 0.70   [range: 0.48 to 0.99]**
+> LeBron agreement index = 0.21   [range: 0.01 to 0.35]
+> Kareem agreement index = 0.05   [range: 0.00 to 0.11]
+> Other = 0.04
 
 Ranges indicate the minimum and maximum across the five frameworks. These are not calibrated probabilities but summary measures of cross-method agreement (see Section 4.2 for caveats).
 
@@ -525,5 +525,5 @@ The author declares no competing financial interests. The author acknowledges gr
 - **Figure S2.** AHP-SD dominance cone visualization for top 5 candidates.
 - **Figure S3.** EARD sensitivity heatmap: GOAT probability as a function of TPD functional form and playoff weight.
 - **Figure S4.** CWIM sensitivity grid: Jordan vs. LeBron CWIM scores across 10 parameter specifications.
-- **Figure S5.** Ensemble GOAT probability as a function of peak-longevity tradeoff ratio $r$.
+- **Figure S5.** Ensemble GOAT probability as a function of peak-longevity tradeoff ratio r.
 - **Code Repository.** Full replication code (Python, R, Stan) with documented random seeds.
