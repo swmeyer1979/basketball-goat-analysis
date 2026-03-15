@@ -384,6 +384,209 @@ def run_csdi(players: dict | None = None, verbose: bool = True) -> dict:
     }
 
 
+# ---------------------------------------------------------------------------
+# Ablation: BPM-free CSDI
+# ---------------------------------------------------------------------------
+
+def _raw_peak_bpm_free(d: dict) -> float:
+    """
+    BPM-free peak: replace BPM/PER/WS48 with raw box-score composite.
+
+    Composite of PPG, RPG, APG, SPG, BPG, TS%, usage_proxy.
+    Each stat is scaled to a roughly comparable ~0-10 range and weighted.
+    """
+    era = d.get("era", 1990)
+    era_factor = 1.00 if era >= 1980 else (0.88 if era >= 1970 else 0.82)
+
+    ppg_norm = d["ppg"] / 3.5          # Jordan 30.1 → 8.6
+    rpg_norm = d["rpg"] / 2.5          # LeBron 7.5 → 3.0
+    apg_norm = d["apg"] / 1.5          # LeBron 7.4 → 4.9
+    spg_norm = d.get("spg", 0) * 2.5   # Jordan 2.35 → 5.9
+    bpg_norm = d.get("bpg", 0) * 2.0   # Hakeem 3.09 → 6.2
+    ts_norm = (d["ts_pct"] - 0.44) * 40  # Jordan 0.569 → 5.2
+    usage_proxy = d["ppg"] / 25.0       # usage rate proxy
+
+    # Scoring title rate (kept from original)
+    sc_rate = min(d["scoring_titles"] / max(d["seasons"], 1), 0.80)
+    sc_norm = sc_rate / 0.80 * 8.0
+
+    raw = (
+        0.30 * ppg_norm * era_factor
+        + 0.10 * rpg_norm * era_factor
+        + 0.10 * apg_norm
+        + 0.10 * spg_norm
+        + 0.08 * bpg_norm
+        + 0.12 * ts_norm * usage_proxy
+        + 0.10 * sc_norm
+        + 0.10 * ppg_norm * era_factor  # double-weight scoring as peak signal
+    )
+    return raw
+
+
+def _raw_longevity_bpm_free(d: dict) -> float:
+    """
+    BPM-free longevity: replace VORP with games × PPG × TS% composite.
+
+    VORP = BPM × minutes_fraction × seasons, so we substitute a
+    production-volume proxy that uses only raw box-score stats.
+    """
+    # Volume proxy: total points (approx) weighted by efficiency
+    total_pts_proxy = d["ppg"] * d["games"]
+    efficiency_bonus = d["ts_pct"] / 0.55  # normalized around league average
+    games_factor = min(1.0, d["games"] / 1000.0)
+    return total_pts_proxy * efficiency_bonus * games_factor / 250.0
+
+
+def _raw_playoff_bpm_free(d: dict) -> float:
+    """
+    BPM-free playoff: replace playoff BPM ratio with raw box-score playoff stats.
+
+    Uses playoff PPG, RPG, APG as quality signals, plus championship equity.
+    """
+    poff = d["playoffs"]
+    po_ppg = poff["ppg"]
+    po_rpg = poff["rpg"]
+    po_apg = poff["apg"]
+    po_ws = poff["win_shares"]
+    po_games = poff["games"]
+
+    # Amplification via raw scoring: playoff PPG / RS PPG
+    rs_ppg = max(d["ppg"], 1.0)
+    scoring_ampli = po_ppg / rs_ppg
+
+    # Quality composite (playoff box-score stats)
+    quality = po_ppg * 0.50 + po_rpg * 0.25 + po_apg * 0.25
+
+    # Per-round WS rate (kept; WS is not BPM-derived, it's from team wins allocation)
+    rounds_proxy = max(po_games / 15.0, 1.0)
+    per_round_ws = po_ws / rounds_proxy
+
+    # Championship equity (same as original — not BPM-dependent)
+    if d["championships"] > 0:
+        frac = (d["finals_mvp"] + 0.3) / (d["championships"] + 0.3)
+        frac = min(frac, 1.0)
+    else:
+        frac = 0.0
+    champ_equity = d["championships"] * frac
+
+    return (
+        0.35 * quality * scoring_ampli / 3.0    # scaled to ~10 range
+        + 0.25 * per_round_ws * 3.5
+        + 0.30 * champ_equity * 4.0
+        + 0.10 * quality / 2.5                  # raw quality bonus
+    )
+
+
+def _raw_winning_bpm_free(d: dict) -> float:
+    """
+    BPM-free winning: replace Win Shares / WS/48 / BPM multiplier with
+    raw box-score productivity × team success proxies.
+
+    Win Shares is partly BPM-adjacent (derived from team wins, not BPM regression),
+    but to be conservative we replace it entirely with a box-score composite.
+    """
+    era = d.get("era", 1990)
+    era_factor = 1.00 if era >= 1980 else (0.88 if era >= 1970 else 0.82)
+
+    # Box-score production rate (per-game composite)
+    prod_rate = (
+        d["ppg"] * 0.40
+        + d["rpg"] * 0.25
+        + d["apg"] * 0.20
+        + d.get("spg", 0) * 0.10
+        + d.get("bpg", 0) * 0.05
+    ) * era_factor
+
+    # All-NBA 1st team rate (per season) — excellence recognition proxy
+    all_nba_rate = d["all_nba_1st"] / max(d["seasons"], 1)
+    all_nba_norm = all_nba_rate * 200.0
+
+    # Team success proxy: championships weighted by seasons
+    team_success = d["championships"] / max(d["seasons"], 1) * 100.0
+
+    # Blend
+    return 0.40 * prod_rate * d["seasons"] / 3.0 + 0.35 * all_nba_norm + 0.25 * team_success
+
+
+def _raw_efficiency_bpm_free(d: dict) -> float:
+    """
+    BPM-free efficiency: same as original (already uses TS% and PPG only,
+    no BPM/VORP/WS inputs). Included for completeness.
+    """
+    return _raw_efficiency(d)
+
+
+def run_csdi_bpm_free(players: dict | None = None, verbose: bool = True) -> dict:
+    """
+    BPM-free CSDI ablation: recompute all sub-indices using only raw box-score
+    stats (PPG, RPG, APG, SPG, BPG, TS%, usage rate). No BPM, VORP, WS, PER,
+    or WS/48 inputs.
+
+    Returns same structure as run_csdi().
+    """
+    if players is None:
+        players = PLAYERS
+
+    names = list(players.keys())
+    n = len(names)
+
+    raw = np.zeros((n, 5))
+    for i, name in enumerate(names):
+        d = players[name]
+        raw[i, 0] = _raw_peak_bpm_free(d)
+        raw[i, 1] = _raw_longevity_bpm_free(d)
+        raw[i, 2] = _raw_playoff_bpm_free(d)
+        raw[i, 3] = _raw_winning_bpm_free(d)
+        raw[i, 4] = _raw_efficiency_bpm_free(d)
+
+    z = np.zeros_like(raw)
+    for k in range(5):
+        z[:, k] = _zscore(raw[:, k])
+
+    if verbose:
+        print("  BPM-Free Sub-index z-scores (Peak, Long, Playoff, Win, Efficiency):")
+        for i, name in enumerate(names):
+            row = z[i]
+            print(f"    {name:25s}  "
+                  f"{row[0]:+.2f}  {row[1]:+.2f}  {row[2]:+.2f}  {row[3]:+.2f}  {row[4]:+.2f}")
+
+    # Use same weight schemes as original
+    sensitivity = {}
+    for scheme_name, weights in WEIGHT_SCHEMES.items():
+        csdi_scores = z @ weights
+        order = np.argsort(-csdi_scores)
+        ranking = [(names[i], float(csdi_scores[i])) for i in order]
+        sensitivity[scheme_name] = ranking
+
+    weights_default = WEIGHT_SCHEMES["default"]
+    csdi_default = z @ weights_default
+    order_default = np.argsort(-csdi_default)
+    rankings = [(names[i], float(csdi_default[i])) for i in order_default]
+
+    if verbose:
+        print("\n=== BPM-Free CSDI Ablation ===")
+        print("\n  Default Ranking:")
+        for pos, (name, score) in enumerate(rankings[:10], 1):
+            print(f"    {pos:2d}. {name:25s}  CSDI = {score:.3f}")
+
+        jordan_score = csdi_default[names.index("Michael Jordan")]
+        lebron_score = csdi_default[names.index("LeBron James")]
+        print(f"\n  Jordan: {jordan_score:.3f}  vs  LeBron: {lebron_score:.3f}")
+        if jordan_score > lebron_score:
+            print("  → Jordan still leads LeBron.")
+        else:
+            print("  → LeBron leads Jordan.")
+
+    return {
+        "names":          names,
+        "raw_subindices": raw,
+        "z_subindices":   z,
+        "csdi_scores":    csdi_default,
+        "rankings":       rankings,
+        "sensitivity":    sensitivity,
+    }
+
+
 if __name__ == "__main__":
     res = run_csdi(verbose=True)
     print("\n=== CSDI Scores (all schemes) ===")

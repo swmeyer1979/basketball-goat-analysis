@@ -715,6 +715,135 @@ def run_ahp_sd(
 
 
 # ===========================================================================
+# Ablation: Championship-free AHP-SD (remove C2)
+# ===========================================================================
+
+def run_ahp_sd_no_championships(
+    players: dict | None = None,
+    n_samples: int = 500_000,
+    alpha: float = 15.0,
+    verbose: bool = True,
+) -> dict:
+    """
+    Championship-free AHP-SD ablation: remove C2 (Winning/Championships)
+    entirely. Run Monte Carlo with 5 remaining criteria (C1, C3, C4, C5, C6).
+
+    Reports Jordan's dominance percentage and whether LeBron overtakes
+    under any archetype.
+
+    Returns dict with scores, rankings, pct_rank1, and archetype breakdown.
+    """
+    if players is None:
+        players = PLAYERS
+
+    rng = np.random.default_rng(seed=42)
+
+    # Compute full score matrix
+    scores_full, names = compute_scores(players)
+
+    # Remove C2 (index 1): keep C1, C3, C4, C5, C6
+    keep = [0, 2, 3, 4, 5]
+    criteria_names = ["C1_Statistical", "C3_Awards", "C4_TwoWay", "C5_Clutch", "C6_Cultural"]
+    scores_sub = scores_full[:, keep]  # (n_players, 5)
+
+    if verbose:
+        print("=== Championship-Free AHP-SD Ablation (C2 removed) ===")
+        print(f"\n  Score Matrix (5 criteria, C2 removed):")
+        hdr = f"  {'Player':25s}  C1(Stat)  C3(Awd)  C4(2Way)  C5(Clutch)  C6(Cult)"
+        print(hdr)
+        print("  " + "-" * (len(hdr) - 2))
+        for i, name in enumerate(names):
+            row = scores_sub[i]
+            print(f"  {name:25s}  {row[0]:8.1f}  {row[1]:7.1f}  {row[2]:8.1f}  {row[3]:10.1f}  {row[4]:8.1f}")
+
+    # Resample Dirichlet weights for 5-criteria problem
+    centres_full = np.array(list(archetype_weights().values()))  # (5, 6)
+    centres_sub = centres_full[:, keep]
+    centres_sub = centres_sub / centres_sub.sum(axis=1, keepdims=True)
+
+    archetype_names_list = list(archetype_weights().keys())
+    n_archetypes = len(centres_sub)
+    n_per = n_samples // n_archetypes
+    remainder = n_samples - n_per * n_archetypes
+
+    parts = []
+    archetype_labels = []
+    for i, centre in enumerate(centres_sub):
+        n = n_per + (1 if i < remainder else 0)
+        conc = alpha * centre
+        draws = rng.dirichlet(conc, size=n)
+        parts.append(draws)
+        archetype_labels.extend([archetype_names_list[i]] * n)
+    wv_sub = np.vstack(parts)
+
+    # Don't shuffle — we need archetype labels aligned for breakdown
+    # But we do need to compute ranks
+    ranks = _compute_rankings_fast(scores_sub, wv_sub)
+
+    # Overall pct_rank1
+    pct_rank1 = {
+        name: float(np.mean(ranks[:, i] == 1)) * 100.0
+        for i, name in enumerate(names)
+    }
+
+    # Per-archetype breakdown
+    archetype_breakdown = {}
+    offset = 0
+    for i, centre in enumerate(centres_sub):
+        n = n_per + (1 if i < remainder else 0)
+        arch_ranks = ranks[offset:offset + n]
+        arch_pct = {
+            name: float(np.mean(arch_ranks[:, j] == 1)) * 100.0
+            for j, name in enumerate(names)
+        }
+        archetype_breakdown[archetype_names_list[i]] = arch_pct
+        offset += n
+
+    jordan_idx = names.index("Michael Jordan")
+    lebron_idx = names.index("LeBron James")
+
+    # Check if LeBron overtakes under any archetype
+    lebron_leads_archetypes = []
+    for arch_name, arch_pct in archetype_breakdown.items():
+        if arch_pct.get("LeBron James", 0) > arch_pct.get("Michael Jordan", 0):
+            lebron_leads_archetypes.append(arch_name)
+
+    if verbose:
+        print(f"\n  Drawing {n_samples:,} weight vectors (5 criteria) ...")
+        print("\n  % of weight draws where each player ranked #1:")
+        sorted_pct = sorted(pct_rank1.items(), key=lambda kv: -kv[1])
+        for name, pct in sorted_pct:
+            bar = "#" * int(pct / 2)
+            print(f"    {name:25s}  {pct:6.2f}%  {bar}")
+
+        print(f"\n  Jordan dominance: {pct_rank1['Michael Jordan']:.2f}%")
+        print(f"  LeBron:           {pct_rank1['LeBron James']:.2f}%")
+
+        print("\n  Per-archetype breakdown (Jordan % | LeBron %):")
+        for arch_name, arch_pct in archetype_breakdown.items():
+            j_pct = arch_pct.get("Michael Jordan", 0)
+            l_pct = arch_pct.get("LeBron James", 0)
+            leader = "Jordan" if j_pct >= l_pct else "LEBRON"
+            print(f"    {arch_name:20s}:  Jordan {j_pct:6.2f}%  LeBron {l_pct:6.2f}%  [{leader}]")
+
+        if lebron_leads_archetypes:
+            print(f"\n  → LeBron overtakes Jordan under: {', '.join(lebron_leads_archetypes)}")
+        else:
+            print("\n  → Jordan leads under ALL archetypes even without championships.")
+
+    return {
+        "scores":                scores_sub,
+        "names":                 names,
+        "criteria":              criteria_names,
+        "pct_rank1":             pct_rank1,
+        "archetype_breakdown":   archetype_breakdown,
+        "jordan_dominance_pct":  pct_rank1.get("Michael Jordan", 0),
+        "lebron_pct":            pct_rank1.get("LeBron James", 0),
+        "lebron_leads_archetypes": lebron_leads_archetypes,
+    }
+
+
+# ===========================================================================
 # Standalone execution
 # ===========================================================================
 

@@ -1093,6 +1093,130 @@ def _first_nonzero(d: dict, keys: list[str]) -> float:
 # CLI / __main__
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Ablation: Playoff-free CWIM
+# ---------------------------------------------------------------------------
+
+def _rs_only_score(player: dict) -> float:
+    """
+    Compute CWIM using ONLY regular-season WAR.
+    No playoff WAR, no championship bonus — pure regular-season contribution.
+    """
+    era_year = player.get("era", 2000)
+    a = compute_method_a(player)
+    b = compute_method_b(player)
+    c = compute_method_c(player)
+
+    if era_year >= MODERN_ERA_CUTOFF:
+        w_a, w_b, w_c = 0.5, 0.3, 0.2
+    else:
+        w_a, w_b, w_c = 0.1, 0.4, 0.5
+
+    return w_a * a + w_b * b + w_c * c
+
+
+def _parity_score(player: dict) -> float:
+    """
+    Compute CWIM with playoffs at parity (1x, not 3.2x), no CPA.
+
+    compute_playoff_war(player, lambda_=3.2) returns PO_WAR at 1x
+    (the internal (lambda_/3.2) normalization cancels out). We add
+    this once — not multiplied by lambda_ again.
+    """
+    rs_war = _rs_only_score(player)
+    po_war_raw = compute_playoff_war(player, lambda_=3.2)  # returns at 1x
+    return rs_war + po_war_raw  # parity: 1x regular, 1x playoff
+
+
+def run_cwim_playoff_free(players: dict | None = None, verbose: bool = True) -> dict:
+    """
+    Playoff-free CWIM ablation. Two variants:
+
+    (A) RS-only: Pure regular-season WAR. No playoff data at all.
+        This is the strongest possible ablation — removes all postseason signal.
+
+    (B) Parity: Playoffs at 1x weight (not 3.2x), no championship bonus (alpha=0).
+        This tests whether the *leverage multiplier* drives the result.
+
+    The paper (Section 5.10) claims lambda=1.0, alpha=0 yields Jordan: 218.5
+    vs LeBron: 204.9. We verify this against the parity variant and report
+    both variants for full transparency.
+
+    Returns dict with rankings for both RS-only and parity variants.
+    """
+    if players is None:
+        players = PLAYERS
+
+    names = list(players.keys())
+    jordan_idx = names.index("Michael Jordan")
+    lebron_idx = names.index("LeBron James")
+
+    # Baseline scale factor (from standard run)
+    baseline_raw_j = _spec_score(
+        players["Michael Jordan"],
+        lambda_=3.2, alpha=8.0,
+        repl_offset=0.0, era_discount=1.0,
+        method_weights=None, season_cap=None,
+    )
+    scale = 243.7 / baseline_raw_j if baseline_raw_j > 0 else 1.0
+
+    # --- Variant A: RS-only ---
+    rs_raw = np.array([_rs_only_score(players[nm]) for nm in names])
+    rs_scaled = rs_raw * scale
+    rs_order = np.argsort(-rs_scaled)
+    rs_rankings = [(names[i], round(float(rs_scaled[i]), 1)) for i in rs_order]
+    rs_jordan = float(rs_scaled[jordan_idx])
+    rs_lebron = float(rs_scaled[lebron_idx])
+
+    # --- Variant B: Parity ---
+    par_raw = np.array([_parity_score(players[nm]) for nm in names])
+    par_scaled = par_raw * scale
+    par_order = np.argsort(-par_scaled)
+    par_rankings = [(names[i], round(float(par_scaled[i]), 1)) for i in par_order]
+    par_jordan = float(par_scaled[jordan_idx])
+    par_lebron = float(par_scaled[lebron_idx])
+
+    if verbose:
+        print("=== Playoff-Free CWIM Ablation ===")
+        print("\n  Variant A — RS-Only (no playoff data at all):")
+        for pos, (nm, sc) in enumerate(rs_rankings[:10], 1):
+            print(f"    {pos:2d}. {nm:25s}  {sc:.1f} WAR")
+        print(f"\n  Jordan: {rs_jordan:.1f}  vs  LeBron: {rs_lebron:.1f}  "
+              f"(gap: {rs_jordan - rs_lebron:+.1f})")
+
+        print("\n  Variant B — Parity (playoffs at 1x, no CPA):")
+        for pos, (nm, sc) in enumerate(par_rankings[:10], 1):
+            print(f"    {pos:2d}. {nm:25s}  {sc:.1f} WAR")
+        print(f"\n  Jordan: {par_jordan:.1f}  vs  LeBron: {par_lebron:.1f}  "
+              f"(gap: {par_jordan - par_lebron:+.1f})")
+
+        paper_j, paper_l = 218.5, 204.9
+        print(f"\n  Paper §5.10 claims (λ=1, α=0): Jordan {paper_j} vs LeBron {paper_l}")
+        print(f"  Parity variant:                Jordan {par_jordan:.1f} vs LeBron {par_lebron:.1f}")
+        if abs(par_jordan - paper_j) < 3.0 and abs(par_lebron - paper_l) < 3.0:
+            print("  → Paper claim verified.")
+        else:
+            print("  → Paper claim does not match. Corrected values reported.")
+
+    return {
+        "names":           names,
+        "rs_only": {
+            "rankings":    rs_rankings,
+            "jordan_war":  round(rs_jordan, 1),
+            "lebron_war":  round(rs_lebron, 1),
+            "jordan_leads": rs_jordan > rs_lebron,
+            "gap":         round(rs_jordan - rs_lebron, 1),
+        },
+        "parity": {
+            "rankings":    par_rankings,
+            "jordan_war":  round(par_jordan, 1),
+            "lebron_war":  round(par_lebron, 1),
+            "jordan_leads": par_jordan > par_lebron,
+            "gap":         round(par_jordan - par_lebron, 1),
+        },
+    }
+
+
 if __name__ == "__main__":
     print("=" * 72)
     print("CAUSAL WIN IMPACT MODEL (CWIM) — Framework 3 of 5")
