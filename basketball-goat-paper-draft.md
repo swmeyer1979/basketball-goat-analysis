@@ -42,7 +42,7 @@ The methods draw from a common data substrate (Basketball Reference career stati
 
 The five frameworks do not all answer the same question. CWIM estimates objective win impact — how many games did this player cause his team to win? EARD measures relative statistical dominance within era. These are performance-estimation tasks. AHP-SD, by contrast, samples across evaluative philosophies and explicitly includes normative criteria (Cultural/Historical Significance). BPLS learns from expert rankings, which encode cultural preferences as well as performance assessments. CSDI occupies middle ground — its sub-indices are statistically derived, but the weighting scheme reflects the analyst's judgment about what matters.
 
-We do not resolve this tension. Instead, we report it. The paper asks: does it matter whether you frame "greatest" as an impact-estimation problem or a preference-aggregation problem? If both framings produce the same answer, the answer is robust to the philosophical ambiguity. If they diverge, the divergence tells you something about which dimensions are driving the disagreement. The agreement index averages across both framings, which is a weakness (it mixes unlike objects) but also a feature (it tests robustness across the full range of what "greatest" might mean).
+We do not resolve this tension. Instead, we report it. The paper asks: does it matter whether you frame "greatest" as an impact-estimation problem or a preference-aggregation problem? If both framings produce the same answer, the answer is robust to the philosophical ambiguity. If they diverge, the divergence tells you something about which dimensions are driving the disagreement. The latent ensemble model (Section 3.6) averages across both framings, which is a weakness (it mixes unlike objects) but also a feature (it tests robustness across the full range of what "greatest" might mean). We report sub-ensemble results for impact-only and preference-only groupings so readers can see where the two framings agree and where they diverge.
 
 ### 1.4 Scope and Limitations
 
@@ -290,7 +290,7 @@ Every framework identifies LeBron as the strongest challenger. Here is where he 
 
 **Longevity metrics.** LeBron's career VORP (151.4 vs. 116.1), career Win Shares (262.7 vs. 214.0), career integral in the BPLS model (47.3 vs. 34.2), and regular-season CWIM (155.8 vs. 140.2) all exceed Jordan's — in most cases substantially. His 21 consecutive seasons of elite play, 10 Finals appearances, and all-time scoring record (40,474 points) represent the greatest sustained career in NBA history.
 
-**Playmaking and versatility.** LeBron is the greatest passing forward in NBA history. His 10,871 career assists and 7.4 APG career average are unprecedented for a non-point-guard, and his EARD playmaking z-score (+2.83) is the highest among non-point-guards in the dataset. With the addition of the Playmaking/Versatility sub-index to CSDI and C7 to AHP-SD, this skill is now directly measured rather than buried in composite metrics. The effect is significant: LeBron's CSDI lead over Jordan widens from 0.05 to 0.24, and Jordan's AHP-SD dominance drops from 99.9% to 96.2%. LeBron scores 95 on C7 (highest in the candidate pool); Jordan scores 62. Magic Johnson scores 92, Jokic 88, and Bird 72. Jordan's 5.3 career APG is elite for a shooting guard but does not approach LeBron's floor-general role.
+**Playmaking and versatility.** LeBron is the greatest passing forward in NBA history — 10,871 career assists, 7.4 APG, the highest EARD playmaking z-score (+2.83) among non-point-guards. With the addition of Playmaking/Versatility to both CSDI and AHP-SD, this skill is now directly measured. The effect on the analysis is detailed in Sections 4.3.3 and 5.5.
 
 **Weak-roster carry performances.** LeBron reached the Finals three times (2007, 2015, 2018) with rosters that would likely have been lottery teams without him. In 2007, he carried a Cleveland team whose second-best player was Drew Gooden to the Finals at age 22. In 2015, with both Kyrie Irving and Kevin Love injured, he averaged 35.8/13.3/8.8 in the Finals — one of the most dominant individual Finals performances ever, despite a series loss. In 2018, he averaged 34.0/8.5/10.0 against a Golden State team with four All-Stars. These performances are properly credited in the CWIM framework through high single-season WAR, but the Championship Equity metric in CSDI assigns them zero value because the team lost. Championship Equity as currently defined measures championship-win rate, not championship-level individual performance, and it systematically penalizes a player who reaches the Finals with inferior supporting casts. This is a genuine flaw in the metric.
 
@@ -338,7 +338,7 @@ The logic of convergent validity [5] is straightforward. If a framework biased t
 
 - CWIM is purely cumulative, with no peak bonus. It should favor LeBron's longevity. Jordan still leads.
 - BPLS learns its weights from 14 published expert rankings and could have landed anywhere. The learned weights favor peak at 1.42:1.
-- AHP-SD samples 500,000 weight vectors across five evaluative archetypes. Jordan leads in 99.9% of them.
+- AHP-SD samples 500,000 weight vectors across six evaluative archetypes. Jordan leads in 96.2% of them.
 - CSDI and EARD use different sub-index constructions and different metrics. Both rank Jordan and LeBron in the same order.
 
 This is convergence, not certainty. The posterior probability P(G_Jordan > G_LeBron) = 0.76, not 1.0. The BPLS framework quantifies exactly where LeBron overtakes (r < 1.05). And the five frameworks are not fully independent — they share BPM-family metrics and structural playoff weighting (Section 5.10). What the convergence does establish is that the result isn't fragile. It doesn't depend on any one modeling choice.
@@ -381,13 +381,9 @@ The honest assessment is that both Jordan and LeBron played with excellent teamm
 
 ### 5.5 The Playmaking and Versatility Effect
 
-Earlier versions of this analysis flagged playmaking as the most consequential structural gap. We have now addressed it by adding a Playmaking/Versatility sub-index to CSDI and a seventh criterion (C7) to AHP-SD. The effect is real and measurable.
+Adding playmaking changed the results. The CSDI gap widened in LeBron's favor (from 0.05 to 0.24), flipping the CSDI from a virtual tie to a LeBron lead under default weighting. Jordan's AHP-SD dominance dropped from 99.9% to 96.2%. In the latent model, CSDI became the only framework with a negative Jordan bias (−0.61).
 
-LeBron scores highest on both new dimensions. His 10,871 career assists (7.4 APG) are unprecedented for a forward, and his positional versatility index (minutes logged at all five positions) leads the candidate pool. Jordan scores respectably — 5.3 APG is elite for a shooting guard — but the gap is large. On the AHP-SD's C7, LeBron scores 95 to Jordan's 62.
-
-The impact on the overall analysis: the CSDI gap widens in LeBron's favor (from 0.05 to 0.24). LeBron now leads the CSDI under the default weighting scheme, not just under longevity-heavy weighting. Jordan's AHP-SD dominance drops from 99.9% to 96.2%, with the Floor General archetype producing LeBron-favoring rankings in 3.8% of draws. In the latent ensemble model, CSDI is the only framework with a negative Jordan bias (−0.61), reflecting its stronger playmaking signal.
-
-The addition of playmaking narrows the gap without closing it. Jordan leads three frameworks (EARD, CWIM, AHP-SD). LeBron leads one (CSDI). The BPLS is ambiguous. Jordan is the plurality winner, but it's a smaller plurality than before playmaking was measured. That shift is itself a finding: playmaking is one of the two or three dimensions where LeBron's case is strongest, and leaving it out overstated the certainty of the Jordan result.
+Jordan still leads three frameworks. LeBron leads one. BPLS is ambiguous. But the plurality is smaller than before playmaking was measured, and the shift confirms what reviewers predicted: ignoring LeBron's most distinctive skill overstated the certainty of the Jordan result.
 
 ### 5.6 What Would Change the Result
 
@@ -421,7 +417,7 @@ Several limitations are fundamental to any cross-era athletic comparison; others
 
 **Candidate pool selection.** Our 25-candidate pool is selected by prior expert consensus, which may itself introduce bias. Players from underrepresented eras or undervalued playing styles may be systematically excluded. We use an inclusive selection criterion (top 10 in at least two major published rankings) but the pool is not exhaustive.
 
-**The single-GOAT framing.** Our analysis presupposes that "greatest" admits a total ordering. An alternative framing would acknowledge that greatness may be partially ordered: Jordan may be the greatest scorer-defender, LeBron the greatest all-around player, Russell the greatest winner, with no single axis dominating the others. Our AHP-SD framework reveals that Jordan dominates under all weighting schemes tested, but that finding is contingent on the six criteria selected.
+**The single-GOAT framing.** Our analysis presupposes that "greatest" admits a total ordering. An alternative framing would acknowledge that greatness may be partially ordered: Jordan may be the greatest scorer-defender, LeBron the greatest all-around player, Russell the greatest winner, with no single axis dominating the others. Our AHP-SD framework reveals that Jordan dominates under five of six weighting archetypes tested, but that finding is contingent on the seven criteria selected.
 
 ### 5.8 The "Greatest Career" vs. "Greatest Player" Distinction
 
@@ -509,11 +505,11 @@ The convergence result is partially robust. The BPM-free ablation shows the find
 
 The latent ensemble gives P(G_Jordan > G_LeBron) = 0.76. The impact-only sub-ensemble gives 0.69. The preference-only sub-ensemble gives 0.83.
 
-Those three numbers tell the whole story. When you ask "who contributed more to winning?" the answer tilts toward Jordan but not decisively — CSDI favors LeBron, EARD and CWIM favor Jordan. When you ask "who do informed evaluators consider greatest?" the answer tilts more strongly toward Jordan, because expert rankings weight peak performance over longevity by about 1.4:1.
+Impact estimation favors Jordan narrowly (0.69). Preference aggregation favors him more strongly (0.83). The gap between those two numbers is the gap between "who contributed more?" and "who do people rank highest?" Both point the same direction. Neither is decisive.
 
-The ablations identify which beams are load-bearing. Jordan's advantage survives removal of BPM-family inputs (raw box scores still favor him) and removal of championships (he dominates on non-championship criteria). It does not survive removal of postseason emphasis: on regular-season data alone, LeBron's 21-season accumulation wins. Playoff amplification is not a minor knob. It is the structural assumption that makes Jordan the plurality answer.
+The ablation that matters most: remove postseason emphasis from CWIM, and LeBron leads 114.5 to 71.2 WAR. Playoff amplification is the load-bearing beam. The other two ablations (BPM-free, championship-free) leave Jordan's position intact or stronger. The result depends on postseason data, and it should — because that's where the question gets hard.
 
-LeBron's case is real and growing. His advantages in playmaking, career accumulation, and weak-roster carry performances are genuine and historically unprecedented. Under specifications that weight these dimensions heavily, he overtakes Jordan. That represents about 24% of the posterior mass.
+LeBron's 24% posterior share is not a rounding error. It represents longevity, playmaking, and weak-roster carry performances that are historically unprecedented. Under specifications that weight these dimensions heavily, he wins.
 
 The answer: **conditional on a construct that values peak and postseason performance, Jordan is favored. Conditional on a construct that values longevity and playmaking, LeBron is favored. The first construct is the majority position among both the frameworks tested and the expert rankings surveyed. But it is a constructed majority, not a discovered fact.**
 
