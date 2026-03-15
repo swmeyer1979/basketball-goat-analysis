@@ -1,0 +1,78 @@
+{
+  "timestamp": "20260314_223054",
+  "probabilities": {
+    "CSDI": {
+      "Michael Jordan": 0.6925925925925925,
+      "LeBron James": 0.30740740740740735,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.0,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.0,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "EARD": {
+      "Michael Jordan": 0.8130000000000001,
+      "LeBron James": 0.11900000000000001,
+      "Kareem Abdul-Jabbar": 0.05,
+      "Bill Russell": 0.0025714285714285618,
+      "Wilt Chamberlain": 0.0025714285714285618,
+      "Magic Johnson": 0.0025714285714285618,
+      "Tim Duncan": 0.0025714285714285618,
+      "Larry Bird": 0.0025714285714285618,
+      "Shaquille O'Neal": 0.0025714285714285618,
+      "Hakeem Olajuwon": 0.0025714285714285618
+    },
+    "CWIM": {
+      "Michael Jordan": 0.68,
+      "LeBron James": 0.24,
+      "Kareem Abdul-Jabbar": 0.05,
+      "Bill Russell": 0.0043,
+      "Wilt Chamberlain": 0.0043,
+      "Magic Johnson": 0.0043,
+      "Tim Duncan": 0.0043,
+      "Larry Bird": 0.0043,
+      "Shaquille O'Neal": 0.0043,
+      "Hakeem Olajuwon": 0.0043
+    },
+    "BPLS": {
+      "Michael Jordan": 0.498,
+      "LeBron James": 0.3472,
+      "Kareem Abdul-Jabbar": 0.0716,
+      "Bill Russell": 0.0308,
+      "Wilt Chamberlain": 0.0184,
+      "Magic Johnson": 0.008,
+      "Tim Duncan": 0.0128,
+      "Larry Bird": 0.0032,
+      "Shaquille O'Neal": 0.0032,
+      "Hakeem Olajuwon": 0.0068
+    },
+    "AHP-SD": {
+      "Michael Jordan": 0.999792,
+      "LeBron James": 0.0,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.000208,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.0,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    }
+  },
+  "ensemble": {
+    "Michael Jordan": 0.736662185274813,
+    "Wilt Chamberlain": 0.0050541846305931,
+    "LeBron James": 0.20271742713293878,
+    "Magic Johnson": 0.0029742262297611168,
+    "Tim Duncan": 0.00393420703014511,
+    "Kareem Abdul-Jabbar": 0.034319313613727725,
+    "Shaquille O'Neal": 0.0020142454293771246,
+    "Bill Russell": 0.00757573419960172,
+    "Larry Bird": 0.0020142454293771246,
+    "Hakeem Olajuwon": 0.002734231029665119
+  },
+  "top_player": "Michael Jordan"
+}

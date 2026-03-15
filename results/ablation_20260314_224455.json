@@ -1,0 +1,391 @@
+{
+  "bpm_free_csdi": {
+    "top_10": [
+      [
+        "Michael Jordan",
+        1.331
+      ],
+      [
+        "LeBron James",
+        1.026
+      ],
+      [
+        "Kareem Abdul-Jabbar",
+        0.176
+      ],
+      [
+        "Magic Johnson",
+        0.152
+      ],
+      [
+        "Larry Bird",
+        0.03
+      ],
+      [
+        "Wilt Chamberlain",
+        0.03
+      ],
+      [
+        "Shaquille O'Neal",
+        -0.143
+      ],
+      [
+        "Tim Duncan",
+        -0.401
+      ],
+      [
+        "Hakeem Olajuwon",
+        -0.611
+      ],
+      [
+        "Bill Russell",
+        -1.59
+      ]
+    ],
+    "jordan_score": 1.331,
+    "lebron_score": 1.026,
+    "jordan_leads": true,
+    "gap": 0.305,
+    "sensitivity": {
+      "default": [
+        [
+          "Michael Jordan",
+          1.331
+        ],
+        [
+          "LeBron James",
+          1.026
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          0.176
+        ],
+        [
+          "Magic Johnson",
+          0.152
+        ],
+        [
+          "Larry Bird",
+          0.03
+        ]
+      ],
+      "equal": [
+        [
+          "Michael Jordan",
+          1.15
+        ],
+        [
+          "LeBron James",
+          0.986
+        ],
+        [
+          "Magic Johnson",
+          0.278
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          0.238
+        ],
+        [
+          "Wilt Chamberlain",
+          0.141
+        ]
+      ],
+      "peak_heavy": [
+        [
+          "Michael Jordan",
+          1.513
+        ],
+        [
+          "LeBron James",
+          0.98
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          0.074
+        ],
+        [
+          "Wilt Chamberlain",
+          0.069
+        ],
+        [
+          "Magic Johnson",
+          0.062
+        ]
+      ],
+      "playoff_heavy": [
+        [
+          "Michael Jordan",
+          1.498
+        ],
+        [
+          "LeBron James",
+          1.032
+        ],
+        [
+          "Magic Johnson",
+          0.2
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          0.067
+        ],
+        [
+          "Larry Bird",
+          -0.011
+        ]
+      ],
+      "longevity_heavy": [
+        [
+          "LeBron James",
+          1.207
+        ],
+        [
+          "Michael Jordan",
+          1.075
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          0.487
+        ],
+        [
+          "Wilt Chamberlain",
+          0.092
+        ],
+        [
+          "Magic Johnson",
+          -0.086
+        ]
+      ],
+      "playmaking_heavy": [
+        [
+          "Michael Jordan",
+          1.199
+        ],
+        [
+          "LeBron James",
+          1.036
+        ],
+        [
+          "Magic Johnson",
+          0.429
+        ],
+        [
+          "Larry Bird",
+          0.111
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          0.058
+        ]
+      ]
+    }
+  },
+  "playoff_free_cwim": {
+    "rs_only": {
+      "top_10": [
+        [
+          "LeBron James",
+          114.5
+        ],
+        [
+          "Shaquille O'Neal",
+          86.4
+        ],
+        [
+          "Tim Duncan",
+          85.5
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          73.3
+        ],
+        [
+          "Michael Jordan",
+          71.2
+        ],
+        [
+          "Wilt Chamberlain",
+          52.8
+        ],
+        [
+          "Magic Johnson",
+          49.0
+        ],
+        [
+          "Larry Bird",
+          45.3
+        ],
+        [
+          "Hakeem Olajuwon",
+          43.0
+        ],
+        [
+          "Bill Russell",
+          39.8
+        ]
+      ],
+      "jordan_war": 71.2,
+      "lebron_war": 114.5,
+      "jordan_leads": false,
+      "gap": -43.2
+    },
+    "parity": {
+      "top_10": [
+        [
+          "LeBron James",
+          149.2
+        ],
+        [
+          "Michael Jordan",
+          123.2
+        ],
+        [
+          "Tim Duncan",
+          116.9
+        ],
+        [
+          "Shaquille O'Neal",
+          112.4
+        ],
+        [
+          "Kareem Abdul-Jabbar",
+          101.2
+        ],
+        [
+          "Magic Johnson",
+          80.5
+        ],
+        [
+          "Larry Bird",
+          73.8
+        ],
+        [
+          "Wilt Chamberlain",
+          73.8
+        ],
+        [
+          "Bill Russell",
+          71.4
+        ],
+        [
+          "Hakeem Olajuwon",
+          66.6
+        ]
+      ],
+      "jordan_war": 123.2,
+      "lebron_war": 149.2,
+      "jordan_leads": false,
+      "gap": -26.0
+    }
+  },
+  "championship_free_ahp": {
+    "jordan_dominance_pct": 75.6156,
+    "lebron_pct": 24.383,
+    "pct_rank1": {
+      "Michael Jordan": 75.6156,
+      "LeBron James": 24.383,
+      "Kareem Abdul-Jabbar": 0.0,
+      "Bill Russell": 0.0014,
+      "Wilt Chamberlain": 0.0,
+      "Magic Johnson": 0.0,
+      "Tim Duncan": 0.0,
+      "Larry Bird": 0.0,
+      "Shaquille O'Neal": 0.0,
+      "Hakeem Olajuwon": 0.0
+    },
+    "archetype_breakdown": {
+      "Statistician": {
+        "Michael Jordan": 82.80653754769962,
+        "LeBron James": 17.19346245230038,
+        "Kareem Abdul-Jabbar": 0.0,
+        "Bill Russell": 0.0,
+        "Wilt Chamberlain": 0.0,
+        "Magic Johnson": 0.0,
+        "Tim Duncan": 0.0,
+        "Larry Bird": 0.0,
+        "Shaquille O'Neal": 0.0,
+        "Hakeem Olajuwon": 0.0
+      },
+      "Ringchaser": {
+        "Michael Jordan": 86.5373077015384,
+        "LeBron James": 13.462692298461612,
+        "Kareem Abdul-Jabbar": 0.0,
+        "Bill Russell": 0.0,
+        "Wilt Chamberlain": 0.0,
+        "Magic Johnson": 0.0,
+        "Tim Duncan": 0.0,
+        "Larry Bird": 0.0,
+        "Shaquille O'Neal": 0.0,
+        "Hakeem Olajuwon": 0.0
+      },
+      "Completist": {
+        "Michael Jordan": 89.58875835503342,
+        "LeBron James": 10.402841611366446,
+        "Kareem Abdul-Jabbar": 0.0,
+        "Bill Russell": 0.008400033600134402,
+        "Wilt Chamberlain": 0.0,
+        "Magic Johnson": 0.0,
+        "Tim Duncan": 0.0,
+        "Larry Bird": 0.0,
+        "Shaquille O'Neal": 0.0,
+        "Hakeem Olajuwon": 0.0
+      },
+      "Clutch Believer": {
+        "Michael Jordan": 92.85397141588567,
+        "LeBron James": 7.146028584114336,
+        "Kareem Abdul-Jabbar": 0.0,
+        "Bill Russell": 0.0,
+        "Wilt Chamberlain": 0.0,
+        "Magic Johnson": 0.0,
+        "Tim Duncan": 0.0,
+        "Larry Bird": 0.0,
+        "Shaquille O'Neal": 0.0,
+        "Hakeem Olajuwon": 0.0
+      },
+      "Historian": {
+        "Michael Jordan": 97.3935895743583,
+        "LeBron James": 2.6064104256417022,
+        "Kareem Abdul-Jabbar": 0.0,
+        "Bill Russell": 0.0,
+        "Wilt Chamberlain": 0.0,
+        "Magic Johnson": 0.0,
+        "Tim Duncan": 0.0,
+        "Larry Bird": 0.0,
+        "Shaquille O'Neal": 0.0,
+        "Hakeem Olajuwon": 0.0
+      },
+      "Floor General": {
+        "Michael Jordan": 4.513218052872212,
+        "LeBron James": 95.48678194712778,
+        "Kareem Abdul-Jabbar": 0.0,
+        "Bill Russell": 0.0,
+        "Wilt Chamberlain": 0.0,
+        "Magic Johnson": 0.0,
+        "Tim Duncan": 0.0,
+        "Larry Bird": 0.0,
+        "Shaquille O'Neal": 0.0,
+        "Hakeem Olajuwon": 0.0
+      }
+    },
+    "lebron_leads_archetypes": [
+      "Floor General"
+    ],
+    "criteria_used": [
+      "C1_Statistical",
+      "C3_Awards",
+      "C4_TwoWay",
+      "C5_Clutch",
+      "C6_Cultural",
+      "C7_Playmaking"
+    ]
+  },
+  "summary": {
+    "jordan_leads_count": 2,
+    "total_ablations": 3,
+    "robust": false,
+    "partially_robust": true,
+    "timestamp": "20260314_224455"
+  },
+  "timestamp": "20260314_224455"
+}

@@ -44,6 +44,9 @@ from analysis.ensemble import (                          # noqa: E402
     print_ensemble_report,
 )
 
+from analysis.latent_ensemble import run_latent_ensemble  # noqa: E402
+from analysis.ablations import run_all_ablations          # noqa: E402
+
 
 # ---------------------------------------------------------------------------
 # JSON serialisation helper (numpy arrays → lists)
@@ -102,6 +105,43 @@ def _save_results(results: dict, results_dir: Path) -> None:
     with open(fpath, "w") as f:
         json.dump(_to_json_safe(sens_summary), f, indent=2)
     print(f"  Saved {fpath.name}")
+
+    # Latent ensemble
+    latent = results.get("latent_ensemble")
+    if latent is not None:
+        # Save full + sub-ensemble summaries (skip bulky G_var internals)
+        latent_summary = {
+            "timestamp":          timestamp,
+            "full":               _to_json_safe({
+                k: v for k, v in latent.get("full", latent).items()
+                if k not in ("players",)
+            }),
+            "impact_only":        _to_json_safe(latent.get("impact_only", {})),
+            "preference_only":    _to_json_safe(latent.get("preference_only", {})),
+            "sensitivity":        _to_json_safe(latent.get("sensitivity", {})),
+            "P_jordan_gt_lebron": _to_json_safe(latent.get("P_jordan_gt_lebron")),
+        }
+        fpath = results_dir / f"latent_ensemble_{timestamp}.json"
+        with open(fpath, "w") as f:
+            json.dump(latent_summary, f, indent=2)
+        print(f"  Saved {fpath.name}")
+
+    # Ablation results
+    ablation = results.get("ablations")
+    if ablation is not None:
+        # Strip out the bulky 'raw' sub-dicts
+        ablation_summary = {}
+        for key, val in ablation.items():
+            if isinstance(val, dict):
+                ablation_summary[key] = {k2: v2 for k2, v2 in val.items()
+                                         if k2 != "raw"}
+            else:
+                ablation_summary[key] = val
+        ablation_summary["timestamp"] = timestamp
+        fpath = results_dir / f"ablation_{timestamp}.json"
+        with open(fpath, "w") as f:
+            json.dump(_to_json_safe(ablation_summary), f, indent=2)
+        print(f"  Saved {fpath.name}")
 
 
 # ---------------------------------------------------------------------------
@@ -293,6 +333,16 @@ def main(
     # ── Step 5: Sensitivity analysis ─────────────────────────────────────
     _run_sensitivity_report(all_results)
 
+    # ── Step 7: Latent variable ensemble model ───────────────────────────
+    print("\nStep 7 / 8  —  Running latent variable ensemble model ...")
+    latent_res = run_latent_ensemble(framework_results=all_results, verbose=True)
+    all_results["latent_ensemble"] = latent_res
+
+    # ── Step 8: Ablation studies ─────────────────────────────────────────
+    print("\nStep 8 / 8  —  Running ablation studies ...")
+    ablation_res = run_all_ablations(players=PLAYERS, verbose=True, save=False)
+    all_results["ablations"] = ablation_res
+
     # ── Step 6: Save results ──────────────────────────────────────────────
     if save_results:
         if results_dir is None:
@@ -305,7 +355,9 @@ def main(
 
     # Final summary line
     top_player = max(ensemble.items(), key=lambda kv: kv[1])
+    p_latent = latent_res.get("P_jordan_gt_lebron", 0.0)
     print(f"\nConclusion: P({top_player[0]} = GOAT) = {top_player[1]:.2f} [ensemble]")
+    print(f"            P(Jordan > LeBron) = {p_latent:.2f} [latent ensemble]")
     print("All 5 frameworks converge on this result.\n")
 
     return all_results
