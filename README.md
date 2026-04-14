@@ -4,6 +4,8 @@
 
 *Samuel Meyer, March 2026*
 
+**[Read the full paper (PDF)](Basketball_GOAT_Multi-Method_Ensemble_Analysis.pdf)**
+
 ## Overview
 
 Three performance-impact frameworks (CSDI, EARD, CWIM) form the core ensemble. Two preference-modeling frameworks (BPLS, AHP-SD) are reported separately as a consistency check. A latent variable model treats each impact framework as a noisy correlated measurement of an underlying "greatness" variable.
