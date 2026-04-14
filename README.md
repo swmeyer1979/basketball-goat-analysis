@@ -18,6 +18,8 @@ Three performance-impact frameworks (CSDI, EARD, CWIM) form the core ensemble. T
 
 ## Key Result
 
+![Impact ensemble posterior: P(G_Jordan > G_LeBron) = 0.69](figures/fig1_impact_ensemble.png)
+
 > **P(G_Jordan > G_LeBron) = 0.69 [0.62--0.81]** (impact ensemble)
 
 The preference check gives 0.83. Both favor Jordan but for different reasons: the impact ensemble measures on-court contribution; the preference ensemble reflects expert rankings that weight peak over longevity by 1.4:1.
